@@ -5,3 +5,25 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+
+# Testing data
+ActiveRecord::Base.connection.reset_pk_sequence!('users')
+require 'faker'
+
+User.delete_all
+
+num_of_users = 5;
+
+names = Array.new(num_of_users).map do |name|
+    Faker::Name.unique.name
+end
+
+passwords = Array.new(num_of_users).map do |password|
+    Faker::Alphanumeric.alpha(number: 10)
+end
+
+(0...num_of_users).each do |idx|
+    User.create(username: names[idx],password_digest: passwords[idx])
+end
+
