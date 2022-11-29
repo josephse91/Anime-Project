@@ -11,9 +11,8 @@
 ActiveRecord::Base.connection.reset_pk_sequence!('users')
 require 'faker'
 
-User.delete_all
-
 num_of_users = 5;
+num_of_reviews = Random.new.rand(5..10)
 
 names = Array.new(num_of_users).map do |name|
     Faker::Name.unique.name
@@ -25,5 +24,10 @@ end
 
 (0...num_of_users).each do |idx|
     User.create(username: names[idx],password_digest: passwords[idx])
+end
+
+
+(0...num_of_reviews).each do |idx|
+    Review.create(user:names.sample,show:Faker::DcComics.title,rating:Random.new.rand(60..100))
 end
 

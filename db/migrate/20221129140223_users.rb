@@ -1,6 +1,6 @@
 class Users < ActiveRecord::Migration[7.0]
   def change
-    add_column :users, :username, :string, null: false
+    add_column :users, :username, :string, null: false, unique: true 
     add_column :users, :password_digest, :string, null: false
     add_column :users, :genre_preference, :string
     add_column :users, :go_to_motto, :string
