@@ -51,6 +51,26 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# Run 'bundle exec annotate' in Terminal to add helpful comments to models.
+  gem 'annotate'
+
+  # These two give you a great error handling page.
+  # But make sure to never use them in production!
+  gem 'better_errors'
+  gem 'binding_of_caller'
+
+
+
+  # pry > irb
+  gem 'pry-rails'
+
+  #
+  gem 'rspec-rails'
+
+  # Gotta have byebug...
+  gem 'byebug'
+
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
