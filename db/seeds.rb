@@ -8,7 +8,6 @@
 
 
 # Testing data
-ActiveRecord::Base.connection.reset_pk_sequence!('users')
 require 'faker'
 
 num_of_users = 5;

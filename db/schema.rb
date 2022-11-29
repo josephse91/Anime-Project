@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_29_173824) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_29_180730) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,6 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_29_173824) do
     t.text "rooms", default: [], array: true
     t.text "peers", default: [], array: true
     t.json "requests"
+    t.string "session_token"
     t.index ["username"], name: "index_users_on_username"
   end
 
