@@ -31,3 +31,7 @@ end
     Review.create(user:names.sample,show:Faker::DcComics.title,rating:Random.new.rand(60..100))
 end
 
+Review.all.each do |review|
+    ReviewComment.create(comment:Faker::Marketing.buzzwords,review_id:review.id,user_id: review.user)
+end
+
