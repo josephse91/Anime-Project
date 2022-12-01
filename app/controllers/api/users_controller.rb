@@ -1,12 +1,16 @@
 class Api::UsersController < ApplicationController
     
     def create
-        @user = User.new(user_params)
+        create_params = user_params.select {|key,value| key != "password" && value}
+        @user = User.new(create_params)
+        
+        @user.password(user_params[:password]) if @user
 
         if @user.save
             render json: {status: "complete"}
         else
-            render json: {status: "failed", error: "Either the username or password is incorrect"}
+            error = @user.errors.messages.length > 0 ? @user.errors.messages : "Either the username or password is incorrect"
+            render json: {status: "failed", error: error}
         end
     end
 
@@ -48,7 +52,6 @@ class Api::UsersController < ApplicationController
         rend json: {status: "complete"}
 
     end
-
 
     def user_params
         params.permit(:id,:username,:password,:genre_preference,:go_to_motto,:user_grade_protocol,:rooms,:peers,:requests,:new_username,:new_password)
