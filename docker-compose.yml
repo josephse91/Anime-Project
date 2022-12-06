@@ -1,29 +1,40 @@
-services:
-  app:
-    image: node:18-alpine
-    command: sh -c "yarn install && yarn run dev"
-    ports:
-      - 3000:3000
-    working_dir: /anime_dojo
-    volumes:
-      - ./:/anime_dojo
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_DB: todos
+version: '3.8'
 
-  mysql:
-    image: mysql:8.0
+services:
+  db:
+    container_name: anime-db
+    image: postgres
+    environment: 
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
     volumes:
-      - todo-mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: todos
+      - postgres:/var/lib/postgresql/data
+
+  frontend:
+    container_name: anime-dojo-frontend
+    build: ./anime_dojo
+    image: "josephse91/anime-dojo-frontend"
+    ports: 
+      - "5000:5000"
+  user-api:
+    container_name: user_api
+    build: ./user_api
+    image: "josephse91/rails_api"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
+    volumes:
+      - .:/Rails-Docker
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
 
 volumes:
-  todo-mysql-data:
+  postgres:
 
 networks:
   default:
-    name: anime-dojo-network
+    name: "anime-dojo-network"
