@@ -11,7 +11,7 @@ class Api::SessionsController < ApplicationController
     
         else
           login_user!(user)
-          render json: {status: "complete", current_user: session[:session_token]}
+          render json: {status: "complete", current_session: session[:session_token]}
         end
     end
     
