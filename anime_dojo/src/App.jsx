@@ -26,7 +26,6 @@ function App() {
     let data = await apiRequest.json()
     setResponse(data)
     addElement(data)
-    console.log("response: ",response)
   }
   
   let sendRequest = function(e) {
