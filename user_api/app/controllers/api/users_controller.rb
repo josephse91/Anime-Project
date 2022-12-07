@@ -1,3 +1,5 @@
+require 'json'
+
 class Api::UsersController < ApplicationController
     
     def create
@@ -19,15 +21,13 @@ class Api::UsersController < ApplicationController
 
         if !@user
             render json: {status: "failed", error: "no existing user"}
-            return
+        else
+            render :show
         end
-
-
-
-
     end
 
     def update
+        #must check for current user before this. Similar to delete. For testing purposes, this will be left out
         @user = User.find_by(username: user_params[:id])
         if !@user
             render json: {status: "failed", error: "no existing user"}
@@ -41,11 +41,28 @@ class Api::UsersController < ApplicationController
             return if !check_password(@user)
             @user.password(user_params[:new_password])
             @user.save
+        elsif user_params[:rooms]
+            user_rooms = !@user.rooms.nil? ? ActiveSupport::JSON.decode(@user.rooms) : {}
+            action_obj = ActiveSupport::JSON.decode(user_params[:rooms])
+            rooms_action = action_obj["action"]
+            focus_room = action_obj["focusRoom"]
+            
+            if (rooms_action == "remove")
+                user_rooms.delete(focus_room)
+            elsif (!user_rooms[focus_room] && rooms_action == "add")
+                time = Time.new
+                current_date = "#{time.month}/#{time.day}/#{time.year}"
+                user_rooms[focus_room] = current_date
+            end
+
+            user_rooms = ActiveSupport::JSON.encode(user_rooms)
+            @user.update(rooms: user_rooms)
+
         elsif !user_params[:password]
             @user.update(user_params)
         end
 
-        render json: {status: "complete"}
+        render json: {status: "complete", user_rooms: @user.rooms}
     end
 
     def destroy
