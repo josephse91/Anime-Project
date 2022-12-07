@@ -20,3 +20,22 @@ input {
 #username {
   border: 5px solid black;
 }
+
+#requestMethod {
+  max-width: 75px;
+}
+
+#requestInputs {
+  display:flex;
+  gap: 10px;
+}
+
+#requestLabels {
+  display:flex;
+  gap: 40px;
+}
+
+#requestButton {
+  margin-top: 20px;
+  border: 2px solid blue;
+}

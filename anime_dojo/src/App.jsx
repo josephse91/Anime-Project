@@ -1,11 +1,13 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
+
 
 function App() {
   const [username, setUsername] = useState("");
   const [password,setPassword] = useState("");
   const [request,setRequest] = useState("");
-  const [response,setResponse] = useState(null)
+  const [response,setResponse] = useState(null);
+  const [requestMethod,setRequestMethod] = useState(null)
 
   let handleChange = function(e) {
     e.preventDefault;
@@ -17,20 +19,40 @@ function App() {
       setPassword(input.value)
     } else if (input.id === "request") {
       setRequest(input.value)
+    } else if (input.id === "requestMethod") {
+      setRequestMethod(input.value)
     }
     console.log(username,password,request)
   }
 
-  async function apiRequest() {
-    let apiRequest = await fetch("https://www.boredapi.com/api/activity")
+  let formData = new FormData();
+  let myHeaders = new Headers();
+
+  async function apiRequest(options) {
+    let requestStr = "http://" + request;
+    let apiRequest = await fetch(requestStr, options)
     let data = await apiRequest.json()
     setResponse(data)
+    await console.log(requestStr,data)
     addElement(data)
   }
   
   let sendRequest = function(e) {
     e.preventDefault;
-    apiRequest()
+
+    const options = {
+      headers: myHeaders,
+      method: requestMethod
+    }
+
+    formData.append('username',username);
+    formData.append('password',password);
+
+    if (requestMethod === "POST") {
+      options.body = formData
+    }
+
+    apiRequest(options)
     console.log("Submit has been handled")
   }
 
@@ -53,12 +75,22 @@ function App() {
         <input type="text" id="username" name="username" value={username}></input>
         <label htmlFor="password">Password:</label>
         <input type="text" id="password" name="password" value={password}/>
-        <label htmlFor="request">Request:</label>
-        <input type="text" id="request" name="request" value={request}/>
+        <div id="requestLabels">
+          <label htmlFor="method">Method:</label>
+          <label htmlFor="request">Request:</label>
+        </div>
+        
+        <div id="requestInputs">
+          <input type="text" id="requestMethod" name="requestMethod" value={requestMethod}/>
+          <input type="text" id="request" name="request" value={request}/>
+        </div>
+        
       </form>
       <button className='request' id="requestButton" onClick={sendRequest}>Send</button>
     </div>
   )
 }
+
+
 
 export default App

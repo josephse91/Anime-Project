@@ -19,7 +19,7 @@ services:
     ports: 
       - "5000:5000"
   user-api:
-    container_name: user_api
+    container_name: user-api
     build: ./user_api
     image: "josephse91/rails_api"
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
