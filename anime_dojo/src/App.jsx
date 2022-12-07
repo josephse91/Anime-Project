@@ -7,7 +7,8 @@ function App() {
   const [password,setPassword] = useState("");
   const [request,setRequest] = useState("");
   const [response,setResponse] = useState(null);
-  const [requestMethod,setRequestMethod] = useState(null)
+  const [requestMethod,setRequestMethod] = useState(null);
+  const [testcase,setTestcase] = useState({});
 
   let handleChange = function(e) {
     e.preventDefault;
@@ -21,8 +22,13 @@ function App() {
       setRequest(input.value)
     } else if (input.id === "requestMethod") {
       setRequestMethod(input.value)
+    } else if (input.id === "key") {
+      setTestcase({...testcase, key: input.value})
+    } else if (input.id === "value") {
+      setTestcase({...testcase, value: input.value})
     }
-    console.log(username,password,request)
+    console.log(username,password)
+    console.log(testcase, request)
   }
 
   let formData = new FormData();
@@ -33,7 +39,7 @@ function App() {
     let apiRequest = await fetch(requestStr, options)
     let data = await apiRequest.json()
     setResponse(data)
-    await console.log(requestStr,data)
+    console.log(requestStr,data)
     addElement(data)
   }
   
@@ -45,11 +51,15 @@ function App() {
       method: requestMethod
     }
 
-    formData.append('username',username);
-    formData.append('password',password);
+    if (username) formData.append('username',username);
+    if (password) formData.append('password',password);
 
-    if (requestMethod === "POST") {
+    // This is where you will format the testcase values
+    let testcaseInput = JSON.stringify({action: "remove",focusPeer: testcase.value })
+
+    if (requestMethod === "POST" || requestMethod === "PATCH") {
       options.body = formData
+      formData.append(testcase.key,testcaseInput)
     }
 
     apiRequest(options)
@@ -75,6 +85,17 @@ function App() {
         <input type="text" id="username" name="username" value={username}></input>
         <label htmlFor="password">Password:</label>
         <input type="text" id="password" name="password" value={password}/>
+
+        <div id="testcaseLabels">
+          <label htmlFor="key">Key:</label>
+          <label htmlFor="value">Value:</label>
+        </div>
+
+        <div id="testcaseInputs">
+          <input type="text" id="key" name="key" value={testcase.key}/>
+          <input type="text" id="value" name="value" value={testcase.value}/>
+        </div>
+
         <div id="requestLabels">
           <label htmlFor="method">Method:</label>
           <label htmlFor="request">Request:</label>

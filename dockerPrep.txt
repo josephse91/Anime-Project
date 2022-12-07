@@ -1,0 +1,10 @@
+There are a number of arrangements that must be made when preparing the Rails API to be Docker suitable
+
+- Take .env file and place it into root of project
+- Take cors.rb and place it within /config/initializers
+
+- within database.yml, comment the content within the development,test and production then insert the following lines
+
+    - development: url: <%= ENV['DATABASE_URL'].gsub('?', '_development?') %>
+    - test: url: <%= ENV['DATABASE_URL'].gsub('?', '_test?') %>
+    - production: url: <%= ENV['DATABASE_URL'].gsub('?', '_production?') %>

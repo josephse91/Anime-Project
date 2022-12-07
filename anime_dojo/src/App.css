@@ -39,3 +39,22 @@ input {
   margin-top: 20px;
   border: 2px solid blue;
 }
+
+#key {
+  max-width: 75px;
+}
+
+#testcaseInputs {
+  display:flex;
+  gap: 10px;
+}
+
+#testcaseLabels {
+  display:flex;
+  gap: 60px;
+}
+
+#requestButton {
+  margin-top: 20px;
+  border: 2px solid blue;
+}
