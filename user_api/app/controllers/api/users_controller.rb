@@ -74,11 +74,27 @@ class Api::UsersController < ApplicationController
             user_peers = ActiveSupport::JSON.encode(user_peers)
             @user.update(peers: user_peers)
 
+        elsif user_params[:requests]
+            user_requests = !@user.requests.nil? ? ActiveSupport::JSON.decode(@user.requests) : {}
+            action_obj = ActiveSupport::JSON.decode(user_params[:requests])
+            requests_action = action_obj["action"]
+            focus_request = action_obj["focusRequest"]
+            
+            if (requests_action == "remove")
+                user_requests.delete(focus_request)
+            elsif (!user_requests[focus_request] && requests_action == "add")
+                time = Time.new
+                current_date = "#{time.month}/#{time.day}/#{time.year}"
+                user_requests[focus_request] = current_date
+            end
+        
+            user_requests = ActiveSupport::JSON.encode(user_requests)
+            @user.update(requests: user_requests)
         elsif !user_params[:password]
             @user.update(user_params)
         end
 
-        render json: {status: "complete", user_peers: @user.peers}
+        render json: {status: "complete", user_focus: @user}
     end
 
     def destroy

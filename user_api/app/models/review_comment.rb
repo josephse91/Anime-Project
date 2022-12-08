@@ -1,6 +1,6 @@
 class ReviewComment < ApplicationRecord
     validates :comment, presence: true
 
-    belongs_to :reviews
-    belongs_to :users, :through => :reviews
+    has_one :reviews
+    has_many :users, through: :reviews
 end

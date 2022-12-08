@@ -9,6 +9,7 @@
 
 # Testing data
 require 'faker'
+require 'bcrypt'
 
 num_of_users = 5;
 num_of_reviews = Random.new.rand(5..10)
@@ -22,7 +23,7 @@ passwords = Array.new(num_of_users).map do |password|
 end
 
 (0...num_of_users).each do |idx|
-    User.create(username: names[idx],password_digest: passwords[idx])
+    User.create(username: names[idx],password_digest: BCrypt::Password.create("password"))
 end
 
 
