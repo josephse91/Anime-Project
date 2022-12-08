@@ -35,7 +35,7 @@ function App() {
   let myHeaders = new Headers();
 
   async function apiRequest(options) {
-    let requestStr = "http://" + request;
+    let requestStr = "http://localhost:3000" + request;
     let apiRequest = await fetch(requestStr, options)
     let data = await apiRequest.json()
     setResponse(data)
@@ -55,11 +55,29 @@ function App() {
     if (password) formData.append('password',password);
 
     // This is where you will format the testcase values
-    let testcaseInput = JSON.stringify({action: "remove",focusPeer: testcase.value })
+    // let testcaseInput = JSON.stringify({action: "add",focusRequest: testcase.value })
+    let testcaseInput;
+
+    let roomPeerParam = new Set(["rooms","peers"]);
+    let requestParam = new Set(["requests"])
+    if (roomPeerParam.has(testcase.key)) {
+      testcaseInput = {action: "add", focusRoom: testcase.value };
+    } else if (requestParam.has(testcase.key)) {
+      testcaseInput = {
+        action: "remove",
+        requestType: "roomAuth", 
+        focusRequest: testcase.value,
+        val: "peer4" 
+      };
+    } else {
+      testcaseInput = testcase.value
+    }
+
+    let testcaseInputString = JSON.stringify(testcaseInput)
 
     if (requestMethod === "POST" || requestMethod === "PATCH") {
       options.body = formData
-      formData.append(testcase.key,testcaseInput)
+      formData.append(testcase.key,testcaseInputString)
     }
 
     apiRequest(options)

@@ -1,24 +1,124 @@
-# README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# User-Api-Documentation
 
-Things you may want to cover:
+This document details the information available for the users of the Anime Dojo application as well as the parameter requirements
 
-* Ruby version
 
-* System dependencies
 
-* Configuration
+## Table Summaries
 
-* Database creation
+This API will be used to manage any actions done by the user. The tables that will be included are a User table, Reviews table a reviews comment table.
 
-* Database initialization
+**User Table**: Will provide details of the user and maintain the inputs specific to the user such as the rooms that they are in, their peers and their pending requests
 
-* How to run the test suite
+**Review Table**: Holds user information about each review that they have made
 
-* Services (job queues, cache servers, search engines, etc.)
+**Review Comments**: Holds comments that will be nested under each review
 
-* Deployment instructions
 
-* ...
+## API Reference
+- User endpoints
+- Review endpoints
+- Review Comment endpoints
+
+#### User Table
+---
+**Retreive all users** (index)
+
+```http
+  GET /api/users/
+```
+
+*Filter select users*
+
+```http
+  GET /api/users?search=[username]
+```
+
+| Parameter | Type     | Description                   |
+| :-------- | :------- | :-------------------------    |
+| `search` | `string` | Username placed w/out brackets |
+
+**Create a user** (create)
+
+```http
+  POST /api/users/
+```
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `username` | `string` | Must be unique                 |
+| `password` | `string` | Must be at least 5 characters  |
+| *`genre_preference` | `string` |                       |
+| *`go_to_motto` | `string` |                            |
+| *`user_grade_protocol` | `text` |                      |
+
+* These inputs will be provided within account information
+
+**Get specific User JSON object** (show)
+
+```http
+  GET /api/users/${username}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `username`| `string` | Username of item to fetch         |
+
+* Refer to JSON object in Appendix
+
+
+**Edit specific User JSON object** (update)
+
+```http
+  PATCH /api/users/${username}
+```
+
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `username` | `string` | Must be unique                 |
+| `password` | `string` | Must be at least 5 characters  |
+| *`genre_preference` | `string` |                       |
+| *`go_to_motto` | `string` |                            |
+| *`user_grade_protocol` | `text` |                      |
+| **`rooms` | `json` | View JSON format below            |
+| **`peers` | `json` | View JSON format below            |
+| **`requests` | `json` | View JSON format below         |
+
+*These inputs will be provided within account information
+**Refer to JSON object in Appendix
+
+**Delete User** (destroy)
+
+```http
+  DELETE /api/users/${username}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `username`| `string` | Username of item to fetch         |
+
+# Appendix
+
+Find terms and formats utilized in the API below
+
+### User room/peer Parameter input
+
+The format of the parameter required will as follows
+
+```
+{ action: "add",focusRoom: "value" }
+{ action: "remove",focusPeer: "value" }
+```
+
+* Be sure that there is an action key which should have either ("add" or "remove")
+* The second key should be (focusRoom or focusPeer) depending on which parameter you're looking to provide. This will be the name of the room looking to be added or removed
+
+### User Requests Parameter input
+
+
+
+
+## Authors
+
+- [Serge-Edouard Joseph](https://josephse91.github.io)
+

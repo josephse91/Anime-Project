@@ -43,9 +43,9 @@ class Api::UsersController < ApplicationController
             @user.save
         elsif user_params[:rooms]
             user_rooms = !@user.rooms.nil? ? ActiveSupport::JSON.decode(@user.rooms) : {}
-            action_obj = ActiveSupport::JSON.decode(user_params[:rooms])
-            rooms_action = action_obj["action"]
-            focus_room = action_obj["focusRoom"]
+            param_obj = ActiveSupport::JSON.decode(user_params[:rooms])
+            rooms_action = param_obj["action"]
+            focus_room = param_obj["focusRoom"]
             
             if (rooms_action == "remove")
                 user_rooms.delete(focus_room)
@@ -59,9 +59,9 @@ class Api::UsersController < ApplicationController
             @user.update(rooms: user_rooms)
         elsif user_params[:peers]
             user_peers = !@user.peers.nil? ? ActiveSupport::JSON.decode(@user.peers) : {}
-            action_obj = ActiveSupport::JSON.decode(user_params[:peers])
-            peers_action = action_obj["action"]
-            focus_peer = action_obj["focusPeer"]
+            param_obj = ActiveSupport::JSON.decode(user_params[:peers])
+            peers_action = param_obj["action"]
+            focus_peer = param_obj["focusPeer"]
             
             if (peers_action == "remove")
                 user_peers.delete(focus_peer)
@@ -75,26 +75,46 @@ class Api::UsersController < ApplicationController
             @user.update(peers: user_peers)
 
         elsif user_params[:requests]
-            user_requests = !@user.requests.nil? ? ActiveSupport::JSON.decode(@user.requests) : {}
-            action_obj = ActiveSupport::JSON.decode(user_params[:requests])
-            requests_action = action_obj["action"]
-            focus_request = action_obj["focusRequest"]
+            # convert request param into JSON
+            param_obj = ActiveSupport::JSON.decode(user_params[:requests])
+            requests_action = param_obj["action"]
+            focus_type = param_obj["requestType"]
+            focus_request = param_obj["focusRequest"]
+            focus_val = param_obj["val"]
+
+            # grab the user request JSON object. This object automatically converts into a hash
+            user_requests =  @user.requests
+
+            user_request_type = user_requests[focus_type]
+
+            # The types of requests will have different values
+            roomTypes = ["room","roomAuth"]
+            peerTypes = ["peer"]
             
-            if (requests_action == "remove")
-                user_requests.delete(focus_request)
-            elsif (!user_requests[focus_request] && requests_action == "add")
+            # Logic to take care of whether the action is "remove" or "add"
+            if requests_action == "remove"
+                user_request_type.delete(focus_request)
+
+            elsif !user_request_type[focus_request] && requests_action == "add" && roomTypes.include?(focus_type)
+
+                user_request_type[focus_request] = focus_val
+
+            elsif !user_request_type[focus_request] && requests_action == "add" && peerTypes.includes?(focus_type)
+
                 time = Time.new
                 current_date = "#{time.month}/#{time.day}/#{time.year}"
-                user_requests[focus_request] = current_date
+                user_request_type[focus_request] = current_date
+
             end
         
-            user_requests = ActiveSupport::JSON.encode(user_requests)
+            # update the requests column
             @user.update(requests: user_requests)
+            
         elsif !user_params[:password]
             @user.update(user_params)
         end
 
-        render json: {status: "complete", user_focus: @user}
+        render :update
     end
 
     def destroy
