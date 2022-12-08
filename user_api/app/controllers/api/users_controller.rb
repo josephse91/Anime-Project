@@ -42,7 +42,7 @@ class Api::UsersController < ApplicationController
             @user.password(user_params[:new_password])
             @user.save
         elsif user_params[:rooms]
-            user_rooms = !@user.rooms.nil? ? ActiveSupport::JSON.decode(@user.rooms) : {}
+            user_rooms = !@user.rooms.nil? ? @user.rooms : {}
             param_obj = ActiveSupport::JSON.decode(user_params[:rooms])
             rooms_action = param_obj["action"]
             focus_room = param_obj["focusRoom"]
@@ -55,10 +55,10 @@ class Api::UsersController < ApplicationController
                 user_rooms[focus_room] = current_date
             end
 
-            user_rooms = ActiveSupport::JSON.encode(user_rooms)
             @user.update(rooms: user_rooms)
         elsif user_params[:peers]
-            user_peers = !@user.peers.nil? ? ActiveSupport::JSON.decode(@user.peers) : {}
+            # user_peers = !@user.peers.nil? ? ActiveSupport::JSON.decode(@user.peers) : {}
+            user_peers = !@user.peers.nil? ? @user.peers : {}
             param_obj = ActiveSupport::JSON.decode(user_params[:peers])
             peers_action = param_obj["action"]
             focus_peer = param_obj["focusPeer"]
@@ -71,7 +71,7 @@ class Api::UsersController < ApplicationController
                 user_peers[focus_peer] = current_date
             end
 
-            user_peers = ActiveSupport::JSON.encode(user_peers)
+            # user_peers = ActiveSupport::JSON.encode(user_peers)
             @user.update(peers: user_peers)
 
         elsif user_params[:requests]
@@ -99,7 +99,7 @@ class Api::UsersController < ApplicationController
 
                 user_request_type[focus_request] = focus_val
 
-            elsif !user_request_type[focus_request] && requests_action == "add" && peerTypes.includes?(focus_type)
+            elsif !user_request_type[focus_request] && requests_action == "add" && peerTypes.include?(focus_type)
 
                 time = Time.new
                 current_date = "#{time.month}/#{time.day}/#{time.year}"
@@ -109,11 +109,12 @@ class Api::UsersController < ApplicationController
         
             # update the requests column
             @user.update(requests: user_requests)
-            
+
         elsif !user_params[:password]
             @user.update(user_params)
         end
 
+        # render json: {userRoom: user_rooms}
         render :update
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_08_162820) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_08_213232) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,8 +42,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_08_162820) do
     t.string "genre_preference"
     t.string "go_to_motto"
     t.text "user_grade_protocol"
-    t.json "rooms"
-    t.json "peers"
+    t.json "rooms", default: {}
+    t.json "peers", default: {}
     t.json "requests", default: {"room"=>{}, "peer"=>{}, "roomAuth"=>{}}
     t.string "session_token"
     t.index ["username"], name: "index_users_on_username"

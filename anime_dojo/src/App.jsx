@@ -61,11 +61,11 @@ function App() {
     let roomPeerParam = new Set(["rooms","peers"]);
     let requestParam = new Set(["requests"])
     if (roomPeerParam.has(testcase.key)) {
-      testcaseInput = {action: "add", focusRoom: testcase.value };
+      testcaseInput = {action: "add", focusPeer: testcase.value };
     } else if (requestParam.has(testcase.key)) {
       testcaseInput = {
-        action: "remove",
-        requestType: "roomAuth", 
+        action: "add",
+        requestType: "room", 
         focusRequest: testcase.value,
         val: "peer4" 
       };
