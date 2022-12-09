@@ -78,8 +78,8 @@ This API will be used to manage any actions done by the user. The tables that wi
 | *`genre_preference` | `string` |                       |
 | *`go_to_motto` | `string` |                            |
 | *`user_grade_protocol` | `text` |                      |
-| **`rooms` | `json` | View [JSON format](#User-room/peer-Parameter-input) below            |
-| **`peers` | `json` | View [JSON format](#User-room/peer-Parameter-input) below            |
+| **`rooms` | `json` | View [JSON format](#User-roompeer-Parameter-input) below            |
+| **`peers` | `json` | View [JSON format](#User-roompeer-Parameter-input) below            |
 | **`requests` | `json` | View [JSON format](#User-Requests-Parameter-input) below         |
 
 *These inputs will be provided within account information

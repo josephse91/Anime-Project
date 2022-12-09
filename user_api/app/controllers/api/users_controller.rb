@@ -2,6 +2,18 @@ require 'json'
 
 class Api::UsersController < ApplicationController
     
+    def index
+        users_search = query_params[:search] ? "%" + query_params[:search] + "%": nil
+         
+        if users_search
+            users = User.where(["username LIKE ?", users_search])
+        else
+            users = User.all;
+        end
+
+        render json: {status: "complete", users: users}
+    end
+    
     def create
         create_params = user_params.select {|key,value| key != "password" && value}
         @user = User.new(create_params)
@@ -57,7 +69,6 @@ class Api::UsersController < ApplicationController
 
             @user.update(rooms: user_rooms)
         elsif user_params[:peers]
-            # user_peers = !@user.peers.nil? ? ActiveSupport::JSON.decode(@user.peers) : {}
             user_peers = !@user.peers.nil? ? @user.peers : {}
             param_obj = ActiveSupport::JSON.decode(user_params[:peers])
             peers_action = param_obj["action"]
@@ -71,7 +82,6 @@ class Api::UsersController < ApplicationController
                 user_peers[focus_peer] = current_date
             end
 
-            # user_peers = ActiveSupport::JSON.encode(user_peers)
             @user.update(peers: user_peers)
 
         elsif user_params[:requests]
@@ -111,10 +121,12 @@ class Api::UsersController < ApplicationController
             @user.update(requests: user_requests)
 
         elsif !user_params[:password]
-            @user.update(user_params)
+            @user.genre_preference = user_params[:genre_preference] || @user.genre_preference
+            @user.go_to_motto = user_params[:go_to_motto] || @user.go_to_motto
+            @user.user_grade_protocol = user_params[:user_grade_protocol] || @user.user_grade_protocol
+            @user.save
         end
 
-        # render json: {userRoom: user_rooms}
         render :update
     end
 
@@ -142,6 +154,10 @@ class Api::UsersController < ApplicationController
 
     def user_params
         params.permit(:id,:username,:password,:genre_preference,:go_to_motto,:user_grade_protocol,:rooms,:peers,:requests,:new_username,:new_password,:session_token_input)
+    end
+
+    def query_params
+        params.permit(:search)
     end
 
     def check_password(user)
