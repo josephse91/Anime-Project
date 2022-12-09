@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import './App.css';
+import './UserTable.css';
 
 
-function App() {
+function UserTable() {
   const [username, setUsername] = useState("");
   const [password,setPassword] = useState("");
   const [request,setRequest] = useState("");
@@ -40,7 +40,6 @@ function App() {
     let data = await apiRequest.json()
     setResponse(data)
     console.log(requestStr,data)
-    addElement(data)
   }
   
   let sendRequest = function(e) {
@@ -98,6 +97,7 @@ function App() {
 
   return (
     <div className="App" id="container">
+      <div className='testForm' id='userTableForm'>
       <form className="credentials" onChange={handleChange}>
         <label htmlFor="username">Username:</label>
         <input type="text" id="username" name="username" value={username}></input>
@@ -126,10 +126,12 @@ function App() {
         
       </form>
       <button className='request' id="requestButton" onClick={sendRequest}>Send</button>
+      </div>
+      
     </div>
   )
 }
 
 
 
-export default App
+export default UserTable

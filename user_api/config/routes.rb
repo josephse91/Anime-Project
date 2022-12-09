@@ -5,7 +5,11 @@ Rails.application.routes.draw do
   root "users#index"
 
   namespace :api do
-    resources :users
+
+    resources :users do
+      get '/reviews', to: 'reviews#user_index'
+    end
+    resources :reviews
     resources :sessions, only: [:create,:destroy]
   end
   

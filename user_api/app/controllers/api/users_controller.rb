@@ -4,7 +4,7 @@ class Api::UsersController < ApplicationController
     
     def index
         users_search = query_params[:search] ? "%" + query_params[:search] + "%": nil
-         
+
         if users_search
             users = User.where(["username LIKE ?", users_search])
         else
