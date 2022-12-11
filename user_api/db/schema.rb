@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_08_213232) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_11_165027) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,11 +27,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_08_213232) do
     t.string "show", null: false
     t.integer "rating", null: false
     t.string "amount_watched"
-    t.string "highlighted_points"
+    t.text "highlighted_points", default: [], array: true
     t.string "overall_review"
     t.string "referral_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "watch_priority"
   end
 
   create_table "users", force: :cascade do |t|

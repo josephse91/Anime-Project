@@ -17,12 +17,20 @@ class Api::ReviewsController < ApplicationController
     def show
         # get the specific review of a specific user
         username = find_user
+        return if username.nil?
+
         show = review_params[:id]
         review = Review.where(["reviews.user = ? and show = ?",username,show]).take
+
+        if !review
+            render json: {status: "failed", error: "No review for this show"}
+            return
+        end
 
         render json: {status: "complete", reviews: review}
     end
 
+    #helper functions
     def review_params
         params.permit(:user_id,:id)
     end
