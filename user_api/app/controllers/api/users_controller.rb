@@ -133,6 +133,7 @@ class Api::UsersController < ApplicationController
     def destroy
         if !current_user
             render json: {status: "failed", error: "not signed in"}
+            return
         end
 
         @user = User.find_by(session_token: user_params[:session_token_input])

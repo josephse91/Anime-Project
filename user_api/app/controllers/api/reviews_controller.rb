@@ -1,13 +1,20 @@
 class Api::ReviewsController < ApplicationController
 
     def index
-        reviews = Review.all
+        where_array = where_filter
 
-        render json: {status: "complete", reviews: reviews}
+        if review_params[:in_network] === "true" || review_params[:range]
+            reviews = Review.where(where_array).order(rating: :desc)
+            render json: {status: "complete",type: "peers", reviews: reviews}
+        else
+            reviews = Review.all.order(rating: :desc);
+            render json: {status: "complete",type: "all", reviews: reviews}
+        end
+
     end
     
     def user_index
-        username = find_user
+        username = find_user.username
         return if username.nil?
         reviews = Review.where(user: username).order(rating: :desc, user: :asc)
 
@@ -15,7 +22,7 @@ class Api::ReviewsController < ApplicationController
     end
 
     def create
-        username = find_user
+        username = find_user.username
         return if username.nil?
 
         components = review_attrs
@@ -53,13 +60,17 @@ class Api::ReviewsController < ApplicationController
     end
 
     def destroy
-        review = find_show(username)
+        review = find_show
         return if review.nil?
+
+        review.destroy
+
+        render json: {status: "complete", review: review}
     end
 
     #helper functions
     def review_params
-        params.permit(:id,:user,:user_id,:show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority)
+        params.permit(:id,:user,:user_id,:show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range)
     end
 
     def find_user
@@ -71,11 +82,11 @@ class Api::ReviewsController < ApplicationController
             return
         end
 
-        user.username
+        user
     end
 
     def find_show
-        username = find_user
+        username = find_user.username
         return nil if username.nil?
 
         show = review_params[:id] || review_params[:show]
@@ -108,5 +119,53 @@ class Api::ReviewsController < ApplicationController
             referral_id: referral_id,
             watch_priority: wp.to_i
         }
+    end
+
+    def query_peers_array(user)
+        peer_array = ""
+        user_peers = user.peers.keys.map {|key| key.to_s}
+
+        if user_peers.length <= 0
+            render json: {status: "complete", reviews: []}
+            return ""
+        end
+
+        peer_array += "("
+        user_peers.each.with_index do |peer,idx|
+            peer_array += "'#{peer}',"
+            if idx == user_peers.length - 1
+                peer_array[-1] = ")"
+            end
+        end
+    
+        peer_array
+    end
+
+    def where_filter
+        network = review_params[:in_network] 
+        range = ActiveSupport::JSON.decode(review_params[:range]) 
+        where_array = [""]
+
+        if network === "true"
+            user = find_user
+            return if user.nil?
+
+            peers_query = "reviews.user IN " + query_peers_array(user)
+            
+            where_array[0] += peers_query
+        end
+
+        if range
+            range_query = "reviews.rating BETWEEN ? AND ?"
+            where_array.push(range["bottom"],range["top"])
+            
+            if where_array[0] != ""
+                where_array[0] += " AND "
+            end
+
+            where_array[0] += range_query
+        end
+
+        where_array
     end
 end
