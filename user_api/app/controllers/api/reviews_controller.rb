@@ -30,7 +30,7 @@ class Api::ReviewsController < ApplicationController
         @review = Review.new(components)
 
         if (@review.save) 
-            {status: "complete", review: @review}
+            render json: {status: "complete", review: @review}
         else 
             render json: {status: "failed", errors: @review.errors.objects.first.full_message}
         end
@@ -63,9 +63,10 @@ class Api::ReviewsController < ApplicationController
         review = find_show
         return if review.nil?
 
+        comments = ReviewComment.where(review_id: review.id)
         review.destroy
-
-        render json: {status: "complete", review: review}
+        
+        render json: {status: "complete", review: review, comments: comments}
     end
 
     #helper functions

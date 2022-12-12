@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import './ReviewsTable.css';
+import './ReviewsCommentsTable.css';
 
 
-function ReviewTable() {
-  const [user,setUser] = useState("");
+function ReviewCommentsTable() {
+  const [review,setReview] = useState("");
   const [request,setRequest] = useState("");
   const [response,setResponse] = useState(null);
   const [requestMethod,setRequestMethod] = useState(null);
@@ -13,8 +13,8 @@ function ReviewTable() {
     e.preventDefault;
 
     let input = e.target
-    if(input.id === "reviewUser") {
-      setUser(input.value)
+    if(input.id === "reviewCommentsReview") {
+      setReview(Number(input.value))
     } else if (input.id === "request") {
       setRequest(input.value)
     } else if (input.id === "requestMethod") {
@@ -25,7 +25,7 @@ function ReviewTable() {
       setTestcase({...testcase, value: input.value})
     }
 
-    console.log(testcase, request)
+    console.log(review,typeof review, request)
   }
 
   let formData = new FormData();
@@ -50,20 +50,22 @@ function ReviewTable() {
     // This is where you will format the testcase values
     // let testcaseInput = JSON.stringify({action: "add",focusRequest: testcase.value })
     let testcaseInput = testcase.value;
-    let testcaseInputString = typeof testcase.value ==="number" ? Number(testcase.value) : JSON.stringify(testcaseInput);
+    let testcaseInputString = JSON.stringify(testcaseInput);
 
     let search = ""
-    if (user) {
-      search += "?user_id=" + user;
-      // search += "&in_network=true";
-      // let range = JSON.stringify({"top": 95, "bottom":80})
-      // search += `&range=${range}`;
+    if (review) {
+      search += "?review_id=" + review;
+      search += "&comment=Let's Build a fort";
+      search += "&user_id=Aldane";
+      search += "&comment_type=reply";
+      search += "&parent=" + 37;
+      // search += "&top_comment=" + 34;
     }
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
       options.body = formData;
       // formData.append("watch_priority",-1)
-      formData.append(testcase.key,testcaseInputString);
+      // formData.append(testcase.key,testcaseInputString);
     }
 
     apiRequest(options,search)
@@ -72,12 +74,12 @@ function ReviewTable() {
 
   return (
     <div className="App" id="container">
-      <div className='testForm' id='reviewTableForm'>
+      <div className='testForm' id='reviewCommentsTableForm'>
       <form className="credentials" onChange={handleChange}>
-        <label htmlFor="reviewUser">User:</label>
-        <input type="text" id="reviewUser" name="reviewUser" value={user}/>
+        <label htmlFor="reviewCommentsReview">Review:</label>
+        <input type="text" id="reviewCommentsReview" name="reviewCommentsReview" value={review}/>
         <label htmlFor="reviewKey">Key:</label>
-        <input type="text" id="reviewKey" name="reviewKey" value={testcase.key}/>
+        <input type="text" id="reviewCommentsKey" name="reviewCommentsKey" value={testcase.key}/>
         <label htmlFor="value">Value:</label>
         <input type="text" id="value" name="value" value={testcase.value}/>
 
@@ -99,4 +101,4 @@ function ReviewTable() {
   )
 }
 
-export default ReviewTable
+export default ReviewCommentsTable

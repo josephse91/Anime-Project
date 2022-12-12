@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get '/reviews', to: 'reviews#user_index'
     end
     resources :reviews
+    resources :review_comments
     resources :sessions, only: [:create,:destroy]
   end
   
