@@ -142,8 +142,11 @@ class Api::ReviewsController < ApplicationController
     end
 
     def where_filter
-        network = review_params[:in_network] 
-        range = ActiveSupport::JSON.decode(review_params[:range]) 
+        network = review_params[:in_network]
+        range = nil 
+        if review_params[:range]
+            range = ActiveSupport::JSON.decode(review_params[:range]) 
+        end
         where_array = [""]
 
         if network === "true"
