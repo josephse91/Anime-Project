@@ -71,7 +71,7 @@ class Api::ReviewsController < ApplicationController
 
     #helper functions
     def review_params
-        params.permit(:id,:user,:user_id,:show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range)
+        params.permit(:id,:user,:user_id,:show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range, :change_like)
     end
 
     def find_user
@@ -109,6 +109,7 @@ class Api::ReviewsController < ApplicationController
         overall_review = review_params[:overall_review] || review&.overall_review
         referral_id = review_params[:referral_id] || review&.referral_id
         wp = review_params[:watch_priority] || review&.watch_priority
+        likes = review_params[:change_likes] || review&.likes
 
         components = {
             user: user,
@@ -118,7 +119,8 @@ class Api::ReviewsController < ApplicationController
             highlighted_points: hps,
             overall_review: overall_review,
             referral_id: referral_id,
-            watch_priority: wp.to_i
+            watch_priority: wp.to_i,
+            likes: likes.to_i
         }
     end
 

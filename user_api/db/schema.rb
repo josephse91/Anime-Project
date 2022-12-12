@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_12_042052) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_12_222220) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_12_042052) do
     t.integer "top_comment"
     t.string "comment_type", null: false
     t.integer "parent", null: false
+    t.integer "likes", default: 0
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -36,6 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_12_042052) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "watch_priority"
+    t.integer "likes", default: 0
   end
 
   create_table "users", force: :cascade do |t|

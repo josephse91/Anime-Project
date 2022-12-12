@@ -3,8 +3,6 @@ class Api::ReviewCommentsController < ApplicationController
         review = find_review
         return if !review
 
-        # comments = ReviewComment.all.where(review_id: review.id).order(created_at: :desc)
-
         sql = <<-SQL
         SELECT *, FIRST_VALUE(top_comment) OVER(
             PARTITION BY top_comment
@@ -67,6 +65,7 @@ class Api::ReviewCommentsController < ApplicationController
                 user_id: item.user_id,
                 parent: item.parent,
                 comment: item.comment,
+                likes: item.likes
             }
             item.destroy
             check = ReviewComment.find_by(id: comments_param[:id])
@@ -82,7 +81,7 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def comments_param
-        params.permit(:id,:comment,:review_id,:user_id,:top_comment,:comment_type,:parent)
+        params.permit(:id,:comment,:review_id,:user_id,:top_comment,:comment_type,:parent,:change_likes)
     end
 
     def find_comment
@@ -123,6 +122,8 @@ class Api::ReviewCommentsController < ApplicationController
             parent: parent,
             top_comment: top_comment
         }
+
+        components[:likes] = comments_param[:change_likes]
 
         components
     end
