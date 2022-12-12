@@ -71,10 +71,19 @@ jarret = User.create({
     peers: {names[1] => "2022-12-11", names[3] => "2022-12-11"}
 })
 
+aldane = User.create({
+    username: "Aldane",
+    password_digest: "password",
+    genre_preference: "Shounin",
+    go_to_motto: "You can take away my body, but you can't take away my pride",
+    peers: {names[1] => "2022-12-12", names[2] => "2022-12-12",names[4] => "2022-12-12"}
+})
+
 jarret_review_1 = Review.create({
     user: "Jarret",
     show: "My Hero",
     rating: 76,
+    comment: "This is trash",
     watch_priority: -1
 })
 
@@ -82,12 +91,70 @@ jarret_review_2 = Review.create({
     user: "Jarret",
     show: "Attack on Titan",
     rating: 99,
+    comment: "God Tier Level",
     watch_priority: 1
 })
 
 jarret_review_3 = Review.create({
-    user: "Jarret",
+    user: jarret.username,
     show: "Jobless Reincarnation",
     rating: 89,
+    comment: "You have to watch this",
     watch_priority: 1
+})
+
+aldane_comment_1 = ReviewComment.create({
+    comment:"You're hatin', you gotta give things a chance",
+    review_id: jarret_review_1.id,
+    user_id: aldane.id,
+    parent: jarret_review_1.id,
+    comment_type: "comment"
+})
+
+jarret_reply_1 = ReviewComment.create({
+    comment:"You have a thick imagination",
+    review_id: jarret_review_1.id,
+    user_id: jarret.id,
+    parent: aldane_comment_1.id,
+    comment_type: "reply"
+})
+
+aldane_reply_1 = ReviewComment.create({
+    comment:"Why you want to hate good things so badly?",
+    review_id: jarret_review_1.id,
+    user_id: aldane.id,
+    parent: jarret_review_1.id,
+    comment_type: "reply"
+})
+
+aldane_review_1 = Review.create({
+    user: aldane.username,
+    show: "Bleach",
+    rating: 90,
+    comment: "This is top 2 and its NOT 2!",
+    watch_priority: 1
+})
+
+jarret_comment_1 = ReviewComment.create({
+    comment:"Bleach really moving crazy now! You right!",
+    review_id: aldane_review_1.id,
+    user_id: jarret.id,
+    parent: aldane_review_1.id,
+    comment_type: "comment"
+})
+
+aldane_reply_2 = ReviewComment.create({
+    comment:"I put you on! DEAD!!!",
+    review_id: aldane_review_1.id,
+    user_id: aldane.id,
+    parent: jarret_comment_1.id,
+    comment_type: "reply"
+})
+
+aldane_comment_2 = ReviewComment.create({
+    comment:"So what you're saying is, its goated",
+    review_id: jarret_review_3.id,
+    user_id: aldane.id,
+    parent: jarret_review_3.id,
+    comment_type: "comment"
 })
