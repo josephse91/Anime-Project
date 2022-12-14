@@ -1,10 +1,80 @@
+Create new rails project
+
+1) Run new Rails project
+    $ rails new --database=postgresql --api [projectname]
+
+2) Add the following gems within the gem file
+    *Note: uncomment the gem "rack-cors"
+
+        # Run 'bundle exec annotate' in Terminal to add helpful comments to models.
+        gem 'annotate'
+
+        # These two give you a great error handling page.
+        # But make sure to never use them in production!
+        gem 'better_errors'
+        gem 'binding_of_caller'
+
+
+
+        # pry > irb
+        gem 'pry-rails'
+
+        #
+        gem 'rspec-rails'
+
+        # Gotta have byebug...
+        gem 'byebug'
+
+        # What to have something that can generate realistic fake data
+        gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'main'
+
+        gem 'dotenv-rails' # added for docker
+
 There are a number of arrangements that must be made when preparing the Rails API to be Docker suitable
 
-- Take .env file and place it into root of project
-- Take cors.rb and place it within /config/initializers
+3) Change the default port within the /config/puma.rb file
 
-- within database.yml, comment the content within the development,test and production then insert the following lines
+    port ENV.fetch("PORT") { 3000 } <-- change the 3000 to an appropriate port that is not being used
 
-    - development: url: <%= ENV['DATABASE_URL'].gsub('?', '_development?') %>
-    - test: url: <%= ENV['DATABASE_URL'].gsub('?', '_test?') %>
-    - production: url: <%= ENV['DATABASE_URL'].gsub('?', '_production?') %>
+4) Copy .env file and place it into root of project
+    - Change the PORT within the file to the appropriate port that was selected prior
+    - Change the container database name on line 1. (right before the question mark)
+
+    * Note: Prior to testing, take all environment files out of temporary folder (z_docker_environment) and place it in root of the API
+
+5) Within the config/initializers/cors.rb file, make sure the allow block contains the following:
+
+    # Read more: https://github.com/cyu/rack-cors
+
+    Rails.application.config.middleware.insert_before 0, Rack::Cors do
+        allow do
+            origins ENV['ALLOWED_ORIGIN'] || 'http://localhost:5000'
+            resource '*', headers: :any, methods: [:get, :post, :patch, :put, :delete, :options, :head]
+        end
+    end
+
+    *Note: If there is no cors.rb file, add a cors.rb file. Also, the port after the localhost should be whatever port you select your frontend to be running on
+
+6) Within config/database.yml, insert the following lines within the respective sections
+
+    - url: <%= ENV['DATABASE_URL'].gsub('?', '_development?') %>
+    - url: <%= ENV['DATABASE_URL'].gsub('?', '_test?') %>
+    - url: <%= ENV['DATABASE_URL'].gsub('?', '_production?') %>
+
+7) Copy the Dockerfile and dockerignore templete files and add it to the root of the new api
+
+8) Copy dockerignore file from previous api
+
+9) Add the new api to the docker-compose.yml
+    - Rename the service name, container name and image name
+    - Add a port tag to the command with an available port
+    - Change the port attribute to expose the port within the command
+
+
+10) Run the following commands to run and test the network:
+
+    $ docker-compose build
+    # Run the commands to create the database and migrate each schema to the volume
+    $ docker-compose run user-api rails db:create db:migrate 
+    $ docker-compose run room-api rails db:create db:migrate
+    $ docker-compose up
