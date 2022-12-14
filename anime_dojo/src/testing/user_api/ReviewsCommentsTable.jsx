@@ -55,8 +55,8 @@ function ReviewCommentsTable() {
     let search = ""
     if (review) {
       search += "?review_id=" + review;
-      search += "&comment=Let's Build a fort";
-      search += "&user_id=Aldane";
+      search += "&comment=Yes, its goated";
+      search += "&user_id=Jarret";
       search += "&comment_type=reply";
       search += "&parent=" + 37;
       // search += "&top_comment=" + 34;
