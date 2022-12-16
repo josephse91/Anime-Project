@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_14_184104) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_16_144757) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,6 +38,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_184104) do
     t.datetime "updated_at", null: false
     t.integer "watch_priority"
     t.integer "likes", default: 0
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.string "room_name", null: false
+    t.json "users", default: {}
+    t.boolean "private", default: true
+    t.json "pending_approval", default: {}
+    t.json "admin", default: {"group_admin"=>false, "admin_users"=>{}}
+    t.json "entry_keys", default: {"keys"=>{}, "user"=>""}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_name"], name: "index_rooms_on_room_name"
   end
 
   create_table "users", force: :cascade do |t|

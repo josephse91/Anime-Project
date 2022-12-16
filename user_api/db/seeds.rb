@@ -11,6 +11,9 @@
 require 'faker'
 require 'bcrypt'
 
+NOW = Time.new
+TIME_INPUT = "#{NOW.month}-#{NOW.day}-#{NOW.year}"
+
 num_of_users = 5;
 num_of_reviews = Random.new.rand(5..10)
 watch_priorities = [-1,0,1]
@@ -68,7 +71,9 @@ jarret = User.create({
     password_digest: "password",
     genre_preference: "Shounin",
     go_to_motto: "Somebody gotta go",
-    peers: {names[1] => "2022-12-11", names[3] => "2022-12-11"}
+    peers: {names[1] => "2022-12-11", 
+        names[3] => "2022-12-11",
+    }
 })
 
 aldane = User.create({
@@ -76,8 +81,15 @@ aldane = User.create({
     password_digest: "password",
     genre_preference: "Shounin",
     go_to_motto: "You can take away my body, but you can't take away my pride",
-    peers: {names[1] => "2022-12-12", names[2] => "2022-12-12",names[4] => "2022-12-12"}
+    peers: {names[1] => "2022-12-12", 
+        names[2] => "2022-12-12",
+        names[4] => "2022-12-12",
+        jarret.username => TIME_INPUT
+    }
 })
+
+jarret.peers[aldane.username] = TIME_INPUT
+jarret.save
 
 jarret_review_1 = Review.create({
     user: "Jarret",
@@ -158,3 +170,24 @@ aldane_comment_2 = ReviewComment.create({
     parent: jarret_review_3.id,
     comment_type: "comment"
 })
+
+serge = User.create({
+    username: "Serge",
+    password_digest: "password",
+    genre_preference: "Isekai",
+    go_to_motto: "Those who break the rules are scum, those who abandon their friends are worse than scum!",
+    peers: {names[0] => "2022-12-11", 
+        jarret.username => TIME_INPUT}
+})
+
+jarret.peers[serge.username] = TIME_INPUT
+jarret.save
+
+planet_vegeta = Room.new({
+    room_name: "Planet Vegeta",
+    users: {"Serge": TIME_INPUT}
+})
+
+planet_vegeta.admin["admin_users"][serge.username] = TIME_INPUT
+planet_vegeta.save
+

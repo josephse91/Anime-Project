@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     end
     resources :reviews
     resources :review_comments
+    resources :rooms
     resources :sessions, only: [:create,:destroy]
   end
   

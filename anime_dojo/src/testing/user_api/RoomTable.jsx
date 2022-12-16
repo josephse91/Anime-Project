@@ -36,7 +36,7 @@ function RoomTable() {
 
   async function apiRequest(options,query = null) {
     let queryInput = query ? `?search=${query}` : "";
-    let requestStr = "http://localhost:3001" + request + queryInput;
+    let requestStr = "http://localhost:3000" + request + queryInput;
     let apiRequest = await fetch(requestStr, options)
     let data = await apiRequest.json()
     setResponse(data)
@@ -61,7 +61,8 @@ function RoomTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH") {
       options.body = formData
-      formData.append("request","Jarret")
+      // formData.append("request","Jamal")
+      formData.append("submitted_key", "qN8CkOC6blcYe-TtNN-kHw")
       formData.append(testcase.key,testcaseInputString)
     }
 
