@@ -1,0 +1,2 @@
+class RoomForum < ApplicationRecord
+end

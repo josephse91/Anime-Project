@@ -39,28 +39,27 @@ class Api::ReviewsController < ApplicationController
 
     def show
         # get the specific review of a specific user
-        review = find_show
+        review = find_show[:review]
         return if review.nil?
 
         render json: {status: "complete", review: review}
     end
 
     def update
-        review = find_show
+        review = find_show[:review]
         return if review.nil?
 
         components = review_attrs(review)
-        review.update(components)
 
-        if (review.save) 
+        if (review.update(components))
             render json: {status: "complete", review: review}
         else 
-            render json: {status: "failed", errors: review.errors.objects.first.full_message}
+            render json: {status: "failed", errors: updated_review.errors.objects.first.full_message}
         end
     end
 
     def destroy
-        review = find_show
+        review = find_show[:review]
         return if review.nil?
 
         comments = ReviewComment.where(review_id: review.id)
@@ -94,10 +93,10 @@ class Api::ReviewsController < ApplicationController
         review = Review.where(["reviews.user = ? and show = ?",username,show]).take
 
         if !review
-            render json: {status: "failed", error: "No review for this show"}
+            render json: {status: "failed", error: "This user has not reviewed this show"}
         end
 
-        review
+        {user: username, review: review}
     end
 
     def review_attrs(review = nil)
