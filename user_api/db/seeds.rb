@@ -30,6 +30,12 @@ end
     User.create(username: names[idx],password_digest: BCrypt::Password.create("password"))
 end
 
+username_0 = User.find_by(username: names[0])
+username_1 = User.find_by(username: names[1])
+username_2 = User.find_by(username: names[2])
+username_3 = User.find_by(username: names[3])
+username_4 = User.find_by(username: names[4])
+
 
 (0...num_of_reviews).each do |idx|
     Review.create({
@@ -177,17 +183,54 @@ serge = User.create({
     genre_preference: "Isekai",
     go_to_motto: "Those who break the rules are scum, those who abandon their friends are worse than scum!",
     peers: {names[0] => "2022-12-11", 
-        jarret.username => TIME_INPUT}
+        jarret.username => TIME_INPUT,
+        aldane.username => TIME_INPUT
+    }
 })
 
 jarret.peers[serge.username] = TIME_INPUT
+aldane.peers[serge.username] = TIME_INPUT
 jarret.save
+aldane.save
+
+david = User.create({
+    username: "David",
+    password_digest: "password",
+    genre_preference: "Shounin",
+    go_to_motto: "Imma yell in your ear",
+    peers: {
+        names[0] => "2022-12-11", 
+        names[3] => "2022-12-11",
+        aldane.username => TIME_INPUT
+    }
+})
+
+names[0].peers[david.username] = TIME_INPUT
+names[3].peers[david.username] = TIME_INPUT
+aldane.peers[david.username] = TIME_INPUT
+aldane.save
+username_0.save
+username_3.save
 
 planet_vegeta = Room.new({
     room_name: "Planet Vegeta",
     users: {"Serge": TIME_INPUT}
 })
 
+planet_vegeta.admin["group_admin"] = true
 planet_vegeta.admin["admin_users"][serge.username] = TIME_INPUT
+planet_vegeta.users[jarret.username] = TIME_INPUT
+planet_vegeta.users[aldane.username] = TIME_INPUT
 planet_vegeta.save
 
+room_name_2 = ""
+room_name_2 += Faker::JapaneseMedia::DragonBall.race
+room_name_2 += Faker::JapaneseMedia::Naruto.demon
+
+room2 = Room.new({
+    room_name: room_name_2,
+    users: {username_0.username => TIME_INPUT}
+})
+
+room2.admin["group_admin"] = true
+room2.admin["admin_users"][username_0.username] = TIME_INPUT

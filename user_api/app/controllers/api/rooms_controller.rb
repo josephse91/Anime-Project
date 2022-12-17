@@ -80,7 +80,7 @@ class Api::RoomsController < ApplicationController
         room_admins = @room.admin["admin_users"][current_user]
 
         if rooms_params[:room_name]
-            if group_admin == "true" || room_admins
+            if group_admin || room_admins
                 @room.room_name = rooms_params[:room_name] || @room.room_name
                 @room.save
             else
@@ -91,10 +91,10 @@ class Api::RoomsController < ApplicationController
 
         if (request || user_remove) && !submitted_key
             
-            if group_admin == "true" || room_admins
+            if group_admin || room_admins
                 request ? @room.users[request] = TIME_INPUT : nil
                 pending_user ? @room.pending_approval.delete(request) : nil
-                user_remove && group_admin == "false" ? @room.users.delete(user_remove) : nil
+                user_remove && !group_admin ? @room.users.delete(user_remove) : nil
             else
                 request ? @room.pending_approval[request] = TIME_INPUT : nil
             end
