@@ -103,7 +103,7 @@ class Api::RoomsController < ApplicationController
 
         if generate_key
             key = Room.generate_entry_key
-            @room.entry_keys["keys"][key] = Time.now.advance(days: 10).at_noon.getutc
+            @room.entry_keys[key] = Time.now.advance(days: 10).at_noon.getutc
 
             if !@room.valid?
                 render json: {status: "complete", error: @room.errors.objects.first.full_message}

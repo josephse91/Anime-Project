@@ -13,11 +13,14 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 **Review Table**: Holds user information about each review that they have made
 
-**Review Comments**: Holds comments that will be nested under each review
+**Review Comments Table**: Holds comments that will be nested under each review
+
+**Rooms Table**: Contains Room data
 ## API Reference
 - [User endpoints](#User-Table)
 - [Review endpoints](#Review-Table)
 - [Review Comment endpoints](#Review-Comments-Table)
+- [Room endpoints](#Rooms-Table)
 
 #### User Table
 ---
@@ -257,6 +260,76 @@ This API will be used to manage any actions done by the user. The tables that wi
 | :--------- | :------- | :-------------------------     |
 | `id` | `integer` | Insert into query param from the frontend component  |
 
+---
+#### Rooms Table
+---
+**Retreive all rooms** (index)
+
+```http
+  GET /api/rooms/
+```
+
+*Filter rooms based upon room name*
+
+```http
+  GET /api/rooms?search=${room name}
+```
+
+| Parameter | Type     | Description                   |
+| :-------- | :------- | :-------------------------    |
+| `search` | `string` | Any consecutive string within Room_name |
+
+
+**Create a Room** (create)
+
+```http
+  POST /api/rooms/
+```
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `current_user` | `string` | The username interacting with the client  |
+| `room_name` | `string` | Insert from form  |
+
+**Get a Room** (show)
+
+```http
+  POST /api/rooms/${:id}
+```
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `id` | `string` | Name of the room  |
+
+
+**Edit Room** (update)
+
+```http
+  PATCH /api/rooms/${:id}
+```
+
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `id` | `string` | Name of the room  |
+| `current_user` | `string` | The username interacting with the client  |
+| `request` | `string` | Username looking to access room |
+| `submitted_key` | `string` | Key submitted by User looking to enter room|
+| `user_remove` | `string` | Username to delete by admin |
+| `room_name` | `string` | Name of Room |
+| `make_entry_key` | `boolean` | Allowed keys generated for access into room |
+| `users` | `JSON` | { key: username, value: date of entry } |
+| `private` | `boolean` | Form data |
+| `admin` | `JSON` | { group_admin =>true, admin_users => {} } |
+| `entry_keys` | `JSON` | { key: generated key, value: expiration } |
+
+**Delete Room** (destroy)
+
+```http
+  DELETE /api/rooms/${id}
+```
+
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `id` | `string` | Room name  |
+| `current_user` | `string` | Username of the client user  |
 
 # Appendix
 
@@ -309,3 +382,4 @@ The format of the parameter required will as follows
 ## Authors
 
 - [Serge-Edouard Joseph](https://josephse91.github.io)
+
