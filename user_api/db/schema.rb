@@ -45,8 +45,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_16_144757) do
     t.json "users", default: {}
     t.boolean "private", default: true
     t.json "pending_approval", default: {}
-    t.json "admin", default: {"group_admin"=>false, "admin_users"=>{}}
-    t.json "entry_keys", default: {"keys"=>{}, "user"=>""}
+    t.json "admin", default: {"group_admin"=>true, "admin_users"=>{}}
+    t.json "entry_keys", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_name"], name: "index_rooms_on_room_name"

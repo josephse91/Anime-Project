@@ -50,7 +50,7 @@ class Api::RoomsController < ApplicationController
 
         request = rooms_params[:request]
         submitted_key = rooms_params[:submitted_key]
-        room_keys = @room.entry_keys["keys"]
+        room_keys = @room.entry_keys
 
         if submitted_key
             if !room_keys[submitted_key]
@@ -134,11 +134,11 @@ class Api::RoomsController < ApplicationController
 
     def clean_expired_keys(room)
         deleted_keys = [];
-        room.entry_keys["keys"].each do |key,val|
+        room.entry_keys.each do |key,val|
             expire_time = Time.parse(val)
             if expire_time < Time.now
                 deleted_keys.push(key)
-                room.entry_keys["keys"].delete(key)
+                room.entry_keys.delete(key)
             end
         end
 

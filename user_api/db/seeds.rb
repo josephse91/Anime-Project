@@ -129,12 +129,15 @@ aldane_comment_1 = ReviewComment.create({
     comment_type: "comment"
 })
 
+aldane_comment_1.top_comment = aldane_comment_1.id
+
 jarret_reply_1 = ReviewComment.create({
     comment:"You have a thick imagination",
     review_id: jarret_review_1.id,
     user_id: jarret.username,
     parent: aldane_comment_1.id,
-    comment_type: "reply"
+    comment_type: "reply",
+    top_comment: aldane_comment_1.id
 })
 
 aldane_reply_1 = ReviewComment.create({
@@ -142,7 +145,8 @@ aldane_reply_1 = ReviewComment.create({
     review_id: jarret_review_1.id,
     user_id: aldane.username,
     parent: jarret_review_1.id,
-    comment_type: "reply"
+    comment_type: "reply",
+    top_comment: aldane_comment_1.id
 })
 
 aldane_review_1 = Review.create({
@@ -161,12 +165,15 @@ jarret_comment_1 = ReviewComment.create({
     comment_type: "comment"
 })
 
+jarret_comment_1.top_comment = jarret_comment_1.id
+
 aldane_reply_2 = ReviewComment.create({
     comment:"I put you on! DEAD!!!",
     review_id: aldane_review_1.id,
     user_id: aldane.username,
     parent: jarret_comment_1.id,
-    comment_type: "reply"
+    comment_type: "reply",
+    top_comment: jarret_comment_1.id
 })
 
 aldane_comment_2 = ReviewComment.create({
@@ -174,8 +181,10 @@ aldane_comment_2 = ReviewComment.create({
     review_id: jarret_review_3.id,
     user_id: aldane.username,
     parent: jarret_review_3.id,
-    comment_type: "comment"
+    comment_type: "comment",
 })
+
+aldane_comment_2.top_comment = aldane_comment_2.id
 
 serge = User.create({
     username: "Serge",
@@ -205,8 +214,8 @@ david = User.create({
     }
 })
 
-names[0].peers[david.username] = TIME_INPUT
-names[3].peers[david.username] = TIME_INPUT
+username_0.peers[david.username] = TIME_INPUT
+username_3.peers[david.username] = TIME_INPUT
 aldane.peers[david.username] = TIME_INPUT
 aldane.save
 username_0.save
@@ -224,7 +233,7 @@ planet_vegeta.users[aldane.username] = TIME_INPUT
 planet_vegeta.save
 
 room_name_2 = ""
-room_name_2 += Faker::JapaneseMedia::DragonBall.race
+room_name_2 += Faker::JapaneseMedia::DragonBall.race + " "
 room_name_2 += Faker::JapaneseMedia::Naruto.demon
 
 room2 = Room.new({
@@ -232,5 +241,5 @@ room2 = Room.new({
     users: {username_0.username => TIME_INPUT}
 })
 
-room2.admin["group_admin"] = true
 room2.admin["admin_users"][username_0.username] = TIME_INPUT
+room2.save
