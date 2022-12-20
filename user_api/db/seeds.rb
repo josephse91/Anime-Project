@@ -226,11 +226,15 @@ planet_vegeta = Room.new({
     users: {"Serge": TIME_INPUT}
 })
 
+serge.rooms[planet_vegeta.roomname] = "12-19-2022"
+
 planet_vegeta.admin["group_admin"] = true
 planet_vegeta.admin["admin_users"][serge.username] = TIME_INPUT
 planet_vegeta.users[jarret.username] = TIME_INPUT
 planet_vegeta.users[aldane.username] = TIME_INPUT
 planet_vegeta.save
+jarret.rooms[planet_vegeta.roomname] = "12-19-2022"
+aldane.rooms[planet_vegeta.roomname] = "12-19-2022"
 
 room_name_2 = ""
 room_name_2 += Faker::JapaneseMedia::DragonBall.race + " "
@@ -243,3 +247,26 @@ room2 = Room.new({
 
 room2.admin["admin_users"][username_0.username] = TIME_INPUT
 room2.save
+username_0.rooms[room2] = "12-19-2022"
+
+forum_1 = Forum.create({
+    topic: "Goku is a bad Father",
+    creator: serge.username,
+    content: "Between voluntarily dying more than once, letting his enemies live and thrive and simply putting his kid in danger, Goku is as bad a father as it gets. There are good moments like their training in the hyperbolic time chamber but that gets nullified because he threw cell a sensu bean. Goku was an acting threat to Gohan's life at times.",
+    anime: "Dragon Ball Z",
+    room: planet_vegeta.room_name
+})
+
+forum_2 = Forum.create({
+    topic: "What are the best quotes in Anime",
+    creator: jarret.username,
+    content: "'I am the bone of my sword, Unknown to death not known to life, Unlimited Blade Works' One of my favorite quotes and anime scenes ever, it gave me chills.",
+    room: planet_vegeta.room_name
+})
+
+forum_3 = Forum.create({
+    topic: "Name a notable anime you watched when you were young that still slaps",
+    creator: aldane.username,
+    content: "The first or second anime i ever saw (as a kid in the late 90s). The main protagonist Kenshin is a special character that has incredible maturity in comparison to other Main characters (it helps that he is 30+ when the show starts). His maturity and approach is evident and you never really get frustrated with him. he is always cool calm and collected. The soundtrack is incredible and for the time the sword animation/fight sequences are great.",
+    room: planet_vegeta.room_name
+})
