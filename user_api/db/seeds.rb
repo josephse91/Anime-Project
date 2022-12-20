@@ -144,7 +144,7 @@ aldane_reply_1 = ReviewComment.create({
     comment:"Why you want to hate good things so badly?",
     review_id: jarret_review_1.id,
     user_id: aldane.username,
-    parent: jarret_review_1.id,
+    parent: aldane_comment_1.id,
     comment_type: "reply",
     top_comment: aldane_comment_1.id
 })
@@ -226,15 +226,15 @@ planet_vegeta = Room.new({
     users: {"Serge": TIME_INPUT}
 })
 
-serge.rooms[planet_vegeta.roomname] = "12-19-2022"
+serge.rooms[planet_vegeta.room_name] = "12-19-2022"
 
 planet_vegeta.admin["group_admin"] = true
 planet_vegeta.admin["admin_users"][serge.username] = TIME_INPUT
 planet_vegeta.users[jarret.username] = TIME_INPUT
 planet_vegeta.users[aldane.username] = TIME_INPUT
 planet_vegeta.save
-jarret.rooms[planet_vegeta.roomname] = "12-19-2022"
-aldane.rooms[planet_vegeta.roomname] = "12-19-2022"
+jarret.rooms[planet_vegeta.room_name] = "12-19-2022"
+aldane.rooms[planet_vegeta.room_name] = "12-19-2022"
 
 room_name_2 = ""
 room_name_2 += Faker::JapaneseMedia::DragonBall.race + " "

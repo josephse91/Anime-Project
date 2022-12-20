@@ -145,7 +145,7 @@ class Api::ForumsController < ApplicationController
 
         current_user,room = user_room
         forum = confirm_forum_owner(current_user)
-        return if !forum
+        return if !forum && forums_params[:id]
 
         topic = forums_params[:topic] || forum&.topic
         content = forums_params[:content]

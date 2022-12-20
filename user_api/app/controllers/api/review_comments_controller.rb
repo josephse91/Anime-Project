@@ -20,9 +20,10 @@ class Api::ReviewCommentsController < ApplicationController
         components = comment_attrs
         return if !components
 
-        comment = ReviewComment.update(components)
+        comment = ReviewComment.new(components)
 
-        if (comment.save)
+        if (comment.valid?)
+            comment.save
             render json: {status: "complete", review: comment}
         else
             render json: {status: "failed", errors: comment.errors.objects.first.full_message}
@@ -34,8 +35,10 @@ class Api::ReviewCommentsController < ApplicationController
         return if !components
         
         comment = ReviewComment.find_by(id: comments_param[:id])
+        valid_check = ReviewComment.new(components)
 
-        if (comment&.update(components))
+        if (valid_check.valid?)
+            comment.update(components)
             render json: {status: "complete", comment: comment}
         else
             render json: {status: "failed", errors: comment.errors.objects.first.full_message}
@@ -43,8 +46,11 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def destroy
+        user_id = comments_param[:user_id]
+        comment = confirm_comment_owner(user_id)
+        return if !comment
+
         delete_stack = []
-        comment = ReviewComment.find_by(id: comments_param[:id])
 
         if !comment
             render json: {status: "failed", parent: parent, error: "Comment does not exist"}
@@ -53,13 +59,14 @@ class Api::ReviewCommentsController < ApplicationController
 
         destroyed_comments = {};
 
-        replies = ReviewComment.where(parent: comment.id)
+        replies = ReviewComment.where(parent: comment.id) # address this parent
         delete_stack.push(comment,*replies)
 
         delete_stack.each do |item|
             item_id = item.id
             destroyed_comments[item_id] = {
                 id: item.id,
+                review_id: item.review_id,
                 top_comment: item.top_comment,
                 comment_type: item.comment_type,
                 user_id: item.user_id,
@@ -68,7 +75,7 @@ class Api::ReviewCommentsController < ApplicationController
                 likes: item.likes
             }
             item.destroy
-            check = ReviewComment.find_by(id: comments_param[:id])
+            check = ReviewComment.find_by(id: item_id)
 
             if check
                 render json: {status: "failed", parent: parent, error: "Did not delete all comments. id: #{item.id} count not be deleted"}
@@ -86,15 +93,38 @@ class Api::ReviewCommentsController < ApplicationController
 
     def find_comment
         comment = ReviewComment.find_by(id: comments_param[:id])
+
+        if !comment
+            render json: {status: "failed", error: "Comment does not exist"}
+            return
+        end
+
+        comment
     end
 
     def find_review
         review = Review.find_by(id: comments_param[:review_id])
     end
 
+    def confirm_comment_owner(current_user)
+        review_comment = find_comment
+        return if !review_comment
+
+        if current_user != review_comment.user_id
+            render json: {
+                status: "failed", 
+                error: "Only the creator of the post can edit the post"
+            }
+            return
+        end
+
+        review_comment
+    end
+
     def comment_attrs(comment = nil) 
         comment_type = comments_param[:comment_type]
         parent = comments_param[:parent]
+        user_id = comments_param[:user_id]
         
         if comment_type == "reply"
             parent = ReviewComment.find_by(id: comments_param[:parent])
@@ -109,9 +139,13 @@ class Api::ReviewCommentsController < ApplicationController
             return nil
         end
 
+        comments_param[:id] ? review_comment = confirm_comment_owner(user_id) : nil
+        return if !review_comment && comments_param[:id]
+
         review_id = comments_param[:review_id].to_i
         comment = comments_param[:comment]
-        user_id = comments_param[:user_id]
+        likes = comments_param[:change_likes]
+        
         parent = parent.id
 
         components = {
@@ -123,7 +157,7 @@ class Api::ReviewCommentsController < ApplicationController
             top_comment: top_comment
         }
 
-        components[:likes] = comments_param[:change_likes]
+        likes ? components[:likes] = likes : nil
 
         components
     end

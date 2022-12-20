@@ -14,7 +14,7 @@ function ReviewCommentsTable() {
 
     let input = e.target
     if(input.id === "reviewCommentsReview") {
-      setReview(Number(input.value))
+      setReview((Number(input.value) || null))
     } else if (input.id === "request") {
       setRequest(input.value)
     } else if (input.id === "requestMethod") {
@@ -55,11 +55,11 @@ function ReviewCommentsTable() {
     let search = ""
     if (review) {
       search += "?review_id=" + review;
-      search += "&comment=Yes, its goated";
-      search += "&user_id=Jarret";
+      search += "&comment=You did, I'll give you credit. I'm not a strag (Duplicate comment to remove)";
+      search += "&user_id=Aldane";
       search += "&comment_type=reply";
-      search += "&parent=" + 37;
-      // search += "&top_comment=" + 34;
+      search += "&parent=" + 17;
+      // search += "&top_comment=" + 16;
     }
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
