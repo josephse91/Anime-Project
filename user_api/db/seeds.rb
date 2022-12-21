@@ -270,3 +270,86 @@ forum_3 = Forum.create({
     content: "The first or second anime i ever saw (as a kid in the late 90s). The main protagonist Kenshin is a special character that has incredible maturity in comparison to other Main characters (it helps that he is 30+ when the show starts). His maturity and approach is evident and you never really get frustrated with him. he is always cool calm and collected. The soundtrack is incredible and for the time the sword animation/fight sequences are great.",
     room: planet_vegeta.room_name
 })
+
+def set_children(parent,child)
+    current_parent = parent
+    current_child = child
+
+    while current_parent
+        current_parent.children[current_child.id] = NOW.to_fs(:db)
+        current_parent.save
+        current_child = current_parent
+        current_parent = ForumComment.find_by(id: current_child.parent)
+    end
+
+    child
+end
+
+def create_forum_comment(attributes)
+    parent = ForumComment.find_by(id: attributes[:parent])
+    level = parent ? parent.level + 1 : 1
+    attributes[:level] = level
+    
+    comment = ForumComment.create(attributes)
+    comment.save
+    comment.top_comment = comment.top_comment || comment.id
+    comment.save
+    set_children(parent, comment)
+    comment
+end
+
+comment_attr_1 = {
+    forum_post: forum_3.id,
+    comment_owner: jarret.username,
+    comment: "Yu Yu Hakusho transcends time. There isn't a better anime that can test to styles of time",
+    parent: nil
+}
+forum_comment_1 = create_forum_comment(comment_attr_1)
+
+comment_attr_2 = {
+    forum_post: forum_3.id,
+    comment_owner: aldane.username,
+    comment: "You're a Yu Yu lover. I can't say that it transcends time. If you love Yu Yu Hakusho, just say that.",
+    parent: forum_comment_1.id
+}
+forum_comment_2 = create_forum_comment(comment_attr_2)
+
+comment_attr_3 = {
+    forum_post: forum_3.id,
+    comment_owner: serge.username,
+    comment: "If we're honest, Naruto is the best anime of all time at transitioning from childhood to adulthood",
+    parent: nil
+}
+forum_comment_3 = create_forum_comment(comment_attr_3)
+
+comment_attr_4 = {
+    forum_post: forum_3.id,
+    comment_owner: aldane.username,
+    comment: "Now that is a take that makes more sense. Naruto really has lessons that carry. And Naruto is goated",
+    parent: forum_comment_3.id
+}
+forum_comment_4 = create_forum_comment(comment_attr_4)
+
+comment_attr_5 = {
+    forum_post: forum_3.id,
+    comment_owner: jarret.username,
+    comment: "You need to put respect on Yu Yu Hakusho's name",
+    parent: forum_comment_2.id
+}
+forum_comment_5 = create_forum_comment(comment_attr_5)
+
+comment_attr_6 = {
+    forum_post: forum_3.id,
+    comment_owner: jarret.username,
+    comment: "Naruto is a safe answer",
+    parent: forum_comment_3.id
+}
+forum_comment_6 = create_forum_comment(comment_attr_6)
+
+comment_attr_7 = {
+    forum_post: forum_3.id,
+    comment_owner: jarret.username,
+    comment: "lol I should've known you were going to put Yu Yu",
+    parent: forum_comment_1.id
+}
+forum_comment_7 = create_forum_comment(comment_attr_7)

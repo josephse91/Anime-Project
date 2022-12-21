@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       get '/forums', to: 'forums#room_forum_index'
     end
     resources :forums
+    resources :forum_comments
     resources :sessions, only: [:create,:destroy]
   end
   

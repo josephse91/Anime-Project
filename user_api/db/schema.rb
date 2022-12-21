@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_19_183812) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "forum_comments", force: :cascade do |t|
+    t.text "comment", null: false
+    t.integer "forum_post", null: false
+    t.string "comment_owner", null: false
+    t.integer "top_comment"
+    t.integer "level"
+    t.integer "parent"
+    t.json "children", default: {}
+    t.json "votes", default: {"up"=>0, "down"=>0}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "forums", force: :cascade do |t|
     t.string "topic", null: false

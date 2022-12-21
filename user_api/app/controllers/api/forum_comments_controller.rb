@@ -1,0 +1,148 @@
+class Api::ForumCommentsController < ApplicationController
+    NOW = Time.new.to_fs(:db)
+
+    def create
+        comment_components = create_components_hash
+        return if !comment_components
+        attributes = comment_components[:attributes]
+        parent = comment_components[:parent]
+        
+        comment = ForumComment.new(attributes)
+
+        if comment.valid?
+            comment.save
+            comment.top_comment = comment.top_comment || comment.id
+            comment.save
+            lineage = set_children(parent,comment)
+        else
+            render json: {status: "failed", error: comment.errors.objects.first.full_message}
+        end
+
+        render json: {status: "complete", comment: comment, lineage: lineage}
+
+    end
+
+    def update
+        comment_components = create_components_hash
+        return if !comment_components
+        attributes = comment_components[:attributes]
+
+        comment = ForumComment.new(attributes)
+
+        if comment.valid?
+            comment.save
+        else
+            render json: {status: "failed", error: comment.errors.objects.first.full_message}
+        end
+
+        render json: {status: "complete", comment: comment}
+    end
+
+    def find_user
+        user = User.find_by(username: comment_params[:comment_owner])
+
+        if !user
+            render json: {status: "failed", error: "User does not exist"}
+            return
+        end
+
+        user
+    end
+
+    def find_forum(current_user)
+        forum = Forum.find_by(id: comment_params[:forum_post])
+
+        if !forum
+            render json: {status: "failed", error: "Forum post does not exist"}
+            return
+        end
+
+        room = Room.find_by(room_name: forum.room)
+        if !room.users[current_user.username]
+            render json: {status: "failed", error: "Only users within room can leave comments"}
+            return
+        end
+
+        forum
+    end
+
+    def add_vote(vote_param)
+        comment = ForumComment.find_by(id: comment_params[:id])
+
+        if !comment
+            render json: {status: "failed", error: "Forum comment could not be found"}
+            return
+        end
+
+        comment.votes = vote_param
+        render json: {status: "complete", votes: comment.votes}
+    end
+
+    def set_children(parent,child)
+        current_parent = parent
+        current_child = child
+
+        lineage = {}
+        lineage[current_child.id] = {}
+
+        while current_parent
+            current_parent.children[current_child.id] = NOW
+            current_parent.save
+            lineage[current_parent.id] = current_parent.children
+            current_child = current_parent
+            current_parent = ForumComment.find_by(id: current_child.parent)
+        end
+
+        lineage
+    end
+
+    def create_components_hash
+        votes = comment_params[:votes]
+        current_user = find_user
+        return if !current_user && !votes
+
+        forum_comment = comment_params[:id]
+
+        if forum_comment
+            forum_comment = ForumComment.find_by(id: forum_comment)
+        end
+
+        if votes
+            if !forum_comment
+                render json: {status: "failed", error: "couldn't find comment"}
+            else
+                forum_comment.votes = votes
+                forum_comment.save
+                render json: {status: "complete", votes: forum_comment.votes}
+            end
+            return
+        end
+
+        forum = find_forum(current_user)
+        return if !forum
+
+        comment = comment_params[:comment] || forum_comment&.comment
+        
+        parent = comment_params[:parent] || forum_comment&.parent
+        parent_obj = ForumComment.find_by(id: parent)
+
+        level = parent_obj ? parent_obj.level + 1 : 1
+        parent_obj ? top_comment = parent_obj.top_comment : nil
+
+        attributes = {
+            comment: comment,
+            forum_post: forum.id,
+            comment_owner: current_user.username,
+            level: level,
+            parent: parent
+        }
+
+        top_comment ? attributes[:top_comment] = top_comment : nil
+
+        {parent: parent_obj, attributes: attributes}
+    end
+
+    def comment_params
+        params.permit(:id,:forum_post,:comment,:comment_owner,:level,:parent,:children,:votes)
+    end
+end
