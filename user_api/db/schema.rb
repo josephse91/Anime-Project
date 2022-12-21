@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
     t.integer "top_comment"
     t.integer "level"
     t.integer "parent"
-    t.json "children", default: {}
+    t.json "children", default: [], array: true
     t.json "votes", default: {"up"=>0, "down"=>0}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

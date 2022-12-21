@@ -1,6 +1,16 @@
 class Api::ForumCommentsController < ApplicationController
     NOW = Time.new.to_fs(:db)
 
+    def index
+        forum = find_forum
+        return if !forum
+
+        where_condition = ["forum_post= ? AND parent IS NULL",forum.id]
+        comments = ForumComment.where(where_condition).order(created_at: :asc)
+
+        render json: {status: "complete", comments: comments}
+    end
+    
     def create
         comment_components = create_components_hash
         return if !comment_components
@@ -49,20 +59,22 @@ class Api::ForumCommentsController < ApplicationController
         user
     end
 
-    def find_forum(current_user)
+    def find_forum
         forum = Forum.find_by(id: comment_params[:forum_post])
 
         if !forum
             render json: {status: "failed", error: "Forum post does not exist"}
             return
         end
+        forum
+    end
 
+    def authorization_check(current_user,forum)
         room = Room.find_by(room_name: forum.room)
         if !room.users[current_user.username]
             render json: {status: "failed", error: "Only users within room can leave comments"}
             return
         end
-
         forum
     end
 
@@ -79,21 +91,33 @@ class Api::ForumCommentsController < ApplicationController
     end
 
     def set_children(parent,child)
+        parent ? parent.children.unshift(child) : nil
+        parent ? parent.save : nil
+
         current_parent = parent
         current_child = child
 
-        lineage = {}
-        lineage[current_child.id] = {}
-
         while current_parent
-            current_parent.children[current_child.id] = NOW
+            already_exists = nil
+
+            current_parent.children.each_with_index do |ex_child,idx|
+                if ex_child["id"] == current_child.id
+                    already_exists = idx
+                end
+            end
+
+            if already_exists
+                current_parent.children[already_exists] = current_child
+            else
+                current_parent.children.unshift(current_child)
+            end
+
             current_parent.save
-            lineage[current_parent.id] = current_parent.children
             current_child = current_parent
             current_parent = ForumComment.find_by(id: current_child.parent)
         end
 
-        lineage
+        child
     end
 
     def create_components_hash
@@ -118,8 +142,11 @@ class Api::ForumCommentsController < ApplicationController
             return
         end
 
-        forum = find_forum(current_user)
+        forum = find_forum
         return if !forum
+
+        check = authorization_check(current_user,forum)
+        return if !check
 
         comment = comment_params[:comment] || forum_comment&.comment
         

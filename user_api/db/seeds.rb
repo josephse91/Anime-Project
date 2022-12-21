@@ -272,12 +272,33 @@ forum_3 = Forum.create({
 })
 
 def set_children(parent,child)
+    # current_parent.children.unshift([child.id,NOW.to_fs(:db)])
+    parent ? parent.children.unshift(child) : nil
+    parent ? parent.save : nil
+
     current_parent = parent
     current_child = child
 
+    # lineage = {}
+    # lineage[current_child.id] = {}
+
     while current_parent
-        current_parent.children[current_child.id] = NOW.to_fs(:db)
+        already_exists = nil
+
+        current_parent.children.each_with_index do |ex_child,idx|
+            if ex_child["id"] == current_child.id
+                already_exists = idx
+            end
+        end
+
+        if already_exists
+            current_parent.children[already_exists] = current_child
+        else
+            current_parent.children.unshift(current_child)
+        end
+
         current_parent.save
+        # lineage[current_parent.id] = current_parent.children
         current_child = current_parent
         current_parent = ForumComment.find_by(id: current_child.parent)
     end
@@ -286,13 +307,13 @@ def set_children(parent,child)
 end
 
 def create_forum_comment(attributes)
-    parent = ForumComment.find_by(id: attributes[:parent])
+    parent = attributes[:parent] ? ForumComment.find_by(id: attributes[:parent]) : nil
     level = parent ? parent.level + 1 : 1
     attributes[:level] = level
-    
+
     comment = ForumComment.create(attributes)
     comment.save
-    comment.top_comment = comment.top_comment || comment.id
+    comment.top_comment = parent ? parent.id : comment.id
     comment.save
     set_children(parent, comment)
     comment

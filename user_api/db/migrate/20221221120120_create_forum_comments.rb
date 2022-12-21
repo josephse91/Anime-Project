@@ -7,7 +7,7 @@ class CreateForumComments < ActiveRecord::Migration[7.0]
       t.integer :top_comment
       t.integer :level
       t.integer :parent
-      t.json :children, default: {}
+      t.json :children, default: [], array: true
       t.json :votes, default: {up: 0, down: 0}
 
       t.timestamps
