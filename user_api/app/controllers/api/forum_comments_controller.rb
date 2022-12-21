@@ -48,6 +48,15 @@ class Api::ForumCommentsController < ApplicationController
         render json: {status: "complete", comment: comment}
     end
 
+    def destroy
+        comment_components = create_components_hash
+        return if !comment_components
+        attributes = comment_components[:attributes]
+        parent = comment_components[:parent]
+
+
+    end
+
     def find_user
         user = User.find_by(username: comment_params[:comment_owner])
 
@@ -69,13 +78,22 @@ class Api::ForumCommentsController < ApplicationController
         forum
     end
 
-    def authorization_check(current_user,forum)
+    def room_authorization(current_user,forum)
         room = Room.find_by(room_name: forum.room)
         if !room.users[current_user.username]
             render json: {status: "failed", error: "Only users within room can leave comments"}
             return
         end
         forum
+    end
+
+    def comment_authorization(current_user,comment)
+        if comment.comment_owner != current_user.username
+            render json: {status: "failed", error: "Only owner of the comment can change the comment"}
+            return
+        end
+
+        comment
     end
 
     def add_vote(vote_param)
@@ -125,11 +143,8 @@ class Api::ForumCommentsController < ApplicationController
         current_user = find_user
         return if !current_user && !votes
 
-        forum_comment = comment_params[:id]
-
-        if forum_comment
-            forum_comment = ForumComment.find_by(id: forum_comment)
-        end
+        forum_comment_param = comment_params[:id]
+        forum_comment = ForumComment.find_by(id: forum_comment_param)
 
         if votes
             if !forum_comment
@@ -142,15 +157,21 @@ class Api::ForumCommentsController < ApplicationController
             return
         end
 
+        if forum_comment
+            comment_confirmed = comment_authorization(current_user,forum_comment)
+        end
+
+        return if !comment_confirmed && forum_comment
+
         forum = find_forum
         return if !forum
 
-        check = authorization_check(current_user,forum)
-        return if !check
+        room_check = room_authorization(current_user,forum)
+        return if !room_check
 
-        comment = comment_params[:comment] || forum_comment&.comment
+        comment = comment_params[:comment] || comment_confirmed&.comment
         
-        parent = comment_params[:parent] || forum_comment&.parent
+        parent = comment_params[:parent] || comment_confirmed&.parent
         parent_obj = ForumComment.find_by(id: parent)
 
         level = parent_obj ? parent_obj.level + 1 : 1
