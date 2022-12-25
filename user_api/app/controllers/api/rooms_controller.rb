@@ -116,20 +116,52 @@ class Api::RoomsController < ApplicationController
     end
 
     def destroy
-        @room = Room.find_by(room_name: rooms_params[:id])
-        user = User.find_by(username: rooms_params[:current_user])
+        @room = find_room
+        return if !@room
 
-        if @room.users.length > 0
+        user = find_user
+        return if !user
+
+        if @room.users.length > 1
             render json: {status: "failed", error: "There are still users within the Room"}
             return
         end
 
-        render json: {status: "complete", room: @room}
+        if !@room.users[user.username]
+            render json: {status: "failed", error: "User must be within Room"}
+            return
+        end
+
+        deleted_room = @room.room_name
         @room.destroy
+
+        delete_forums_and_comments(deleted_room)
+
+        render json: {status: "complete", room: deleted_room}
     end
 
     def rooms_params
         params.permit(:id,:room_name,:users,:pending_approval,:admin,:search,:current_user,:request,:user_remove,:make_entry_key,:submitted_key)
+    end
+
+    def find_user
+        user = User.find_by(username: rooms_params[:current_user])
+
+        if !user
+            render json: {status: "failed", error: "User could not be found"}
+        end
+
+        user
+    end
+
+    def find_room
+        room = Room.find_by(room_name: rooms_params[:id])
+
+        if !room
+            render json: {status: "failed", error: "Room could not be found"}
+        end
+
+        room
     end
 
     def clean_expired_keys(room)
@@ -144,5 +176,18 @@ class Api::RoomsController < ApplicationController
 
         deleted_keys.length > 0 ? room.save : nil
         deleted_keys
+    end
+
+    def delete_forums_and_comments(room)
+        forums = Forum.where(room_id: room)
+
+        forums.each do |forum|
+            forum_comments = ForumComment.where(forum_post: forum.id)
+            forum_comments.delete_all
+
+            forum.delete
+        end
+
+        forums
     end
 end

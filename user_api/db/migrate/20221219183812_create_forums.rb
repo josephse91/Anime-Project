@@ -6,7 +6,7 @@ class CreateForums < ActiveRecord::Migration[7.0]
       t.text :content
       t.string :anime
       t.json :votes, default: {up: 0, down: 0}
-      t.string :room
+      t.string :room_id
 
       t.timestamps
     end

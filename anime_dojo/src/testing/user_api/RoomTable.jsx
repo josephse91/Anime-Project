@@ -59,7 +59,7 @@ function RoomTable() {
     // let testcaseInputString = JSON.stringify(testcaseInput)
     let testcaseInputString = testcaseInput;
 
-    if (requestMethod === "POST" || requestMethod === "PATCH") {
+    if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
       // formData.append("request","Jamal")
       formData.append("submitted_key", "qN8CkOC6blcYe-TtNN-kHw")

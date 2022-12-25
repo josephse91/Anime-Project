@@ -5,7 +5,7 @@ class Api::ForumCommentsController < ApplicationController
         forum = find_forum
         return if !forum
 
-        where_condition = ["forum_post= ? AND parent IS NULL",forum.id]
+        where_condition = ["forum_id= ? AND parent IS NULL",forum.id]
         comments = ForumComment.where(where_condition).order(created_at: :asc)
 
         render json: {status: "complete", comments: comments}
@@ -23,12 +23,12 @@ class Api::ForumCommentsController < ApplicationController
             comment.save
             comment.top_comment = comment.top_comment || comment.id
             comment.save
-            lineage = set_children(parent,comment)
+            set_children(parent,comment)
         else
             render json: {status: "failed", error: comment.errors.objects.first.full_message}
         end
 
-        render json: {status: "complete", comment: comment, lineage: lineage}
+        render json: {status: "complete", comment: comment}
 
     end
 
@@ -49,12 +49,33 @@ class Api::ForumCommentsController < ApplicationController
     end
 
     def destroy
-        comment_components = create_components_hash
-        return if !comment_components
-        attributes = comment_components[:attributes]
-        parent = comment_components[:parent]
+        current_user = find_user
+        return if !current_user
 
+        comment_unauthorized = find_comment
+        return if !comment_unauthorized
 
+        comment = comment_authorization(current_user,comment_unauthorized)
+        return if !comment
+
+        bfs = [comment]
+
+        while bfs.length > 0
+            current_comment = bfs.shift
+            children = current_comment&.children
+            
+            if children.length > 0
+                children = children.map do |child| 
+                    ForumComment.find_by(id: child["id"])
+                end
+            end
+
+            bfs.push(*children)
+
+            current_comment.destroy
+        end
+
+        render json: {status: "complete", comment: comment}
     end
 
     def find_user
@@ -69,7 +90,7 @@ class Api::ForumCommentsController < ApplicationController
     end
 
     def find_forum
-        forum = Forum.find_by(id: comment_params[:forum_post])
+        forum = Forum.find_by(id: comment_params[:forum_id])
 
         if !forum
             render json: {status: "failed", error: "Forum post does not exist"}
@@ -78,8 +99,19 @@ class Api::ForumCommentsController < ApplicationController
         forum
     end
 
+    def find_comment
+        comment = ForumComment.find_by(id: comment_params[:id])
+
+        if !comment
+            render json: {status: "failed", error: "Could not find comment"}
+            return
+        end
+
+        comment
+    end
+
     def room_authorization(current_user,forum)
-        room = Room.find_by(room_name: forum.room)
+        room = Room.find_by(room_name: forum.room_id)
         if !room.users[current_user.username]
             render json: {status: "failed", error: "Only users within room can leave comments"}
             return
@@ -179,7 +211,7 @@ class Api::ForumCommentsController < ApplicationController
 
         attributes = {
             comment: comment,
-            forum_post: forum.id,
+            forum_id: forum.id,
             comment_owner: current_user.username,
             level: level,
             parent: parent
@@ -191,6 +223,6 @@ class Api::ForumCommentsController < ApplicationController
     end
 
     def comment_params
-        params.permit(:id,:forum_post,:comment,:comment_owner,:level,:parent,:children,:votes)
+        params.permit(:id,:forum_id,:comment,:comment_owner,:level,:parent,:children,:votes)
     end
 end

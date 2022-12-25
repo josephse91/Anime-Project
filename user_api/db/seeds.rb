@@ -233,8 +233,10 @@ planet_vegeta.admin["admin_users"][serge.username] = TIME_INPUT
 planet_vegeta.users[jarret.username] = TIME_INPUT
 planet_vegeta.users[aldane.username] = TIME_INPUT
 planet_vegeta.save
-jarret.rooms[planet_vegeta.room_name] = "12-19-2022"
-aldane.rooms[planet_vegeta.room_name] = "12-19-2022"
+jarret.rooms[planet_vegeta.room_name] = TIME_INPUT
+jarret.save
+aldane.rooms[planet_vegeta.room_name] = TIME_INPUT
+aldane.save
 
 room_name_2 = ""
 room_name_2 += Faker::JapaneseMedia::DragonBall.race + " "
@@ -254,21 +256,21 @@ forum_1 = Forum.create({
     creator: serge.username,
     content: "Between voluntarily dying more than once, letting his enemies live and thrive and simply putting his kid in danger, Goku is as bad a father as it gets. There are good moments like their training in the hyperbolic time chamber but that gets nullified because he threw cell a sensu bean. Goku was an acting threat to Gohan's life at times.",
     anime: "Dragon Ball Z",
-    room: planet_vegeta.room_name
+    room_id: planet_vegeta.room_name
 })
 
 forum_2 = Forum.create({
     topic: "What are the best quotes in Anime",
     creator: jarret.username,
     content: "'I am the bone of my sword, Unknown to death not known to life, Unlimited Blade Works' One of my favorite quotes and anime scenes ever, it gave me chills.",
-    room: planet_vegeta.room_name
+    room_id: planet_vegeta.room_name
 })
 
 forum_3 = Forum.create({
     topic: "Name a notable anime you watched when you were young that still slaps",
     creator: aldane.username,
     content: "The first or second anime i ever saw (as a kid in the late 90s). The main protagonist Kenshin is a special character that has incredible maturity in comparison to other Main characters (it helps that he is 30+ when the show starts). His maturity and approach is evident and you never really get frustrated with him. he is always cool calm and collected. The soundtrack is incredible and for the time the sword animation/fight sequences are great.",
-    room: planet_vegeta.room_name
+    room_id: planet_vegeta.room_name
 })
 
 def set_children(parent,child)
@@ -320,7 +322,7 @@ def create_forum_comment(attributes)
 end
 
 comment_attr_1 = {
-    forum_post: forum_3.id,
+    forum_id: forum_3.id,
     comment_owner: jarret.username,
     comment: "Yu Yu Hakusho transcends time. There isn't a better anime that can test to styles of time",
     parent: nil
@@ -328,7 +330,7 @@ comment_attr_1 = {
 forum_comment_1 = create_forum_comment(comment_attr_1)
 
 comment_attr_2 = {
-    forum_post: forum_3.id,
+    forum_id: forum_3.id,
     comment_owner: aldane.username,
     comment: "You're a Yu Yu lover. I can't say that it transcends time. If you love Yu Yu Hakusho, just say that.",
     parent: forum_comment_1.id
@@ -336,7 +338,7 @@ comment_attr_2 = {
 forum_comment_2 = create_forum_comment(comment_attr_2)
 
 comment_attr_3 = {
-    forum_post: forum_3.id,
+    forum_id: forum_3.id,
     comment_owner: serge.username,
     comment: "If we're honest, Naruto is the best anime of all time at transitioning from childhood to adulthood",
     parent: nil
@@ -344,7 +346,7 @@ comment_attr_3 = {
 forum_comment_3 = create_forum_comment(comment_attr_3)
 
 comment_attr_4 = {
-    forum_post: forum_3.id,
+    forum_id: forum_3.id,
     comment_owner: aldane.username,
     comment: "Now that is a take that makes more sense. Naruto really has lessons that carry. And Naruto is goated",
     parent: forum_comment_3.id
@@ -352,7 +354,7 @@ comment_attr_4 = {
 forum_comment_4 = create_forum_comment(comment_attr_4)
 
 comment_attr_5 = {
-    forum_post: forum_3.id,
+    forum_id: forum_3.id,
     comment_owner: jarret.username,
     comment: "You need to put respect on Yu Yu Hakusho's name",
     parent: forum_comment_2.id
@@ -360,7 +362,7 @@ comment_attr_5 = {
 forum_comment_5 = create_forum_comment(comment_attr_5)
 
 comment_attr_6 = {
-    forum_post: forum_3.id,
+    forum_id: forum_3.id,
     comment_owner: jarret.username,
     comment: "Naruto is a safe answer",
     parent: forum_comment_3.id
@@ -368,7 +370,7 @@ comment_attr_6 = {
 forum_comment_6 = create_forum_comment(comment_attr_6)
 
 comment_attr_7 = {
-    forum_post: forum_3.id,
+    forum_id: forum_3.id,
     comment_owner: jarret.username,
     comment: "lol I should've known you were going to put Yu Yu",
     parent: forum_comment_1.id

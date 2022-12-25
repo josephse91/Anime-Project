@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
 
   create_table "forum_comments", force: :cascade do |t|
     t.text "comment", null: false
-    t.integer "forum_post", null: false
+    t.integer "forum_id", null: false
     t.string "comment_owner", null: false
     t.integer "top_comment"
     t.integer "level"
@@ -33,7 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
     t.text "content"
     t.string "anime"
     t.json "votes", default: {"up"=>0, "down"=>0}
-    t.string "room"
+    t.string "room_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

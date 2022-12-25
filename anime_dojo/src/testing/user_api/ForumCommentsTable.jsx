@@ -71,16 +71,16 @@ function ForumCommentsTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      // formData.append("comment", "Naruto Wins at everything") // Mandatory
-      // formData.append("parent", 1) // Mandatory
+      // formData.append("comment", "Being lonely is more painful then getting hurt. ~Monkey D. Luffy") // Mandatory
+      // formData.append("parent", null) // Mandatory
 
       let votes = {up: 2, down: 0}
-      formData.append("votes",JSON.stringify(votes)) // individually run
+      // formData.append("votes",JSON.stringify(votes)) // individually run
 
       // formData.append("level",0) // Not Required
       // formData.append("children", {}) // Not Required
       // formData.append("top_comment",0) // Not required
-      // formData.append(testcase.key,testcaseInputString)
+      formData.append(testcase.key,testcaseInputString)
     }
 
     apiRequest(options,query)
