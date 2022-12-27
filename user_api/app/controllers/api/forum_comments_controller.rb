@@ -223,6 +223,6 @@ class Api::ForumCommentsController < ApplicationController
     end
 
     def comment_params
-        params.permit(:id,:forum_id,:comment,:comment_owner,:level,:parent,:children,:votes)
+        params.permit(:id,:forum_id,:comment,:comment_owner,:parent,:children,:votes)
     end
 end

@@ -45,12 +45,18 @@ class Api::RoomsController < ApplicationController
     end
 
     def update
-        @room = Room.find_by(room_name: rooms_params[:id])
-        current_user = rooms_params[:current_user]
+        @room = find_room
+        return if !@room
 
+        user = find_user
+        return if !user
+
+        current_user = user.username
         request = rooms_params[:request]
         submitted_key = rooms_params[:submitted_key]
         room_keys = @room.entry_keys
+        group_admin = @room.admin["group_admin"]
+        room_admins = @room.admin["admin_users"][current_user]
 
         if submitted_key
             if !room_keys[submitted_key]
@@ -66,6 +72,33 @@ class Api::RoomsController < ApplicationController
             end
 
             @room.users[current_user] = TIME_INPUT
+
+            render_obj = {
+                status: "complete", 
+                message: "Key has been successfully submitted to Room: #{@room.room_name}",
+                notification: current_user,
+                room: @room
+            }
+
+            render json: render_obj
+            return
+        end
+
+        if request && request == current_user
+            @room.pending_approval[request] = TIME_INPUT
+            !group_admin ? request_to_admins(@room,request) : @room.users[request] = TIME_INPUT
+            @room.save
+
+            render_obj = {
+                status: "complete", 
+                message: "Request has been sent to Room: #{@room.room_name}",
+                room: @room
+            }
+
+            !group_admin ? render_obj[:notification] = @room.admin["admin_users"].keys : nil
+
+            render json: render_obj
+            return
         end
 
         if !@room.users[current_user] 
@@ -76,8 +109,6 @@ class Api::RoomsController < ApplicationController
         user_remove = rooms_params[:user_remove]
         generate_key = rooms_params[:make_entry_key]
         pending_user = @room.pending_approval[request]
-        group_admin = @room.admin["group_admin"]
-        room_admins = @room.admin["admin_users"][current_user]
 
         if rooms_params[:room_name]
             if group_admin || room_admins
@@ -89,14 +120,30 @@ class Api::RoomsController < ApplicationController
             end
         end
 
-        if (request || user_remove) && !submitted_key
+        if user_remove
+            if !room_admins && user_remove != current_user
+                render json: {status: "failed", error: "Not authorized to remove user from room"}
+                return
+            end
+
+            user.rooms.delete(@room.room_name)
+            @room.users.delete(current_user)
+
+            user.save
+            @room.save
+
+            # Logic needs to be included to change the rating total of each applicable show within the room
+        end
+
+        if request && !submitted_key
             
             if group_admin || room_admins
-                request ? @room.users[request] = TIME_INPUT : nil
+                @room.users[request] = TIME_INPUT
                 pending_user ? @room.pending_approval.delete(request) : nil
-                user_remove && !group_admin ? @room.users.delete(user_remove) : nil
+                !group_admin ? clear_admin_request(@room,request) : nil
             else
-                request ? @room.pending_approval[request] = TIME_INPUT : nil
+                @room.pending_approval[request] = TIME_INPUT
+                !group_admin ? request_to_admins(@room,request) : nil
             end
             @room.save
         end
@@ -112,7 +159,16 @@ class Api::RoomsController < ApplicationController
             @room.save
         end
 
-        render json: {status: "complete", room: @room}
+        render_obj = {
+            status: "complete", 
+            room: @room
+        }
+
+        if request
+            render_obj[:notification] = request
+        end
+
+        render json: render_obj
     end
 
     def destroy
@@ -189,5 +245,25 @@ class Api::RoomsController < ApplicationController
         end
 
         forums
+    end
+
+    def request_to_admins(room,request)
+        room_admins = room.admin["admin_users"].keys
+
+        room_admins.each do |admin_names|
+            admin_user = User.find_by(username: admin_names)
+            admin_user.requests["roomAuth"][request] = TIME_INPUT
+            admin_user.save
+        end
+    end
+
+    def clear_admin_request(room,admitted_user)
+        room_admins = room.admin["admin_users"].keys
+
+        room_admins.each do |admin|
+            admin_user = User.find_by(username: admin)
+
+            admin_user.requests["roomAuth"].delete(admitted_user)
+        end
     end
 end

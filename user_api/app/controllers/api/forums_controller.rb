@@ -98,8 +98,6 @@ class Api::ForumsController < ApplicationController
     end
 
     def valid_user
-        room = forums_params[:room_id] || forums_params[:id]
-        
         current_user = forums_params[:current_user]
         user = User.find_by(username: current_user)
 

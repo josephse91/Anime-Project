@@ -16,11 +16,17 @@ This API will be used to manage any actions done by the user. The tables that wi
 **Review Comments Table**: Holds comments that will be nested under each review
 
 **Rooms Table**: Contains Room data
+
+**Forum Table**: Contains Forum data
+
+**Forum Comments Table**: Contains Forum Comment data
 ## API Reference
 - [User endpoints](#User-Table)
 - [Review endpoints](#Review-Table)
 - [Review Comment endpoints](#Review-Comments-Table)
 - [Room endpoints](#Rooms-Table)
+- [Forum endpoints](#Forum-Table)
+- [Forum Comment endpoints](#Forum-Comments-Table)
 
 #### User Table
 ---
@@ -98,9 +104,9 @@ This API will be used to manage any actions done by the user. The tables that wi
 | :-------- | :------- | :-------------------------------- |
 | `username`| `string` | Username of item to fetch         |
 
+
+
 ---
-
-
 #### Review Table
 ---
 **Retreive all reviews** (index)
@@ -330,6 +336,142 @@ This API will be used to manage any actions done by the user. The tables that wi
 | :--------- | :------- | :-------------------------     |
 | `id` | `string` | Room name  |
 | `current_user` | `string` | Username of the client user  |
+
+
+---
+#### Forum Table
+---
+**Retreive all forums** (index)
+
+```http
+  GET /api/forums/
+```
+
+**Retreive all forums within specified room** (room_forum_index)
+
+```http
+  GET /api/rooms/:room_id/forums/
+```
+
+| Parameter | Type     | Description                   |
+| :-------- | :------- | :-------------------------    |
+| `room_id` | `string` | This will be the room_name of the room  |
+| `forum_search` | `string` |  |
+| `anime_search` | `string` |   |
+
+
+**Create a review** (create)
+
+```http
+  POST /api/forums/
+```
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `room_id` | `string` | Room_name of Room  |
+| `current_user` | `string` | Username of current user  |
+| `topic` | `string` | Forum Subject Title |
+| `creator` | `string` | User that creates or edits forum post |
+| `content` | `text` | Content in regards to the topic |
+| `anime` | `string` | Anime pertaining to subject (Optional) |
+
+
+**Retrieve the review of a user**
+
+```http
+  GET /api/forums/:id
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id` | `integer` | Primary key of Forum object  |
+
+
+**Edit Forum of a Room** (update)
+
+```http
+  PATCH /api/forums/:id
+```
+
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `id` | `integer` | Primary key of Forum object  |
+| `room_id` | `string` | Room_name of Room  |
+| `current_user` | `string` | Username of current user  |
+| `topic` | `string` | Forum Subject Title |
+| `creator` | `string` | User that creates or edits forum post |
+| `content` | `text` | Content in regards to the topic |
+| `anime` | `string` | Anime pertaining to subject (Optional) |
+| `votes` | `JSON` | JSON object that has the keys, "up" and "down" |
+
+**Delete Review of a User** (destroy)
+
+```http
+  DELETE /api/reviews/:id
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id` | `integer` | Primary key of Forum object  |
+| `room_id` | `string` | Room_name of Room  |
+| `current_user` | `string` | Username of current user  |
+
+---
+#### Forum Comments Table
+---
+**Retreive all the TOP forum comments of a Forum** (index)
+
+```http
+  GET /api/forum_comments/
+```
+
+| Parameter | Type     | Description                   |
+| :-------- | :------- | :-------------------------    |
+| `forum_id` | `integer` | Forum Primary ID |
+
+
+**Create a Forum Comment** (create)
+
+```http
+  POST /api/forum_comments/
+```
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `comment` | `text` |  |
+| `forum_id` | `integer` | Forum Primary ID  |
+| `comment_owner` | `string` | Username of commenter |
+| `parent` | `integer` | Primary ID of parent comment. NULL if there is no parent |
+| `top_comment` | `integer` |  |
+
+
+
+**Edit Forum Comment** (update)
+
+```http
+  PATCH /api/forum_comments/:id
+```
+
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `id` | `integer` | Primary ID of existing Forum comment  |
+| `comment` | `text` |  |
+| `forum_id` | `integer` | Forum Primary ID  |
+| `comment_owner` | `string` | Username of commenter |
+| `parent` | `integer` | Primary ID of parent comment. NULL if there is no parent |
+| `top_comment` | `integer` |  |
+| `votes` | `JSON` | JSON object that has the keys, "up" and "down" |
+
+**Delete Forum Comment of a User** (destroy)
+
+```http
+  DELETE /api/forum_comments/:id
+```
+
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `id` | `integer` | Primary ID of existing Forum comment  |
+| `forum_id` | `integer` | Forum Primary ID  |
+| `comment_owner` | `string` | Username of commenter |
+
 
 # Appendix
 
