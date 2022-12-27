@@ -52,7 +52,10 @@ class Api::RoomsController < ApplicationController
         return if !user
 
         current_user = user.username
+        room_name = @room.room_name
+
         request = rooms_params[:request]
+        request_user = User.find_by(username: request)
         submitted_key = rooms_params[:submitted_key]
         room_keys = @room.entry_keys
         group_admin = @room.admin["group_admin"]
@@ -72,10 +75,14 @@ class Api::RoomsController < ApplicationController
             end
 
             @room.users[current_user] = TIME_INPUT
+            user.rooms[room_name] = TIME_INPUT
+
+            @room.save
+            user.save
 
             render_obj = {
                 status: "complete", 
-                message: "Key has been successfully submitted to Room: #{@room.room_name}",
+                message: "Key has been successfully submitted to Room: #{room_name}",
                 notification: current_user,
                 room: @room
             }
@@ -89,13 +96,21 @@ class Api::RoomsController < ApplicationController
             !group_admin ? request_to_admins(@room,request) : @room.users[request] = TIME_INPUT
             @room.save
 
+            !group_admin ? user.rooms[room_name] = TIME_INPUT : nil
+            user.save
+
             render_obj = {
                 status: "complete", 
-                message: "Request has been sent to Room: #{@room.room_name}",
                 room: @room
             }
 
-            !group_admin ? render_obj[:notification] = @room.admin["admin_users"].keys : nil
+            if group_admin
+                render_obj[:notification] = user.username
+                render_obj[:message] = "You have been added to Room: #{room_name}"
+            else
+                render_obj[:notification] = @room.admin["admin_users"].keys
+                render_obj[:message] = "Request has been sent to Room: #{room_name}"
+            end
 
             render json: render_obj
             return
@@ -112,7 +127,7 @@ class Api::RoomsController < ApplicationController
 
         if rooms_params[:room_name]
             if group_admin || room_admins
-                @room.room_name = rooms_params[:room_name] || @room.room_name
+                @room.room_name = rooms_params[:room_name] || room_name
                 @room.save
             else
                 render json: {status: "failed", error: "Not authorized user"}
@@ -126,7 +141,7 @@ class Api::RoomsController < ApplicationController
                 return
             end
 
-            user.rooms.delete(@room.room_name)
+            user.rooms.delete(room_name)
             @room.users.delete(current_user)
 
             user.save
@@ -136,9 +151,11 @@ class Api::RoomsController < ApplicationController
         end
 
         if request && !submitted_key
-            
             if group_admin || room_admins
                 @room.users[request] = TIME_INPUT
+                request_user.rooms[room_name] = TIME_INPUT
+                request_user.save
+
                 pending_user ? @room.pending_approval.delete(request) : nil
                 !group_admin ? clear_admin_request(@room,request) : nil
             else

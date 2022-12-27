@@ -34,8 +34,8 @@ function UserTable() {
   let formData = new FormData();
   let myHeaders = new Headers();
 
-  async function apiRequest(options) {
-    let requestStr = "http://localhost:3000" + request;
+  async function apiRequest(options,query) {
+    let requestStr = "http://localhost:3000" + request + query;
     let apiRequest = await fetch(requestStr, options)
     let data = await apiRequest.json()
     setResponse(data)
@@ -59,41 +59,42 @@ function UserTable() {
 
     let roomPeerParam = new Set(["rooms","peers"]);
     let requestParam = new Set(["requests"])
+
     if (roomPeerParam.has(testcase.key)) {
-      testcaseInput = {action: "add", focusPeer: testcase.value };
+      testcaseInput = {action: "add", peerFocus: testcase.value };
+      testcaseInput = JSON.stringify(testcaseInput)
     } else if (requestParam.has(testcase.key)) {
       testcaseInput = {
         action: "add",
-        requestType: "room", 
-        focusRequest: testcase.value,
-        val: "peer4" 
+        requestFocus: testcase.value
       };
+      testcaseInput = JSON.stringify(testcaseInput)
     } else {
       testcaseInput = testcase.value
     }
 
-    let testcaseInputString = JSON.stringify(testcaseInput)
+    let query = ""
+    // query += "session_token=1"
+    if (query) query = "?" + query
 
-    if (requestMethod === "POST" || requestMethod === "PATCH") {
+    if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      formData.append(testcase.key,testcaseInputString)
+      if (testcase.key) formData.append(testcase.key,testcaseInput)
+      // formData.append("new_username","Aldane1")
+      // formData.append("new_password","password")
+      // formData.append("password_digest",'password')
+      // formData.append("genre_preference","Isakai")
+      // formData.append("go_to_motto","Stay Chill Homie")
+      // let peerRequest = {action: "add", requestFocus:"Allia"}
+      // formData.append("requests",JSON.stringify(peerRequest))
+      let peerAdd = {action: "add", peerFocus: "Allia"}
+      formData.append("peers",JSON.stringify(peerAdd))
     }
 
-    apiRequest(options)
+    apiRequest(options,query)
     console.log("Submit has been handled")
   }
 
-  function addElement(data) {
-    // create a new div element
-    const req = document.createElement("div");
-  
-    // and give it some content
-    req.innerHTML = JSON.stringify(data)
-  
-    // add the newly created element and its content into the DOM
-    const lastChild = document.getElementById("container");
-    lastChild.append(req)
-  }
 
   return (
     <div className="App" id="container">
