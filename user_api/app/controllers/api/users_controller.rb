@@ -46,7 +46,7 @@ class Api::UsersController < ApplicationController
         return if !@user
 
         user_peer_request = user_params[:requests]
-        user_to_notify = nil
+        notifications = []
 
         # Conditional for an incoming request
         if user_peer_request
@@ -54,6 +54,7 @@ class Api::UsersController < ApplicationController
             param_obj = ActiveSupport::JSON.decode(user_peer_request)
             requests_action = param_obj["action"]
             request_focus = param_obj["requestFocus"]
+            request_obj = User.find_by(username: request_focus)
 
             peer_check = peer_check(@user,request_focus,requests_action)
             return if peer_check
@@ -74,7 +75,12 @@ class Api::UsersController < ApplicationController
             @user.save
 
             render_obj = {status: "complete", user: @user}
-            requests_action == "add" ? render_obj[:notification] = @user.username : nil
+
+            if requests_action == "add"
+                add_notification(notifications,@user,request_obj,"Request")
+                request_obj.save
+                render_obj[:notifications] = notifications
+            end
 
             render json: render_obj
             return
@@ -82,10 +88,10 @@ class Api::UsersController < ApplicationController
 
         # Should only allow the current user to be the one to change further attributes
 
-        # if @user.username != current_user_username
-        #     render json: {status: "failed", error: "Not authorized user", user: @user.username, current_user: current_user_username}
-        #     return
-        # end
+        if @user.username != user_params[:username]
+            render json: {status: "failed", error: "Not authorized user", user: @user.username, current_user: current_user}
+            return
+        end
 
         new_username = user_params[:new_username]
         new_password = user_params[:new_password]
@@ -118,13 +124,12 @@ class Api::UsersController < ApplicationController
             elsif peers_action == "add"
                 user_peers[peer_focus] = TIME_INPUT
                 peer_obj.peers[@user.username] = TIME_INPUT
+                add_notification(notifications,@user,peer_obj,"Accept")
                 peer_obj.save
                 @user.requests["peer"].delete(peer_focus)
             end
 
-            user_to_notify = peer_focus
             @user.update(peers: user_peers)
-
         end
 
         genre_preference = user_params[:genre_preference]
@@ -139,7 +144,7 @@ class Api::UsersController < ApplicationController
         end
 
         render_obj = {status: "complete", user: @user}
-        user_peer_param ? render_obj[:notification] = user_to_notify : nil
+        user_peer_param ? render_obj[:notifications] = notifications : nil
 
         render json: render_obj
     end
@@ -168,7 +173,7 @@ class Api::UsersController < ApplicationController
     end
 
     def user_params
-        params.permit(:id,:username,:password,:genre_preference,:go_to_motto,:user_grade_protocol,:peers,:requests,:new_username,:new_password,:session_token_input)
+        params.permit(:id,:username,:password,:genre_preference,:go_to_motto,:user_grade_protocol,:peers,:requests,:new_username,:new_password,:session_token)
     end
 
     def query_params
@@ -203,5 +208,17 @@ class Api::UsersController < ApplicationController
         end
 
         peer_exist && action == "add"
+    end
+
+    def add_notification(notifications,action_user,recipient_user,request_type)
+        data = {
+            id: action_user.id,
+            recipient: recipient_user.username,
+            action: request_type,
+            action_user: action_user.username,
+            target_item: "User"
+        }
+        notifications.push(data)
+        notifications
     end
 end

@@ -54,8 +54,13 @@ class Api::RoomsController < ApplicationController
         current_user = user.username
         room_name = @room.room_name
 
+        notifications = []
         request = rooms_params[:request]
         request_user = User.find_by(username: request)
+        if request && !request_user
+            render json: {status: "failed", error: "User could not be found"}
+            return
+        end
         submitted_key = rooms_params[:submitted_key]
         room_keys = @room.entry_keys
         group_admin = @room.admin["group_admin"]
@@ -79,11 +84,13 @@ class Api::RoomsController < ApplicationController
 
             @room.save
             user.save
+            
+            add_notification(notifications,@room,user)
 
             render_obj = {
                 status: "complete", 
                 message: "Key has been successfully submitted to Room: #{room_name}",
-                notification: current_user,
+                notification: notifications,
                 room: @room
             }
 
@@ -91,27 +98,29 @@ class Api::RoomsController < ApplicationController
             return
         end
 
-        if request && request == current_user
-            @room.pending_approval[request] = TIME_INPUT
-            !group_admin ? request_to_admins(@room,request) : @room.users[request] = TIME_INPUT
+        if request && request == current_user    
+            if (group_admin && @room.pending_approval[request]) || !@room.private_room
+                @room.users[request] = TIME_INPUT
+                user.rooms[room_name] = TIME_INPUT
+                user.save
+                add_notification(notifications,@room,user)
+            elsif group_admin && !@room.pending_approval[request]
+                render json: {status: "failed", error: "For this room, you must receive a key. Ask a member to generate key"}
+                return
+            else
+                @room.pending_approval[request] = TIME_INPUT
+                request_to_admins(notifications,@room,request)
+            end
+            
             @room.save
-
-            !group_admin ? user.rooms[room_name] = TIME_INPUT : nil
-            user.save
 
             render_obj = {
                 status: "complete", 
-                room: @room
+                room: @room,
+                notifications: notifications
             }
-
-            if group_admin
-                render_obj[:notification] = user.username
-                render_obj[:message] = "You have been added to Room: #{room_name}"
-            else
-                render_obj[:notification] = @room.admin["admin_users"].keys
-                render_obj[:message] = "Request has been sent to Room: #{room_name}"
-            end
-
+            
+            render_obj[:notifications] = notifications
             render json: render_obj
             return
         end
@@ -150,19 +159,24 @@ class Api::RoomsController < ApplicationController
             # Logic needs to be included to change the rating total of each applicable show within the room
         end
 
-        if request && !submitted_key
-            if group_admin || room_admins
-                @room.users[request] = TIME_INPUT
-                request_user.rooms[room_name] = TIME_INPUT
-                request_user.save
+        member_request = request && !submitted_key
 
-                pending_user ? @room.pending_approval.delete(request) : nil
-                !group_admin ? clear_admin_request(@room,request) : nil
-            else
-                @room.pending_approval[request] = TIME_INPUT
-                !group_admin ? request_to_admins(@room,request) : nil
-            end
+        if  member_request && room_admins && @room.pending_approval[request]
+            @room.users[request] = TIME_INPUT
+            request_user.rooms[room_name] = TIME_INPUT
+            request_user.save
+
+            @room.pending_approval.delete(request)
+            clear_admin_request(@room,request)
             @room.save
+            add_notification(notifications,@room,request_user)
+        elsif member_request && !room_admins && !@room.pending_approval[request]
+            request_user.requests["room"][@room.room_name] = current_user
+            request_user.save
+            add_notification(notifications,@room,request_user,"Request")
+        else
+            render json: {status: "failed", error: "Only the authorized user can bring in users into the room"}
+            return
         end
 
         if generate_key
@@ -170,7 +184,7 @@ class Api::RoomsController < ApplicationController
             @room.entry_keys[key] = Time.now.advance(days: 10).at_noon.getutc
 
             if !@room.valid?
-                render json: {status: "complete", error: @room.errors.objects.first.full_message}
+                render json: {status: "failed", error: @room.errors.objects.first.full_message}
                 return
             end
             @room.save
@@ -182,7 +196,7 @@ class Api::RoomsController < ApplicationController
         }
 
         if request
-            render_obj[:notification] = request
+            render_obj[:notifications] = notifications
         end
 
         render json: render_obj
@@ -264,13 +278,14 @@ class Api::RoomsController < ApplicationController
         forums
     end
 
-    def request_to_admins(room,request)
+    def request_to_admins(notifications,room,request)
         room_admins = room.admin["admin_users"].keys
 
         room_admins.each do |admin_names|
             admin_user = User.find_by(username: admin_names)
             admin_user.requests["roomAuth"][request] = TIME_INPUT
             admin_user.save
+            add_notification(notifications,@room,admin_user,"Request")
         end
     end
 
@@ -279,8 +294,21 @@ class Api::RoomsController < ApplicationController
 
         room_admins.each do |admin|
             admin_user = User.find_by(username: admin)
-
             admin_user.requests["roomAuth"].delete(admitted_user)
+            admin_user.save
         end
+    end
+
+    def add_notification(notifications,room,user,request_type = "Accept")
+        data = {
+            id: room.id,
+            recipient: user.username,
+            action: request_type,
+            action_user: room.room_name,
+            target_item: "Room"
+        }
+        
+        notifications.push(data)
+        notifications
     end
 end

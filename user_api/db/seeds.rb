@@ -22,10 +22,6 @@ names = Array.new(num_of_users).map do |name|
     Faker::Name.unique.name
 end
 
-passwords = Array.new(num_of_users).map do |password|
-    Faker::Alphanumeric.alpha(number: 10)
-end
-
 (0...num_of_users).each do |idx|
     User.create(username: names[idx],password_digest: BCrypt::Password.create("password"))
 end
@@ -70,11 +66,11 @@ review_comments.each do |comment|
     })
 end
 
-
+password_digest = BCrypt::Password.create("password")
 
 jarret = User.create({
     username: "Jarret",
-    password_digest: "password",
+    password_digest: password_digest,
     genre_preference: "Shounin",
     go_to_motto: "Somebody gotta go",
     peers: {names[1] => "2022-12-11", 
@@ -84,7 +80,7 @@ jarret = User.create({
 
 aldane = User.create({
     username: "Aldane",
-    password_digest: "password",
+    password_digest: password_digest,
     genre_preference: "Shounin",
     go_to_motto: "You can take away my body, but you can't take away my pride",
     peers: {names[1] => "2022-12-12", 
@@ -188,7 +184,7 @@ aldane_comment_2.top_comment = aldane_comment_2.id
 
 serge = User.create({
     username: "Serge",
-    password_digest: "password",
+    password_digest: password_digest,
     genre_preference: "Isekai",
     go_to_motto: "Those who break the rules are scum, those who abandon their friends are worse than scum!",
     peers: {names[0] => "2022-12-11", 
@@ -204,7 +200,7 @@ aldane.save
 
 david = User.create({
     username: "David",
-    password_digest: "password",
+    password_digest: password_digest,
     genre_preference: "Shounin",
     go_to_motto: "Imma yell in your ear",
     peers: {

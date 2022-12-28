@@ -83,11 +83,11 @@ function UserTable() {
       // formData.append("new_username","Aldane1")
       // formData.append("new_password","password")
       // formData.append("password_digest",'password')
-      // formData.append("genre_preference","Isakai")
-      // formData.append("go_to_motto","Stay Chill Homie")
-      // let peerRequest = {action: "add", requestFocus:"Allia"}
+      // formData.append("genre_preference","Shounen")
+      // formData.append("go_to_motto","Where is Ichigo?")
+      // let peerRequest = {action: "add", requestFocus:"Jarret"}
       // formData.append("requests",JSON.stringify(peerRequest))
-      let peerAdd = {action: "add", peerFocus: "Allia"}
+      let peerAdd = {action: "add", peerFocus: "Jarret"}
       formData.append("peers",JSON.stringify(peerAdd))
     }
 

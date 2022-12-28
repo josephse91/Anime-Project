@@ -55,10 +55,10 @@ function ReviewCommentsTable() {
     let search = ""
     if (review) {
       search += "?review_id=" + review;
-      search += "&comment=You did, I'll give you credit. I'm not a strag (Duplicate comment to remove)";
-      search += "&user_id=Aldane";
+      search += "&comment=I gave it a chance";
+      search += "&user_id=Jarret";
       search += "&comment_type=reply";
-      search += "&parent=" + 17;
+      search += "&parent=" + 15;
       // search += "&top_comment=" + 16;
     }
 

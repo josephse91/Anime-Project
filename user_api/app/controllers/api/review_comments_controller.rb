@@ -17,21 +17,25 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def create
-        components = comment_attrs
+        components = comment_attrs[:components]
         return if !components
 
         comment = ReviewComment.new(components)
 
         if (comment.valid?)
             comment.save
-            render json: {status: "complete", review: comment}
+            notifications = comment_attrs[:notification]
+            render_obj = {status: "complete", comment: comment}
+
+            render_obj[:notifications] = notifications
+            render json: render_obj
         else
             render json: {status: "failed", errors: comment.errors.objects.first.full_message}
         end
     end
 
     def update
-        components = comment_attrs
+        components = comment_attrs[:components]
         return if !components
         
         comment = ReviewComment.find_by(id: comments_param[:id])
@@ -125,13 +129,18 @@ class Api::ReviewCommentsController < ApplicationController
         comment_type = comments_param[:comment_type]
         parent = comments_param[:parent]
         user_id = comments_param[:user_id]
+        review_id = comments_param[:review_id]
+        review = Review.find_by(id: review_id)
+        notification_target = []
         
         if comment_type == "reply"
             parent = ReviewComment.find_by(id: comments_param[:parent])
             top_comment = parent.id
+            add_notification(notification_target,review,user_id,parent)
         elsif comment_type == "comment"
             parent = Review.find_by(id: comments_param[:parent])
             top_comment = ReviewComment.last.id + 1
+            add_notification(notification_target,review,user_id)
         end
 
         if !parent
@@ -142,7 +151,6 @@ class Api::ReviewCommentsController < ApplicationController
         comments_param[:id] ? review_comment = confirm_comment_owner(user_id) : nil
         return if !review_comment && comments_param[:id]
 
-        review_id = comments_param[:review_id].to_i
         comment = comments_param[:comment]
         likes = comments_param[:change_likes]
         
@@ -159,6 +167,33 @@ class Api::ReviewCommentsController < ApplicationController
 
         likes ? components[:likes] = likes : nil
 
-        components
+        {components: components, notification: notification_target}
+    end
+
+    def add_notification(notifications,review,current_user,comment = nil)
+        reviewer = {
+            id: review.id,
+            recipient: review.user,
+            show: review.show,
+            action: "Comment",
+            action_user: current_user,
+            target_item: "Review"
+        }
+        notifications.push(reviewer)
+
+        if comment
+            commenter = {
+                id: comment.id,
+                recipient: comment.user_id,
+                review: comment.review_id,
+                show: review.show,
+                target_item: "Comment",
+                action: "Comment",
+                action_user: current_user
+            }
+            notifications.push(commenter)
+        end
+
+        notifications
     end
 end

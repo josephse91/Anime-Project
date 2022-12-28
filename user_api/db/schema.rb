@@ -67,7 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
   create_table "rooms", force: :cascade do |t|
     t.string "room_name", null: false
     t.json "users", default: {}
-    t.boolean "private", default: true
+    t.boolean "private_room", default: true
     t.json "pending_approval", default: {}
     t.json "admin", default: {"group_admin"=>true, "admin_users"=>{}}
     t.json "entry_keys", default: {}
