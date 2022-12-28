@@ -53,7 +53,7 @@ function ForumCommentsTable() {
     let query = "" 
 
     let queryParams = [];
-    if (forum) queryParams.push(`forum_post=${forum}`)
+    if (forum) queryParams.push(`forum_id=${forum}`)
     if (commentOwner) queryParams.push(`comment_owner=${commentOwner}`)
     if (queryParams.length) {
       query += "?"
@@ -71,8 +71,8 @@ function ForumCommentsTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      // formData.append("comment", "Being lonely is more painful then getting hurt. ~Monkey D. Luffy") // Mandatory
-      // formData.append("parent", null) // Mandatory
+      formData.append("comment", "You have to leave your son so he finds his hidden power") // Mandatory
+      formData.append("parent", null) // Mandatory
 
       let votes = {up: 2, down: 0}
       // formData.append("votes",JSON.stringify(votes)) // individually run
@@ -80,7 +80,7 @@ function ForumCommentsTable() {
       // formData.append("level",0) // Not Required
       // formData.append("children", {}) // Not Required
       // formData.append("top_comment",0) // Not required
-      formData.append(testcase.key,testcaseInputString)
+      if (testcase.key) formData.append(testcase.key,testcaseInputString)
     }
 
     apiRequest(options,query)

@@ -16,6 +16,7 @@ class Api::ForumCommentsController < ApplicationController
         return if !comment_components
         attributes = comment_components[:attributes]
         parent = comment_components[:parent]
+        forum = comment_components[:forum]
         
         comment = ForumComment.new(attributes)
 
@@ -23,12 +24,16 @@ class Api::ForumCommentsController < ApplicationController
             comment.save
             comment.top_comment = comment.top_comment || comment.id
             comment.save
-            set_children(parent,comment)
+            touched_comments = set_children(parent,comment,forum)
         else
             render json: {status: "failed", error: comment.errors.objects.first.full_message}
         end
 
-        render json: {status: "complete", comment: comment}
+        notifications = touched_comments[:notifications]
+        render_obj = {status: "complete", comment: comment}
+
+        render_obj[:notifications] = notifications
+        render json: render_obj
 
     end
 
@@ -140,14 +145,17 @@ class Api::ForumCommentsController < ApplicationController
         render json: {status: "complete", votes: comment.votes}
     end
 
-    def set_children(parent,child)
+    def set_children(parent,child,forum)
+        notifications = []
         parent ? parent.children.unshift(child) : nil
         parent ? parent.save : nil
 
-        current_parent = parent
+        current_parent = parent || forum
         current_child = child
 
-        while current_parent
+        add_notification(notifications, current_parent, current_child,forum)
+
+        while current_parent && current_parent.is_a?(ForumComment)
             already_exists = nil
 
             current_parent.children.each_with_index do |ex_child,idx|
@@ -167,7 +175,11 @@ class Api::ForumCommentsController < ApplicationController
             current_parent = ForumComment.find_by(id: current_child.parent)
         end
 
-        child
+        # if parent.is_a?(ForumComment)
+        #     add_notification(notifications, forum, child,forum)
+        # end
+
+        {comment: child, notifications: notifications}
     end
 
     def create_components_hash
@@ -219,7 +231,24 @@ class Api::ForumCommentsController < ApplicationController
 
         top_comment ? attributes[:top_comment] = top_comment : nil
 
-        {parent: parent_obj, attributes: attributes}
+        {parent: parent_obj, attributes: attributes, forum: forum}
+    end
+
+    def add_notification(notifications, parent, comment,forum)
+        recipient = parent.is_a?(Forum) ? parent.creator : parent.comment_owner
+        target_item = parent.is_a?(Forum) ? "Forum" : "Forum Comment"
+
+        data = {
+            action: "Comment",
+            action_user: comment.comment_owner,
+            recipient: recipient,
+            target_item: target_item,
+            topic: forum.topic,
+            id: parent.id
+        }
+
+        notifications.push(data)
+        notifications
     end
 
     def comment_params

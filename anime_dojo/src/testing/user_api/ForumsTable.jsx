@@ -63,10 +63,10 @@ function ForumsTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      // formData.append("request","Jamal")
-      formData.append("content", "Everybody is obsessed with Death note but Code Geass should be the chosen one!")
-      formData.append("anime","Code Geass")
-      formData.append(testcase.key,testcaseInputString)
+      formData.append("topic", "One Piece ages like fine wine")
+      formData.append("content", "There is no anime that ages better than One Piece")
+      formData.append("anime","One Piece")
+      if (testcase.key) formData.append(testcase.key,testcaseInputString)
     }
 
     apiRequest(options,query)

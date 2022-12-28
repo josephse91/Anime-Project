@@ -223,6 +223,7 @@ planet_vegeta = Room.new({
 })
 
 serge.rooms[planet_vegeta.room_name] = "12-19-2022"
+serge.save
 
 planet_vegeta.admin["group_admin"] = true
 planet_vegeta.admin["admin_users"][serge.username] = TIME_INPUT

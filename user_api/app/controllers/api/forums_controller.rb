@@ -16,7 +16,7 @@ class Api::ForumsController < ApplicationController
             return
         end
 
-        query = ["forums.room = ?",room]
+        query = ["forums.room_id = ?",room]
 
         if forum_search
             query[0] += " AND (LOWER(topic) LIKE ? OR LOWER(content) LIKE ?"
@@ -52,17 +52,22 @@ class Api::ForumsController < ApplicationController
 
         components = alter_forum[:components]
         forum = alter_forum[:forum]
+        room = alter_forum[:room]
+        notifications = []
 
         forum = Forum.new(components)
 
         if forum.invalid?
             render json: {status: "failed", error: forum.errors.objects.first.full_message}
             return
-        else
-            forum.save
         end
+        forum.save
+        
+        render_obj = {status: "complete", components: forum}
+        add_notification(notifications,forum,room)
 
-        render json: {status: "complete", components: forum}
+        render_obj[:notifications] = notifications
+        render json: render_obj
     end
 
     def update
@@ -108,15 +113,29 @@ class Api::ForumsController < ApplicationController
         user
     end
 
+    def find_room
+        room_input = forums_params[:room_id]
+        room = Room.find_by(room_name: room_input)
+
+        if !room
+            render json: {status: "failed", vari: [user,room], error: "Invalid Room"}
+        end
+
+        room
+    end
+
     def access_granted
         user = valid_user
         return nil if !user
-        room = forums_params[:room_id]
 
-        user_in_room = user ? user.rooms[room] : nil
+        room = find_room
+        return if !room
 
-        if !user_in_room
-            render json: {status: "failed", error: "User must be within room to edit forum"}
+        user_in_room = user.rooms[room.room_name]
+        room_contains_user = room.users[user.username]
+
+        if !user_in_room || !room_contains_user
+            render json: {status: "failed", user: user, room: room, error: "User must be within room to edit forum"}
             return nil
         end
 
@@ -153,14 +172,32 @@ class Api::ForumsController < ApplicationController
         components = {
             topic: topic,
             creator: current_user.username,
-            room: room
+            room_id: room.room_name
         }
 
         content ? components[:content] = content : nil
         anime ? components[:anime] = anime : nil
         votes ? components[:votes] = votes : nil
 
-        {components: components, forum: forum}
+        {components: components, forum: forum, room: room}
+    end
+
+    def add_notification(notifications,forum_post,room)
+        users = room.users.each_key do |username|
+            data = {
+                action: "Forum Post",
+                target_item: "User",
+                action_user: room.room_name,
+                recipient: username,
+                id: forum_post.id,
+                topic: forum_post.topic,
+                forum_owner: forum_post.creator
+            }
+            notifications.push(data)
+            notifications
+        end
+
+        notifications
     end
 
     def forums_params
