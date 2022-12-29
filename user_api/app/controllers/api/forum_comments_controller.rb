@@ -175,10 +175,6 @@ class Api::ForumCommentsController < ApplicationController
             current_parent = ForumComment.find_by(id: current_child.parent)
         end
 
-        # if parent.is_a?(ForumComment)
-        #     add_notification(notifications, forum, child,forum)
-        # end
-
         {comment: child, notifications: notifications}
     end
 

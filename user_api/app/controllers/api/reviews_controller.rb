@@ -22,19 +22,18 @@ class Api::ReviewsController < ApplicationController
     end
 
     def create
-        username = find_user.username
-        return if username.nil?
-
-        components = review_attrs
+        components = review_attrs[:components]
+        return if !components
 
         @review = Review.new(components)
 
-        if (@review.save) 
-            render json: {status: "complete", review: @review}
-        else 
+        if !@review.valid?
             render json: {status: "failed", errors: @review.errors.objects.first.full_message}
+            return
         end
 
+        @review.save
+        render json: {status: "complete", review: @review}
     end
 
     def show
@@ -46,15 +45,17 @@ class Api::ReviewsController < ApplicationController
     end
 
     def update
-        review = find_show[:review]
-        return if review.nil?
+        return if !review_attrs
 
-        components = review_attrs(review)
+        components = review_attrs[:components]
+        review = review_attrs[:review]
 
-        if (review.update(components))
+        return if !components || !review
+
+        if review.update(components)
             render json: {status: "complete", review: review}
         else 
-            render json: {status: "failed", errors: updated_review.errors.objects.first.full_message}
+            render json: {status: "failed", errors: review.errors.objects.first.full_message}
         end
     end
 
@@ -70,14 +71,14 @@ class Api::ReviewsController < ApplicationController
 
     #helper functions
     def review_params
-        params.permit(:id,:user,:user_id,:show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range, :change_like)
+        params.permit(:id,:user_id, :current_user, :show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range, :likes)
     end
 
     def find_user
-        input_user = review_params[:user_id] || review_params[:user]
+        input_user =  review_params[:user_id]
         user = User.find_by(username: input_user)
 
-        if !user
+        if !user && !review_params[:current_user]
             render json: {status: "failed", user: user,error: "Invalid user"}
             return
         end
@@ -85,42 +86,81 @@ class Api::ReviewsController < ApplicationController
         user
     end
 
-    def find_show
-        username = find_user.username
-        return nil if username.nil?
+    def current_user
+        user_input =  review_params[:current_user]
+        current_user = User.find_by(username: user_input)
 
-        show = review_params[:id] || review_params[:show]
-        review = Review.where(["reviews.user = ? and show = ?",username,show]).take
-
-        if !review
-            render json: {status: "failed", error: "This user has not reviewed this show"}
+        if !current_user
+            render json: {status: "failed", user: current_user,error: "Could not find current user"}
+            return
         end
 
-        {user: username, review: review}
+        current_user
     end
 
-    def review_attrs(review = nil)
-        user = review_params[:user_id] || review_params[:user]
-        show = review_params[:id] || review_params[:show]
+    def find_show
+        user = find_user || current_user
+        return nil if user.nil?
+
+        show = review_params[:id]
+        return {user: user, show: review_params[:show]} if !show
+
+        review = Review.where([
+            "reviews.user = ? and show = ?",
+            user.username,
+            show
+            ]).take
+
+        if show && !review
+            render json: {status: "failed", review: review,show: show, user: user, error: "This user has not reviewed this show"}
+            return
+        end
+
+        {user: user, review: review, show: show}
+    end
+
+    def review_attrs
+        client_user = current_user || find_user
+        return if !client_user
+        
+        review_hash = find_show
+        return if !review_hash
+
+        show = review_hash[:show]
+        review = review_hash[:review]
+        user = review_hash[:user]
+        return if !review && review_params[:id]
+
+        likes_hash = review_params[:id] ? adjust_likes(review) : {}
+        likes = likes_hash[:likes]
+        return if likes_hash[:action]
+        
+        if review && review.user != client_user.username
+            render json: {status: "failed", error: "User not authorized to edit this review"}
+            return
+        end
+
         rating = review_params[:rating] || review&.rating
         amount_watched = review_params[:amount_watched] || review&.amount_watched
         hps = review_params[:highlighted_points] || review&.highlighted_points
         overall_review = review_params[:overall_review] || review&.overall_review
         referral_id = review_params[:referral_id] || review&.referral_id
         wp = review_params[:watch_priority] || review&.watch_priority
-        likes = review_params[:change_likes] || review&.likes
 
         components = {
-            user: user,
+            user: user.username,
             show: show,
-            rating: rating.to_i,
-            amount_watched: amount_watched,
-            highlighted_points: hps,
-            overall_review: overall_review,
-            referral_id: referral_id,
-            watch_priority: wp.to_i,
-            likes: likes.to_i
+            rating: rating
         }
+
+        components[:amount_watched] = amount_watched
+        components[:highlighted_points] = hps
+        components[:overall_review] = overall_review
+        components[:referral_id] = referral_id
+        components[:watch_priority] = wp
+        likes ? components[:likes] = likes : nil
+
+        {review: review, components: components}
     end
 
     def query_peers_array(user)
@@ -172,5 +212,49 @@ class Api::ReviewsController < ApplicationController
         end
 
         where_array
+    end
+
+    def adjust_likes(review)
+        action_hash = review_params[:likes]
+        return {action: nil, likes: review.likes}if !action_hash
+
+        notifications = []
+        action = ActiveSupport::JSON.decode(action_hash)
+        # review_check = Review.find_by(id: action["review_id"])
+
+        # if review != review_check
+        #     render json: {status: "failed", error: "Review not matching parameters"}
+        #     return
+        # end
+
+        like_count = review.likes
+        user = User.find_by(username: action["user"])
+        net = action["net"]
+        target = action["target"]
+
+        if net < target
+            review.likes = like_count + 1
+            event = "like"
+        elsif net > target
+            review.likes = like_count - 1
+            event = "unlike"
+        end
+
+        review.save
+
+        data = {
+            id: review.id,
+            recipient: review.user,
+            action: event,
+            action_user: user.username,
+            target_item: "Review"
+        }
+        event == "like" ? notifications.push(data) : nil
+        render_obj = {status: "complete", event: event, review: review}
+        notifications.length > 0 ? render_obj[:notifications] = notifications : nil
+
+        render json: render_obj
+
+        {action: event, review: review}
     end
 end

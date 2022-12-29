@@ -54,7 +54,7 @@ function ReviewTable() {
 
     let search = ""
     if (user) {
-      search += "?user_id=" + user;
+      search += "?current_user=" + user;
       // search += "&in_network=true";
       // let range = JSON.stringify({"top": 95, "bottom":80})
       // search += `&range=${range}`;
@@ -62,7 +62,15 @@ function ReviewTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
       options.body = formData;
-      formData.append("rating",75)
+      // formData.append("rating",85)
+      // formData.append("amount_watched","season 1")
+      // // formData.append("highlighted_points",'[]')
+      // formData.append("overall_review","This anime is the epitomy of greatness")
+      // formData.append("referral_id","Jarret")
+      // formData.append("watch_priority",1)
+      let likesAction = {user: user, net: 0, target: 1}
+      formData.append("likes",JSON.stringify(likesAction))
+
       if (testcase.key) formData.append(testcase.key,testcaseInputString);
     }
 
