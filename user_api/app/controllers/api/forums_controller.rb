@@ -118,7 +118,7 @@ class Api::ForumsController < ApplicationController
         room = Room.find_by(room_name: room_input)
 
         if !room
-            render json: {status: "failed", vari: [user,room], error: "Invalid Room"}
+            render json: {status: "failed", error: "Invalid Room"}
         end
 
         room
@@ -142,10 +142,22 @@ class Api::ForumsController < ApplicationController
         [user,room]
     end
 
-    def confirm_forum_owner(current_user)
+    def find_forum
         forum = Forum.find_by(id: forums_params[:id])
 
-        if forum && current_user.username != forum.creator
+        if !forum && forums_params[:id]
+            render json: {status: "failed", error: "No forum can be found"}
+            return
+        end
+
+        forum
+    end
+
+    def confirm_forum_owner(current_user)
+        forum = find_forum
+        return if !forum
+
+        if forum && current_user.username != forum&.creator
             render json: {
                 status: "failed", 
                 error: "Only the creator of the post can edit the post"
@@ -161,6 +173,16 @@ class Api::ForumsController < ApplicationController
         return nil if !user_room
 
         current_user,room = user_room
+        notifications = []
+
+        forum = find_forum
+
+        if forum
+            votes_hash = adjust_votes(notifications,current_user,forum)
+            return nil if votes_hash[:action]
+            votes = votes_hash[:votes]
+        end
+
         forum = confirm_forum_owner(current_user)
         return if !forum && forums_params[:id]
 
@@ -198,6 +220,63 @@ class Api::ForumsController < ApplicationController
         end
 
         notifications
+    end
+
+    def adjust_votes(notifications,user,forum)
+        action_hash = forums_params[:votes]
+        return {action: nil, votes: forum.votes} if !action_hash
+
+        action = ActiveSupport::JSON.decode(action_hash)
+        # review_check = Review.find_by(id: action["review_id"])
+
+        # if review != review_check
+        #     render json: {status: "failed", error: "Review not matching parameters"}
+        #     return
+        # end
+
+        up_votes = forum.votes["up"]
+        down_votes = forum.votes["down"]
+
+        net = action["net"]
+        target = action["target"]
+
+        if net == 1 && target == 0
+            forum.votes = {"up": up_votes - 1, "down": down_votes}
+            event = "neutral"
+        elsif net == 1 && target == -1
+            forum.votes = {"up": up_votes - 1, "down": down_votes + 1}
+            event = "unlike"
+        elsif net == 0 && target == 1
+            forum.votes = {"up": up_votes + 1, "down": down_votes}
+            event = "like"
+        elsif net == 0 && target == -1
+            forum.votes = {"up": up_votes, "down": down_votes - 1}
+            event = "unlike"
+        elsif net == -1 && target == 0
+            forum.votes = {"up": up_votes + 1, "down": down_votes}
+            event = "neutral"
+        elsif net == -1 && target == 1
+            forum.votes = {"up": up_votes + 1, "down": down_votes - 1}
+            event = "like"
+        end
+
+        forum.save
+
+        data = {
+            id: forum.id,
+            recipient: forum.creator,
+            action: event,
+            action_user: user.username,
+            target_item: "Forum"
+        }
+
+        event == "like" ? notifications.push(data) : nil
+        render_obj = {status: "complete", event: event, forum: forum}
+        notifications.length > 0 ? render_obj[:notifications] = notifications : nil
+
+        render json: render_obj
+
+        {action: event, forum: forum}
     end
 
     def forums_params

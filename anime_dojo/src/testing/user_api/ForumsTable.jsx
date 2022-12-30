@@ -50,8 +50,13 @@ function ForumsTable() {
       method: requestMethod
     }
 
-    let query = "" + search
-    
+    let query = "?"
+    let user = "Aldane"
+    let roomId = "Planet Vegeta"
+
+      query += `room_id=${roomId}`;
+      query += `&current_user=${user}`;
+      if (search) query += search
 
     if (forum) formData.append('topic',forum);
 
@@ -63,10 +68,12 @@ function ForumsTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      formData.append("topic", "One Piece ages like fine wine")
-      formData.append("content", "There is no anime that ages better than One Piece")
-      formData.append("anime","One Piece")
-      if (testcase.key) formData.append(testcase.key,testcaseInputString)
+      // formData.append("topic", "One Piece ages like fine wine")
+      // formData.append("content", "There is no anime that ages better than One Piece")
+      // formData.append("anime","Rurouni Kenshin")
+      let votesAction = {user: user, net: 1, target: 0}
+      // formData.append("votes",JSON.stringify(votesAction))
+      // if (testcase.key) formData.append(testcase.key,testcaseInputString)
     }
 
     apiRequest(options,query)
