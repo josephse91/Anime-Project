@@ -35,8 +35,10 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def update
-        components = comment_attrs[:components]
-        return if !components
+        component_hash = comment_attrs
+        return if !component_hash
+
+        components = component_hash[:components]
         
         comment = ReviewComment.find_by(id: comments_param[:id])
         valid_check = ReviewComment.new(components)
@@ -50,8 +52,10 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def destroy
-        user_id = comments_param[:user_id]
-        comment = confirm_comment_owner(user_id)
+        user = find_user
+        return if !user
+
+        comment = confirm_comment_owner(user)
         return if !comment
 
         delete_stack = []
@@ -92,13 +96,24 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def comments_param
-        params.permit(:id,:comment,:review_id,:user_id,:top_comment,:comment_type,:parent,:change_likes)
+        params.permit(:id,:comment,:review_id,:user_id,:top_comment,:comment_type,:parent,:likes)
+    end
+
+    def find_user
+        user = User.find_by(username: comments_param[:user_id])
+
+        if !user
+            render json: {status: "failed", user: user,error: "Invalid user"}
+            return
+        end
+
+        user
     end
 
     def find_comment
         comment = ReviewComment.find_by(id: comments_param[:id])
 
-        if !comment
+        if !comment 
             render json: {status: "failed", error: "Comment does not exist"}
             return
         end
@@ -126,48 +141,99 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def comment_attrs(comment = nil) 
+        user = find_user
+        return if !user
+        user_id = user.username
+
         comment_type = comments_param[:comment_type]
         parent = comments_param[:parent]
-        user_id = comments_param[:user_id]
         review_id = comments_param[:review_id]
         review = Review.find_by(id: review_id)
-        notification_target = []
+        notifications = []
+
+        if comments_param[:id]
+            target_comment = find_comment
+
+            likes_hash = target_comment ? adjust_likes(notifications,user,target_comment) : {}
+            likes = likes_hash[:likes]
+            return nil if likes_hash[:action]
+        end
         
         if comment_type == "reply"
             parent = ReviewComment.find_by(id: comments_param[:parent])
             top_comment = parent.id
-            add_notification(notification_target,review,user_id,parent)
+            add_notification(notifications,review,user,parent)
         elsif comment_type == "comment"
             parent = Review.find_by(id: comments_param[:parent])
             top_comment = ReviewComment.last.id + 1
-            add_notification(notification_target,review,user_id)
+            add_notification(notifications,review,user_id)
         end
 
-        if !parent
+        if !parent && !target_comment
             render json: {status: "failed", parent: parent, error: "Review or Comment does not exist"}
             return nil
         end
 
         comments_param[:id] ? review_comment = confirm_comment_owner(user_id) : nil
-        return if !review_comment && comments_param[:id]
+        return if !review_comment && target_comment
 
         comment = comments_param[:comment]
-        likes = comments_param[:change_likes]
         
-        parent = parent.id
+        parent = target_comment&.parent || parent&.id
 
         components = {
-            review_id: review_id,
             comment: comment,
-            user_id: user_id,
-            comment_type: comment_type,
-            parent: parent,
-            top_comment: top_comment
         }
 
-        likes ? components[:likes] = likes : nil
+        review_id ? components[:review_id] = review_id : nil
+        user_id ? components[:user_id] = user_id : nil
+        comment_type ? components[:comment_type] = comment_type : nil
+        parent ? components[:parent] = parent : nil
+        top_comment ? components[:top_comment] = top_comment : nil
 
-        {components: components, notification: notification_target}
+        {components: components, notification: notifications}
+    end
+
+    def adjust_likes(notifications,user,comment)
+        action_hash = comments_param[:likes]
+        return {action: nil, likes: comment.likes} if !action_hash
+
+        action = ActiveSupport::JSON.decode(action_hash)
+        # review_check = Review.find_by(id: action["review_id"])
+
+        # if review != review_check
+        #     render json: {status: "failed", error: "Review not matching parameters"}
+        #     return
+        # end
+
+        like_count = comment.likes
+        net = action["net"]
+        target = action["target"]
+
+        if net < target
+            comment.likes = like_count + 1
+            event = "like"
+        elsif net > target
+            comment.likes = like_count - 1
+            event = "unlike"
+        end
+
+        comment.save
+
+        data = {
+            id: comment.id,
+            recipient: comment.user_id,
+            action: event,
+            action_user: user.username,
+            target_item: "Comment"
+        }
+        event == "like" ? notifications.push(data) : nil
+        render_obj = {status: "complete", event: event, comment: comment}
+        notifications.length > 0 ? render_obj[:notifications] = notifications : nil
+
+        render json: render_obj
+
+        {action: event, comment: comment}
     end
 
     def add_notification(notifications,review,current_user,comment = nil)
@@ -176,12 +242,14 @@ class Api::ReviewCommentsController < ApplicationController
             recipient: review.user,
             show: review.show,
             action: "Comment",
-            action_user: current_user,
+            action_user: current_user.username,
             target_item: "Review"
         }
-        notifications.push(reviewer)
+        if current_user.username != review.user
+            notifications.push(reviewer)
+        end
 
-        if comment
+        if comment && current_user.username != comment.user_id
             commenter = {
                 id: comment.id,
                 recipient: comment.user_id,

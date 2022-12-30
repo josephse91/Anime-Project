@@ -52,20 +52,24 @@ function ReviewCommentsTable() {
     let testcaseInput = testcase.value;
     let testcaseInputString = JSON.stringify(testcaseInput);
 
-    let search = ""
-    if (review) {
-      search += "?review_id=" + review;
-      search += "&comment=I gave it a chance";
-      search += "&user_id=Jarret";
-      search += "&comment_type=reply";
-      search += "&parent=" + 15;
+    let search = "?"
+    let user = "Serge"
+    let comment = "I love very good things"
+
+      // search += "review_id=" + review;
+      // search += `&comment=${comment}`;
+      search += `&user_id=${user}`;
+      // search += "&comment_type=reply";
+      // search += "&parent=" + 20;
       // search += "&top_comment=" + 16;
-    }
+
+    if (search.length === 1) search = ""
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
       options.body = formData;
-      // formData.append("watch_priority",-1)
-      // formData.append(testcase.key,testcaseInputString);
+      let likesAction = {user: user, net: 1, target: 0}
+      formData.append("likes",JSON.stringify(likesAction))
+      if (testcase.key) formData.append(testcase.key,testcaseInputString);
     }
 
     apiRequest(options,search)
