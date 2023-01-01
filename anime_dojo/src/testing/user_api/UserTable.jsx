@@ -87,8 +87,8 @@ function UserTable() {
       // formData.append("go_to_motto","Where is Ichigo?")
       // let peerRequest = {action: "add", requestFocus:"Jarret"}
       // formData.append("requests",JSON.stringify(peerRequest))
-      let peerAdd = {action: "add", peerFocus: "Jarret"}
-      formData.append("peers",JSON.stringify(peerAdd))
+      // let peerAdd = {action: "add", peerFocus: "Jarret"}
+      // formData.append("peers",JSON.stringify(peerAdd))
     }
 
     apiRequest(options,query)

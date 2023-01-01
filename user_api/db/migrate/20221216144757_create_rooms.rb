@@ -7,6 +7,7 @@ class CreateRooms < ActiveRecord::Migration[7.0]
       t.json :pending_approval, default: {}
       t.json :admin, default: {group_admin: true, admin_users: {}}
       t.json :entry_keys, default: {}
+      t.json :shows, default: {}
 
       t.timestamps
     end

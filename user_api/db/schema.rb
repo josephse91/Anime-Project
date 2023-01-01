@@ -42,12 +42,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
     t.text "comment", null: false
     t.integer "review_id", null: false
     t.string "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "top_comment"
     t.string "comment_type", null: false
     t.integer "parent", null: false
     t.integer "likes", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -58,10 +58,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
     t.text "highlighted_points", default: [], array: true
     t.text "overall_review"
     t.string "referral_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "watch_priority"
     t.integer "likes", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -71,23 +71,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
     t.json "pending_approval", default: {}
     t.json "admin", default: {"group_admin"=>true, "admin_users"=>{}}
     t.json "entry_keys", default: {}
+    t.json "shows", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_name"], name: "index_rooms_on_room_name"
   end
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "username", null: false
     t.string "password_digest", null: false
-    t.string "genre_preference"
-    t.string "go_to_motto"
-    t.text "user_grade_protocol"
     t.json "rooms", default: {}
     t.json "peers", default: {}
     t.json "requests", default: {"room"=>{}, "peer"=>{}, "roomAuth"=>{}}
+    t.string "genre_preference"
+    t.string "go_to_motto"
+    t.text "user_grade_protocol"
     t.string "session_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["username"], name: "index_users_on_username"
   end
 

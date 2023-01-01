@@ -15,6 +15,16 @@ class Api::UsersController < ApplicationController
 
         render json: {status: "complete", users: users}
     end
+
+    def user_rooms
+        user = find_user
+        return if !user
+
+        room_hash = user.rooms
+        rooms = room_hash.map {|room,date| Room.find_by(room_name: room)}
+
+        render json: {status: "complete", user: user, rooms: rooms}
+    end
     
     def create
         create_params = user_params.select {|key,value| key != "password" && value}
@@ -31,13 +41,11 @@ class Api::UsersController < ApplicationController
     end
 
     def show
-        @user = User.find_by(username: user_params[:id])
+        @user = find_user
+        return if !@user
 
-        if !@user
-            render json: {status: "failed", error: "no existing user"}
-        else
-            render :show
-        end
+        render json: {status: "complete", user: @user}
+
     end
 
     def update
@@ -173,7 +181,7 @@ class Api::UsersController < ApplicationController
     end
 
     def user_params
-        params.permit(:id,:username,:password,:genre_preference,:go_to_motto,:user_grade_protocol,:peers,:requests,:new_username,:new_password,:session_token)
+        params.permit(:id, :user_id, :username,:password,:genre_preference,:go_to_motto,:user_grade_protocol,:peers,:requests,:new_username,:new_password,:session_token)
     end
 
     def query_params
@@ -190,7 +198,8 @@ class Api::UsersController < ApplicationController
     end
 
     def find_user
-        user = User.find_by(username: user_params[:id])
+        current_user = user_params[:id] || user_params[:user_id]
+        user = User.find_by(username: current_user)
         
         if !user
             render json: {status: "failed", error: "no existing user"}

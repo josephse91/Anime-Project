@@ -5,9 +5,11 @@ class CreateReviews < ActiveRecord::Migration[7.0]
       t.string :show, null: false
       t.integer :rating, null: false
       t.string :amount_watched
-      t.string :highlighted_points
-      t.string :overall_review
-      t.string :referral_id 
+      t.text :highlighted_points, default: [], array: true
+      t.text :overall_review
+      t.string :referral_id
+      t.integer :watch_priority
+      t.integer :likes, default: 0 
       t.timestamps
     end
   end

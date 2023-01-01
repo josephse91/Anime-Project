@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
     resources :users do
       get '/reviews', to: 'reviews#user_index'
+      get '/rooms', to: 'users#user_rooms'
     end
     resources :reviews
     resources :review_comments
