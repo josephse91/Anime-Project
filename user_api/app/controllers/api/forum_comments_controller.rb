@@ -14,6 +14,7 @@ class Api::ForumCommentsController < ApplicationController
     def create
         comment_components = create_components_hash
         return if !comment_components
+
         attributes = comment_components[:attributes]
         parent = comment_components[:parent]
         forum = comment_components[:forum]
@@ -24,7 +25,7 @@ class Api::ForumCommentsController < ApplicationController
             comment.save
             comment.top_comment = comment.top_comment || comment.id
             comment.save
-            touched_comments = set_children(parent,comment,forum)
+            touched_comments = set_children(parent,comment,forum, "Comment")
         else
             render json: {status: "failed", error: comment.errors.objects.first.full_message}
         end
@@ -69,13 +70,13 @@ class Api::ForumCommentsController < ApplicationController
             current_comment = bfs.shift
             children = current_comment&.children
             
-            if children.length > 0
+            if children&.length > 0
                 children = children.map do |child| 
                     ForumComment.find_by(id: child["id"])
                 end
-            end
 
-            bfs.push(*children)
+                bfs.push(*children)
+            end
 
             current_comment.destroy
         end
@@ -84,7 +85,8 @@ class Api::ForumCommentsController < ApplicationController
     end
 
     def find_user
-        user = User.find_by(username: comment_params[:comment_owner])
+        user_param = comment_params[:current_user] || comment_params[:comment_owner]
+        user = User.find_by(username: user_param)
 
         if !user
             render json: {status: "failed", error: "User does not exist"}
@@ -101,13 +103,14 @@ class Api::ForumCommentsController < ApplicationController
             render json: {status: "failed", error: "Forum post does not exist"}
             return
         end
+
         forum
     end
 
     def find_comment
         comment = ForumComment.find_by(id: comment_params[:id])
 
-        if !comment
+        if !comment && comment_params[:id]
             render json: {status: "failed", error: "Could not find comment"}
             return
         end
@@ -133,19 +136,7 @@ class Api::ForumCommentsController < ApplicationController
         comment
     end
 
-    def add_vote(vote_param)
-        comment = ForumComment.find_by(id: comment_params[:id])
-
-        if !comment
-            render json: {status: "failed", error: "Forum comment could not be found"}
-            return
-        end
-
-        comment.votes = vote_param
-        render json: {status: "complete", votes: comment.votes}
-    end
-
-    def set_children(parent,child,forum)
+    def set_children(parent,child,forum,action)
         notifications = []
         parent ? parent.children.unshift(child) : nil
         parent ? parent.save : nil
@@ -153,7 +144,9 @@ class Api::ForumCommentsController < ApplicationController
         current_parent = parent || forum
         current_child = child
 
-        add_notification(notifications, current_parent, current_child,forum)
+        if action == "Comment"
+            add_notification(notifications, current_parent, current_child,forum,action)
+        end
 
         while current_parent && current_parent.is_a?(ForumComment)
             already_exists = nil
@@ -181,23 +174,14 @@ class Api::ForumCommentsController < ApplicationController
     def create_components_hash
         votes = comment_params[:votes]
         current_user = find_user
-        return if !current_user && !votes
+        return if !current_user
 
-        forum_comment_param = comment_params[:id]
-        forum_comment = ForumComment.find_by(id: forum_comment_param)
-
-        if votes
-            if !forum_comment
-                render json: {status: "failed", error: "couldn't find comment"}
-            else
-                forum_comment.votes = votes
-                forum_comment.save
-                render json: {status: "complete", votes: forum_comment.votes}
-            end
-            return
-        end
+        forum_comment = find_comment
+        notifications = []
 
         if forum_comment
+            votes_hash = adjust_votes(notifications,current_user,forum_comment)
+            return nil if votes_hash[:action]
             comment_confirmed = comment_authorization(current_user,forum_comment)
         end
 
@@ -230,12 +214,12 @@ class Api::ForumCommentsController < ApplicationController
         {parent: parent_obj, attributes: attributes, forum: forum}
     end
 
-    def add_notification(notifications, parent, comment,forum)
+    def add_notification(notifications, parent, comment,forum,action)
         recipient = parent.is_a?(Forum) ? parent.creator : parent.comment_owner
         target_item = parent.is_a?(Forum) ? "Forum" : "Forum Comment"
 
         data = {
-            action: "Comment",
+            action: action,
             action_user: comment.comment_owner,
             recipient: recipient,
             target_item: target_item,
@@ -247,7 +231,67 @@ class Api::ForumCommentsController < ApplicationController
         notifications
     end
 
+    def adjust_votes(notifications,user,comment)
+        action_hash = comment_params[:votes]
+        return {action: nil, votes: comment.votes} if !action_hash
+
+        action = ActiveSupport::JSON.decode(action_hash)
+        # review_check = Review.find_by(id: action["review_id"])
+
+        # if review != review_check
+        #     render json: {status: "failed", error: "Review not matching parameters"}
+        #     return
+        # end
+
+        up_votes = comment.votes["up"]
+        down_votes = comment.votes["down"]
+
+        net = action["net"]
+        target = action["target"]
+
+        if net == 1 && target == 0
+            comment.votes = {"up": up_votes - 1, "down": down_votes}
+            event = "neutral"
+        elsif net == 1 && target == -1
+            comment.votes = {"up": up_votes - 1, "down": down_votes + 1}
+            event = "unlike"
+        elsif net == 0 && target == 1
+            comment.votes = {"up": up_votes + 1, "down": down_votes}
+            event = "like"
+        elsif net == 0 && target == -1
+            comment.votes = {"up": up_votes, "down": down_votes - 1}
+            event = "unlike"
+        elsif net == -1 && target == 0
+            comment.votes = {"up": up_votes + 1, "down": down_votes}
+            event = "neutral"
+        elsif net == -1 && target == 1
+            comment.votes = {"up": up_votes + 1, "down": down_votes - 1}
+            event = "like"
+        end
+
+        comment.save
+        parent = ForumComment.find_by(parent: comment.parent)
+        forum = Forum.find_by(id: comment.forum_id)
+        notifications = set_children(parent,comment,forum,"like")[:notifications]
+
+        data = {
+            action: "like",
+            target_item: "Forum Comment",
+            action_user: user.username,
+            recipient: comment.comment_owner,
+            id: comment.id
+        }
+
+        event == "like" ? notifications.push(data) : nil
+        render_obj = {status: "complete", event: event, comment: comment}
+        notifications.length > 0 ? render_obj[:notifications] = notifications : nil
+
+        render json: render_obj
+
+        {action: event, comment: comment}
+    end
+
     def comment_params
-        params.permit(:id,:forum_id,:comment,:comment_owner,:parent,:children,:votes)
+        params.permit(:id,:forum_id,:comment,:comment_owner,:parent,:children,:votes, :current_user)
     end
 end

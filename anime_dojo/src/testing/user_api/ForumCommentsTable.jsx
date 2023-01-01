@@ -33,8 +33,8 @@ function ForumCommentsTable() {
   let formData = new FormData();
   let myHeaders = new Headers();
 
-  async function apiRequest(options,query = null) {
-    let queryInput = (query || "");
+  async function apiRequest(options,query = "") {
+    let queryInput = query;
     let requestStr = "http://localhost:3000" + request + queryInput;
     let apiRequest = await fetch(requestStr, options)
     let data = await apiRequest.json()
@@ -50,11 +50,13 @@ function ForumCommentsTable() {
       method: requestMethod
     }
 
-    let query = "" 
+    let query = ""
+    let user = "Jarret" 
 
     let queryParams = [];
-    if (forum) queryParams.push(`forum_id=${forum}`)
+    if (forum) queryParams.push(`forum_id=${Number(forum)}`)
     if (commentOwner) queryParams.push(`comment_owner=${commentOwner}`)
+    if (user) queryParams.push(`current_user=${user}`)
     if (queryParams.length) {
       query += "?"
       queryParams.forEach((param,idx) => {
@@ -71,11 +73,11 @@ function ForumCommentsTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      formData.append("comment", "You have to leave your son so he finds his hidden power") // Mandatory
-      formData.append("parent", null) // Mandatory
+      // formData.append("comment", "Naruto original is the best answer. Shippuden has holes in it") // Mandatory
+      // formData.append("parent", 6) // Mandatory
 
-      let votes = {up: 2, down: 0}
-      // formData.append("votes",JSON.stringify(votes)) // individually run
+      let votesAction = {user: user, net: 0, target: 1}
+      formData.append("votes",JSON.stringify(votesAction))
 
       // formData.append("level",0) // Not Required
       // formData.append("children", {}) // Not Required

@@ -189,7 +189,6 @@ class Api::ForumsController < ApplicationController
         topic = forums_params[:topic] || forum&.topic
         content = forums_params[:content]
         anime = forums_params[:anime]
-        votes = forums_params[:votes]
 
         components = {
             topic: topic,
@@ -199,7 +198,6 @@ class Api::ForumsController < ApplicationController
 
         content ? components[:content] = content : nil
         anime ? components[:anime] = anime : nil
-        votes ? components[:votes] = votes : nil
 
         {components: components, forum: forum, room: room}
     end
