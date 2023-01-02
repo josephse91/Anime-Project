@@ -14,6 +14,98 @@ require 'bcrypt'
 NOW = Time.new
 TIME_INPUT = "#{NOW.month}-#{NOW.day}-#{NOW.year}"
 
+# helper functions
+
+def create_review(user,review_attr)
+    review = Review.create({
+        user: user.username,
+        show: review_attr[:show],
+        rating: review_attr[:rating],
+        overall_review: review_attr[:overall_review],
+        watch_priority: review_attr[:watch_priority]
+    })
+
+    rooms = user.rooms.map do |room,enter_date|
+        current_room = Room.find_by(room_name: room)
+
+        if current_room.shows[review_attr[:show]]
+            current_room.shows[review_attr[:show]] += 1
+        else
+            current_room.shows[review_attr[:show]] = 1
+        end
+        current_room.save
+        current_room
+    end
+
+    review
+end
+
+def add_user_to_room(user,room)
+    reviews = Review.where(user: user.username)
+    reviews.each do |review|
+        if room.shows[review.show] 
+            room.shows[review.show] += 1
+        else
+            room.shows[review.show] = 1
+        end
+    end
+
+    room.users[user.username] = TIME_INPUT
+    user.rooms[room.room_name] = TIME_INPUT
+    room.save
+    user.save
+end
+
+def set_children(parent,child)
+    # current_parent.children.unshift([child.id,NOW.to_fs(:db)])
+    parent ? parent.children.unshift(child) : nil
+    parent ? parent.save : nil
+
+    current_parent = parent
+    current_child = child
+
+    # lineage = {}
+    # lineage[current_child.id] = {}
+
+    while current_parent
+        already_exists = nil
+
+        current_parent.children.each_with_index do |ex_child,idx|
+            if ex_child["id"] == current_child.id
+                already_exists = idx
+            end
+        end
+
+        if already_exists
+            current_parent.children[already_exists] = current_child
+        else
+            current_parent.children.unshift(current_child)
+        end
+
+        current_parent.save
+        # lineage[current_parent.id] = current_parent.children
+        current_child = current_parent
+        current_parent = ForumComment.find_by(id: current_child.parent)
+    end
+
+    child
+end
+
+def create_forum_comment(attributes)
+    parent = attributes[:parent] ? ForumComment.find_by(id: attributes[:parent]) : nil
+    level = parent ? parent.level + 1 : 1
+    attributes[:level] = level
+
+    comment = ForumComment.create(attributes)
+    comment.save
+    comment.top_comment = parent ? parent.id : comment.id
+    comment.save
+    set_children(parent, comment)
+    comment
+end
+
+# Seeded information
+
 num_of_users = 5;
 num_of_reviews = Random.new.rand(5..10)
 watch_priorities = [-1,0,1]
@@ -93,29 +185,32 @@ aldane = User.create({
 jarret.peers[aldane.username] = TIME_INPUT
 jarret.save
 
-jarret_review_1 = Review.create({
-    user: "Jarret",
+jarret_review_1 = {
     show: "My Hero",
     rating: 76,
     overall_review: "This is trash",
     watch_priority: -1
-})
+}
 
-jarret_review_2 = Review.create({
-    user: "Jarret",
+jarret_review_1 = create_review(jarret,jarret_review_1)
+
+jarret_review_2 = {
     show: "Attack on Titan",
     rating: 99,
     overall_review: "God Tier Level",
     watch_priority: 1
-})
+}
 
-jarret_review_3 = Review.create({
-    user: jarret.username,
+jarret_review_2 = create_review(jarret,jarret_review_2)
+
+jarret_review_3 = {
     show: "Jobless Reincarnation",
     rating: 89,
     overall_review: "You have to watch this",
     watch_priority: 1
-})
+}
+
+jarret_review_3 = create_review(jarret,jarret_review_3)
 
 aldane_comment_1 = ReviewComment.create({
     comment:"You're hatin', you gotta give things a chance",
@@ -126,6 +221,7 @@ aldane_comment_1 = ReviewComment.create({
 })
 
 aldane_comment_1.top_comment = aldane_comment_1.id
+aldane_comment_1.save
 
 jarret_reply_1 = ReviewComment.create({
     comment:"You have a thick imagination",
@@ -145,13 +241,14 @@ aldane_reply_1 = ReviewComment.create({
     top_comment: aldane_comment_1.id
 })
 
-aldane_review_1 = Review.create({
-    user: aldane.username,
+aldane_review_1 = {
     show: "Bleach",
     rating: 90,
     overall_review: "This is top 2 and its NOT 2!",
     watch_priority: 1
-})
+}
+
+aldane_review_1 = create_review(aldane,aldane_review_1)
 
 jarret_comment_1 = ReviewComment.create({
     comment:"Bleach really moving crazy now! You right!",
@@ -162,6 +259,7 @@ jarret_comment_1 = ReviewComment.create({
 })
 
 jarret_comment_1.top_comment = jarret_comment_1.id
+jarret_comment_1.save
 
 aldane_reply_2 = ReviewComment.create({
     comment:"I put you on! DEAD!!!",
@@ -181,6 +279,7 @@ aldane_comment_2 = ReviewComment.create({
 })
 
 aldane_comment_2.top_comment = aldane_comment_2.id
+aldane_comment_2.save
 
 serge = User.create({
     username: "Serge",
@@ -222,18 +321,13 @@ planet_vegeta = Room.new({
     users: {"Serge": TIME_INPUT}
 })
 
-serge.rooms[planet_vegeta.room_name] = "12-19-2022"
-serge.save
+add_user_to_room(serge,planet_vegeta)
 
 planet_vegeta.admin["group_admin"] = true
 planet_vegeta.admin["admin_users"][serge.username] = TIME_INPUT
-planet_vegeta.users[jarret.username] = TIME_INPUT
-planet_vegeta.users[aldane.username] = TIME_INPUT
-planet_vegeta.save
-jarret.rooms[planet_vegeta.room_name] = TIME_INPUT
-jarret.save
-aldane.rooms[planet_vegeta.room_name] = TIME_INPUT
-aldane.save
+add_user_to_room(jarret,planet_vegeta)
+add_user_to_room(aldane,planet_vegeta)
+
 
 room_name_2 = ""
 room_name_2 += Faker::JapaneseMedia::DragonBall.race + " "
@@ -246,7 +340,8 @@ room2 = Room.new({
 
 room2.admin["admin_users"][username_0.username] = TIME_INPUT
 room2.save
-username_0.rooms[room2] = "12-19-2022"
+
+add_user_to_room(username_0,room2)
 
 forum_1 = Forum.create({
     topic: "Goku is a bad Father",
@@ -269,54 +364,6 @@ forum_3 = Forum.create({
     content: "The first or second anime i ever saw (as a kid in the late 90s). The main protagonist Kenshin is a special character that has incredible maturity in comparison to other Main characters (it helps that he is 30+ when the show starts). His maturity and approach is evident and you never really get frustrated with him. he is always cool calm and collected. The soundtrack is incredible and for the time the sword animation/fight sequences are great.",
     room_id: planet_vegeta.room_name
 })
-
-def set_children(parent,child)
-    # current_parent.children.unshift([child.id,NOW.to_fs(:db)])
-    parent ? parent.children.unshift(child) : nil
-    parent ? parent.save : nil
-
-    current_parent = parent
-    current_child = child
-
-    # lineage = {}
-    # lineage[current_child.id] = {}
-
-    while current_parent
-        already_exists = nil
-
-        current_parent.children.each_with_index do |ex_child,idx|
-            if ex_child["id"] == current_child.id
-                already_exists = idx
-            end
-        end
-
-        if already_exists
-            current_parent.children[already_exists] = current_child
-        else
-            current_parent.children.unshift(current_child)
-        end
-
-        current_parent.save
-        # lineage[current_parent.id] = current_parent.children
-        current_child = current_parent
-        current_parent = ForumComment.find_by(id: current_child.parent)
-    end
-
-    child
-end
-
-def create_forum_comment(attributes)
-    parent = attributes[:parent] ? ForumComment.find_by(id: attributes[:parent]) : nil
-    level = parent ? parent.level + 1 : 1
-    attributes[:level] = level
-
-    comment = ForumComment.create(attributes)
-    comment.save
-    comment.top_comment = parent ? parent.id : comment.id
-    comment.save
-    set_children(parent, comment)
-    comment
-end
 
 comment_attr_1 = {
     forum_id: forum_3.id,
@@ -373,3 +420,44 @@ comment_attr_7 = {
     parent: forum_comment_1.id
 }
 forum_comment_7 = create_forum_comment(comment_attr_7)
+
+aldane_review_2 = {
+    show: "Attack on Titan",
+    rating: 99,
+    overall_review: "This is beyond the greatest ever",
+    watch_priority: 1
+}
+aldane_review_2 = create_review(aldane,aldane_review_2)
+
+serge_review_1 = {
+    show: "Naruto",
+    rating: 90,
+    overall_review: "Naruto is the gold standard of Shounin anime. Shippuden is still stronger but this is the gold standard",
+    watch_priority: 1
+}
+serge_review_1 = create_review(serge,serge_review_1)
+
+david_review_1 = {
+    show: "Jujutsu Kaisen",
+    rating: 92,
+    overall_review: "The animation is ridiculous. The action is out of this world",
+    watch_priority: 1
+}
+david_review_1 = create_review(david,david_review_1)
+
+jarret_review_4 = {
+    show: "Tokyo Revengers",
+    rating: 86,
+    overall_review: "This anime does what it needs to do very well. The characters really put their lives on the line",
+    watch_priority: 1
+}
+jarret_review_4 = create_review(jarret,jarret_review_4)
+
+serge_review_2 = {
+    show: "Tokyo Revengers",
+    rating: 78,
+    overall_review: "This show is solid but there are just a few things I can't get past. The time travel portion of the show is just so convenient that I find it lazy. I also can't get past the fact that these characters are in middle school. The character defining moments are great though",
+    watch_priority: 0
+}
+serge_review_2 = create_review(serge,serge_review_2)
+

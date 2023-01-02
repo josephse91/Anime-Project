@@ -31,12 +31,29 @@ function ReviewTable() {
   let formData = new FormData();
   let myHeaders = new Headers();
 
-  async function apiRequest(options,searchParam) {
-    let requestStr = "http://localhost:3000/" + request + searchParam;
-    let apiRequest = await fetch(requestStr, options)
-    let data = await apiRequest.json()
+  async function apiRequest(searchParam,options,options2) {
+    let requestStr = "http://localhost:3000/" + request + searchParam, requestStr2;
+    let apiRequest = await fetch(requestStr, options), apiRequest2
+    let data = await apiRequest.json(), data2
+    console.log(requestStr, data)
+
+    let requestMethod2 = options2.method
+
+    async function addReviewsToRooms(data) {
+      if (data.status === "complete" && requestMethod2 === "PATCH") {
+        let review = data["review"]
+        console.log(review)
+        requestStr2 = `http://localhost:3000/api/reviews/${review.show}/rooms`+ searchParam;
+        return apiRequest2 = await fetch(requestStr2, options2)
+      }
+      return new Promise(resolve => resolve(JSON.stringify({status: "failed"})))
+    }
+
     setResponse(data)
-    console.log(requestStr,data)
+
+    apiRequest2 = await addReviewsToRooms(data)
+    data2 = await apiRequest2.json()
+    console.log(requestStr2, data2)
   }
   
   let sendRequest = function(e) {
@@ -45,6 +62,11 @@ function ReviewTable() {
     const options = {
       headers: myHeaders,
       method: requestMethod
+    }
+
+    const options2 = {
+      headers: myHeaders,
+      method: "PATCH"
     }
 
     // This is where you will format the testcase values
@@ -62,19 +84,19 @@ function ReviewTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
       options.body = formData;
-      // formData.append("rating",85)
-      // formData.append("amount_watched","season 1")
+      formData.append("rating",66)
+      formData.append("amount_watched","season 1")
       // // formData.append("highlighted_points",'[]')
-      // formData.append("overall_review","This anime is the epitomy of greatness")
+      formData.append("overall_review","This anime was trash")
       // formData.append("referral_id","Jarret")
-      // formData.append("watch_priority",1)
-      let likesAction = {user: user, net: 0, target: 1}
-      formData.append("likes",JSON.stringify(likesAction))
+      formData.append("watch_priority",-1)
+      // let likesAction = {user: user, net: 0, target: 1}
+      // formData.append("likes",JSON.stringify(likesAction))
 
       if (testcase.key) formData.append(testcase.key,testcaseInputString);
     }
 
-    apiRequest(options,search)
+    apiRequest(search,options,options2)
     console.log("Submit has been handled")
   }
 

@@ -22,8 +22,13 @@ class Api::ReviewsController < ApplicationController
     end
 
     def create
-        components = review_attrs[:components]
-        return if !components
+        components_hash = review_attrs
+        return if !components_hash
+
+        components = components_hash[:components]
+        user = components_hash[:user]
+
+        
 
         @review = Review.new(components)
 
@@ -33,7 +38,38 @@ class Api::ReviewsController < ApplicationController
         end
 
         @review.save
-        render json: {status: "complete", review: @review}
+        render json: {status: "complete", user: user, review: @review}
+    end
+
+    def add_review_to_rooms
+        hash = find_show
+        return if !hash
+
+        user = hash[:user]
+        review = hash[:review]
+        show = hash[:show]
+        review_exists_in_room = true
+
+        rooms = user.rooms.map do |room,enter_date|
+            current_room = Room.find_by(room_name: room)
+    
+            if current_room.shows[show]
+                current_room.shows[show] += 1
+            else
+                current_room.shows[show] = 1
+                review_exists_in_room = false
+            end
+            current_room.save
+            current_room
+        end
+
+        render json: {
+            status: "complete", 
+            user: user,
+            review: review, 
+            rooms: rooms,
+            review_exists_in_room: review_exists_in_room
+        }
     end
 
     def show
@@ -71,7 +107,7 @@ class Api::ReviewsController < ApplicationController
 
     #helper functions
     def review_params
-        params.permit(:id,:user_id, :current_user, :show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range, :likes)
+        params.permit(:id,:user_id, :current_user, :show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range, :likes, :review_id)
     end
 
     def find_user
@@ -102,7 +138,7 @@ class Api::ReviewsController < ApplicationController
         user = find_user || current_user
         return nil if user.nil?
 
-        show = review_params[:id]
+        show = review_params[:id] || review_params[:review_id]
         return {user: user, show: review_params[:show]} if !show
 
         review = Review.where([
@@ -111,7 +147,7 @@ class Api::ReviewsController < ApplicationController
             show
             ]).take
 
-        if show && !review
+        if review_params[:id] && !review
             render json: {status: "failed", review: review,show: show, user: user, error: "This user has not reviewed this show"}
             return
         end
@@ -160,7 +196,7 @@ class Api::ReviewsController < ApplicationController
         components[:watch_priority] = wp
         likes ? components[:likes] = likes : nil
 
-        {review: review, components: components}
+        {review: review, user: client_user, components: components}
     end
 
     def query_peers_array(user)

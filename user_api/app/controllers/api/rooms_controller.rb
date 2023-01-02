@@ -29,7 +29,43 @@ class Api::RoomsController < ApplicationController
         else
             render json: {status: "failed", error: @room.errors.objects.first.full_message}
         end
-        
+    end
+
+    def add_user_reviews_to_room
+        user = find_user
+        return if !user
+
+        room = find_room
+        return if !room
+
+        existing_shows = []
+        add_new_show = []
+
+        reviews = Review.where(user: user.username)
+        reviews.each do |review|
+            if room.shows[review.show] 
+                room.shows[review.show] += 1
+                existing_shows.push(review)
+            else
+                room.shows[review.show] = 1
+                add_new_show.push(review)
+            end
+        end
+
+        if room.invalid?
+            render json: {status: "failed", error: room.errors.objects.first.full_message}
+            return
+        end
+
+        room.save
+        render json: {
+            status: "complete", 
+            reviews: reviews, 
+            room: room, 
+            add_shows: add_new_show,
+            existing_shows: existing_shows
+        }
+
     end
 
     def show
@@ -228,11 +264,12 @@ class Api::RoomsController < ApplicationController
     end
 
     def rooms_params
-        params.permit(:id,:room_name,:users,:pending_approval,:admin,:search,:current_user,:request,:user_remove,:make_entry_key,:submitted_key)
+        params.permit(:id,:room_name,:users,:pending_approval,:admin,:search,:current_user,:request,:user_remove,:make_entry_key,:submitted_key,:user_id, :room_id)
     end
 
     def find_user
-        user = User.find_by(username: rooms_params[:current_user])
+        user_input = rooms_params[:current_user] || rooms_params[:user_id]
+        user = User.find_by(username: user_input)
 
         if !user
             render json: {status: "failed", error: "User could not be found"}
@@ -242,7 +279,8 @@ class Api::RoomsController < ApplicationController
     end
 
     def find_room
-        room = Room.find_by(room_name: rooms_params[:id])
+        room_input = rooms_params[:id] || rooms_params[:room_id]
+        room = Room.find_by(room_name: room_input)
 
         if !room
             render json: {status: "failed", error: "Room could not be found"}

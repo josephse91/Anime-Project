@@ -10,9 +10,12 @@ Rails.application.routes.draw do
       get '/reviews', to: 'reviews#user_index'
       get '/rooms', to: 'users#user_rooms'
     end
-    resources :reviews
+    resources :reviews do
+      patch '/rooms', to: 'reviews#add_review_to_rooms'
+    end
     resources :review_comments
     resources :rooms do
+      patch '/add_user_reviews/:user_id', to: 'rooms#add_user_reviews_to_room'
       get '/forums', to: 'forums#room_forum_index'
     end
     resources :forums
