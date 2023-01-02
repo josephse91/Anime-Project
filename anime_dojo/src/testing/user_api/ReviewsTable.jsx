@@ -29,22 +29,34 @@ function ReviewTable() {
   }
 
   let formData = new FormData();
+  let formData2 = new FormData();
   let myHeaders = new Headers();
 
-  async function apiRequest(searchParam,options,options2) {
+  async function apiRequest(searchParam,options) {
     let requestStr = "http://localhost:3000/" + request + searchParam, requestStr2;
     let apiRequest = await fetch(requestStr, options), apiRequest2
     let data = await apiRequest.json(), data2
     console.log(requestStr, data)
 
+    const options2 = {
+      headers: myHeaders,
+      method: "PATCH"
+    }
     let requestMethod2 = options2.method
 
     async function addReviewsToRooms(data) {
       if (data.status === "complete" && requestMethod2 === "PATCH") {
-        let review = data["review"]
-        console.log(review)
+        options2.body = formData2;
+        let review = data.review
+        let reviewAction = data.action
+        // console.log("This is complete data: ",data, "This is the data action: ", data.action, action, typeof action)
+        formData2.append("review_action",reviewAction)
+        formData2.append("show_object",JSON.stringify(review))
+
         requestStr2 = `http://localhost:3000/api/reviews/${review.show}/rooms`+ searchParam;
-        return apiRequest2 = await fetch(requestStr2, options2)
+        apiRequest2 = await fetch(requestStr2, options2)
+        data2 = await apiRequest2.json()
+        console.log(apiRequest2, data2,options2)
       }
       return new Promise(resolve => resolve(JSON.stringify({status: "failed"})))
     }
@@ -52,8 +64,8 @@ function ReviewTable() {
     setResponse(data)
 
     apiRequest2 = await addReviewsToRooms(data)
-    data2 = await apiRequest2.json()
-    console.log(requestStr2, data2)
+    // data2 = await apiRequest2.json()
+    // console.log(requestStr2, data2)
   }
   
   let sendRequest = function(e) {
@@ -62,11 +74,6 @@ function ReviewTable() {
     const options = {
       headers: myHeaders,
       method: requestMethod
-    }
-
-    const options2 = {
-      headers: myHeaders,
-      method: "PATCH"
     }
 
     // This is where you will format the testcase values
@@ -84,19 +91,19 @@ function ReviewTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
       options.body = formData;
-      formData.append("rating",66)
-      formData.append("amount_watched","season 1")
+      formData.append("rating",80)
+      // formData.append("amount_watched","season 1")
       // // formData.append("highlighted_points",'[]')
-      formData.append("overall_review","This anime was trash")
+      formData.append("overall_review","This anime is growing on me")
       // formData.append("referral_id","Jarret")
-      formData.append("watch_priority",-1)
+      formData.append("watch_priority",0)
       // let likesAction = {user: user, net: 0, target: 1}
       // formData.append("likes",JSON.stringify(likesAction))
 
       if (testcase.key) formData.append(testcase.key,testcaseInputString);
     }
 
-    apiRequest(search,options,options2)
+    apiRequest(search,options)
     console.log("Submit has been handled")
   }
 

@@ -461,3 +461,11 @@ serge_review_2 = {
 }
 serge_review_2 = create_review(serge,serge_review_2)
 
+david_review_2 = {
+    show: "Naruto",
+    rating: 91,
+    overall_review: "I can see why this show is the OG. It doesn't do much wrong",
+    watch_priority: 1
+}
+serge_review_2 = create_review(david,david_review_2)
+

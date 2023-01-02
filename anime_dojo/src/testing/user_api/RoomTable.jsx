@@ -33,14 +33,46 @@ function RoomTable() {
 
   let formData = new FormData();
   let myHeaders = new Headers();
+  let formData2 = new FormData();
 
   async function apiRequest(options,query = null) {
     let queryInput = query ? query : "";
-    let requestStr = "http://localhost:3000" + request + queryInput;
-    let apiRequest = await fetch(requestStr, options)
-    let data = await apiRequest.json()
+    let requestStr = "http://localhost:3000" + request + queryInput, requestStr2;
+    let apiRequest = await fetch(requestStr, options), apiRequest2
+    let data = await apiRequest.json(), data2
     setResponse(data)
     console.log(requestStr,data)
+
+    const options2 = {
+      headers: myHeaders,
+      method: "PATCH"
+    }
+    let requestMethod2 = options2.method
+
+    async function addReviewsToRooms(data) {
+      let user = data.user
+      let room = data.room
+      let roomAction = data.action
+
+      if (
+        data.status === "complete" && 
+        requestMethod2 === "PATCH" &&
+        roomAction
+        ) {
+        options2.body = formData2;
+        
+        // console.log("This is complete data: ",data, "This is the data action: ", data.action, action, typeof action)
+        formData2.append("room_action",roomAction)
+
+        requestStr2 = "http://localhost:3000/api/"
+        requestStr2 += `rooms/${room.room_name}/add_user_reviews/${user.username}`
+        apiRequest2 = await fetch(requestStr2, options2)
+        data2 = await apiRequest2.json()
+        console.log(apiRequest2, data2, options2)
+      }
+    }
+
+    apiRequest2 = await addReviewsToRooms(data)
   }
   
   let sendRequest = function(e) {
@@ -61,9 +93,10 @@ function RoomTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      formData.append("request","Markus Borer LLD")
-      // formData.append("submitted_key", "P84h9OvJvP7Yh01uzISHdg")
+      // formData.append("request","Markus Borer LLD")
+      formData.append("submitted_key", "dOHVqfOHP8729TbRgR3Klg")
       // formData.append("make_entry_key", true)
+      // formData.append("user_remove","David")
       // formData.append(testcase.key,testcaseInputString)
     }
 

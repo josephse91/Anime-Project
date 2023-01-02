@@ -38,27 +38,35 @@ class Api::ReviewsController < ApplicationController
         end
 
         @review.save
-        render json: {status: "complete", user: user, review: @review}
+        render json: {status: "complete", user: user, review: @review, action: "add review"}
     end
 
     def add_review_to_rooms
-        hash = find_show
-        return if !hash
-
-        user = hash[:user]
-        review = hash[:review]
-        show = hash[:show]
-        review_exists_in_room = true
+        action = review_params[:review_action]
+        user = find_user || current_user
+        review = ActiveSupport::JSON.decode(review_params[:show_object])
+        show = review["show"]
+        
+        add_edit_review_in_shows = []
+        delete_review_in_shows = []
 
         rooms = user.rooms.map do |room,enter_date|
             current_room = Room.find_by(room_name: room)
     
             if current_room.shows[show]
                 current_room.shows[show] += 1
+                action != "delete review" ? add_edit_review_in_shows.push(review) : nil
+                action == "delete review" ? delete_review_in_shows.push(review) : nil
             else
                 current_room.shows[show] = 1
-                review_exists_in_room = false
+                action != "delete review" ? add_edit_review_in_shows.push(review) : nil
             end
+
+            if current_room.invalid?
+                render json: {status: "failed", error: current_room.errors.objects.first.full_message}
+                return
+            end
+
             current_room.save
             current_room
         end
@@ -68,7 +76,8 @@ class Api::ReviewsController < ApplicationController
             user: user,
             review: review, 
             rooms: rooms,
-            review_exists_in_room: review_exists_in_room
+            add_edit_review_in_shows: add_edit_review_in_shows,
+            delete_review_in_shows: delete_review_in_shows
         }
     end
 
@@ -89,25 +98,33 @@ class Api::ReviewsController < ApplicationController
         return if !components || !review
 
         if review.update(components)
-            render json: {status: "complete", review: review}
+            render json: {status: "complete", review: review, action: "edit review"}
         else 
             render json: {status: "failed", errors: review.errors.objects.first.full_message}
         end
     end
 
     def destroy
-        review = find_show[:review]
-        return if review.nil?
+        review_hash = find_show
+        return if !review_hash
+
+        review = review_hash[:review]
+        review_copy = review
 
         comments = ReviewComment.where(review_id: review.id)
         review.destroy
+
+        if !review.destroyed?
+            render json: {status: "failed", error: review.errors.objects.first.full_message}
+            return
+        end
         
-        render json: {status: "complete", review: review, comments: comments}
+        render json: {status: "complete", action: "delete review", review: review_copy, comments: comments}
     end
 
     #helper functions
     def review_params
-        params.permit(:id,:user_id, :current_user, :show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range, :likes, :review_id)
+        params.permit(:id,:user_id, :current_user, :show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range, :likes, :review_id, :review_action, :show_object)
     end
 
     def find_user

@@ -1,6 +1,6 @@
 class Api::RoomsController < ApplicationController
     NOW = Time.new
-    TIME_INPUT = "#{NOW.month}/#{NOW.day}/#{NOW.year}"
+    TIME_INPUT = "#{NOW.month}-#{NOW.day}-#{NOW.year}"
     
     def index
         rooms_search = rooms_params[:search] ? "%#{rooms_params[:search]}%": nil
@@ -32,23 +32,28 @@ class Api::RoomsController < ApplicationController
     end
 
     def add_user_reviews_to_room
+        action = rooms_params[:room_action]
         user = find_user
         return if !user
 
         room = find_room
         return if !room
 
-        existing_shows = []
+        edit_existing_shows = []
         add_new_show = []
+        remove_shows = []
 
         reviews = Review.where(user: user.username)
         reviews.each do |review|
-            if room.shows[review.show] 
+            if room.shows[review.show] && action == "member added"
                 room.shows[review.show] += 1
-                existing_shows.push(review)
-            else
+                edit_existing_shows.push(review)
+            elsif !room.shows[review.show] && action == "member added"
                 room.shows[review.show] = 1
                 add_new_show.push(review)
+            elsif room.shows[review.show] == 1 && action == "member removed"
+                room.shows.delete(review.show)
+                remove_shows.push(review)
             end
         end
 
@@ -63,7 +68,8 @@ class Api::RoomsController < ApplicationController
             reviews: reviews, 
             room: room, 
             add_shows: add_new_show,
-            existing_shows: existing_shows
+            edit_existing_shows: edit_existing_shows,
+            remove_shows: remove_shows
         }
 
     end
@@ -87,6 +93,11 @@ class Api::RoomsController < ApplicationController
         user = find_user
         return if !user
 
+        render_obj = {
+            status: "complete", 
+            room: @room
+        }
+
         current_user = user.username
         room_name = @room.room_name
 
@@ -98,6 +109,7 @@ class Api::RoomsController < ApplicationController
             return
         end
         submitted_key = rooms_params[:submitted_key]
+        user_remove = rooms_params[:user_remove]
         room_keys = @room.entry_keys
         group_admin = @room.admin["group_admin"]
         room_admins = @room.admin["admin_users"][current_user]
@@ -126,6 +138,8 @@ class Api::RoomsController < ApplicationController
             render_obj = {
                 status: "complete", 
                 message: "Key has been successfully submitted to Room: #{room_name}",
+                action: "member added",
+                user: user,
                 notification: notifications,
                 room: @room
             }
@@ -161,12 +175,32 @@ class Api::RoomsController < ApplicationController
             return
         end
 
+        if user_remove && user_remove == current_user
+            user.rooms.delete(room_name)
+            @room.users.delete(current_user)
+
+            if user.invalid?
+                render json: {status: "failed", error: user.errors.objects.first.full_message}
+                return
+            end
+
+            if @room.invalid?
+                render json: {status: "failed", error: @room.errors.objects.first.full_message}
+                return
+            end
+
+            user.save
+            @room.save
+
+            render json: {status: "complete", user: user, room: @room, action: "member removed"}
+            return
+        end
+
         if !@room.users[current_user] 
             render json: {status: "failed", error: "Only users within room can update the room"}
             return
         end
 
-        user_remove = rooms_params[:user_remove]
         generate_key = rooms_params[:make_entry_key]
         pending_user = @room.pending_approval[request]
 
@@ -192,7 +226,23 @@ class Api::RoomsController < ApplicationController
             user.save
             @room.save
 
+            render json: {status: "complete", user: user, action: "member removed"}
+            return
             # Logic needs to be included to change the rating total of each applicable show within the room
+        end
+
+        if generate_key
+            key = Room.generate_entry_key
+            @room.entry_keys[key] = Time.now.advance(days: 10).at_noon.getutc
+
+            if !@room.valid?
+                render json: {status: "failed", error: @room.errors.objects.first.full_message}
+                return
+            end
+
+            @room.save
+            render json: {status: "complete", key: key, room: @room}
+            return
         end
 
         member_request = request && !submitted_key
@@ -201,6 +251,9 @@ class Api::RoomsController < ApplicationController
             @room.users[request] = TIME_INPUT
             request_user.rooms[room_name] = TIME_INPUT
             request_user.save
+
+            render_obj[:action] = "member added"
+            render_obj[:user] = request_user
 
             @room.pending_approval.delete(request)
             clear_admin_request(@room,request)
@@ -213,17 +266,6 @@ class Api::RoomsController < ApplicationController
         else
             render json: {status: "failed", error: "Only the authorized user can bring in users into the room"}
             return
-        end
-
-        if generate_key
-            key = Room.generate_entry_key
-            @room.entry_keys[key] = Time.now.advance(days: 10).at_noon.getutc
-
-            if !@room.valid?
-                render json: {status: "failed", error: @room.errors.objects.first.full_message}
-                return
-            end
-            @room.save
         end
 
         render_obj = {
@@ -264,7 +306,7 @@ class Api::RoomsController < ApplicationController
     end
 
     def rooms_params
-        params.permit(:id,:room_name,:users,:pending_approval,:admin,:search,:current_user,:request,:user_remove,:make_entry_key,:submitted_key,:user_id, :room_id)
+        params.permit(:id,:room_name,:users,:pending_approval,:admin,:search,:current_user,:request,:user_remove,:make_entry_key,:submitted_key,:user_id, :room_id, :room_action)
     end
 
     def find_user
