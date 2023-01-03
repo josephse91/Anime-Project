@@ -26,8 +26,10 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### **User Table** 
-[index](#Retreive-all-users...index) /
-[user_room_index](#Retreive-all-users-user-room-index) /
+[index](#Retreive-all-users...index)
+
+[user_room_index](#Retreive-all-users-user-room-index)
+
 [user_review_index](#Retreive-all-reviews-the-User...User-Review-Index) /
 [create](#Create-a-user:-create) /
 [show](#Get-specific-User:-show) /
