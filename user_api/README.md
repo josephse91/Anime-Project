@@ -22,6 +22,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 - [Room endpoints](#Rooms-Table)
 - [Forum endpoints](#Forum-Table)
 - [Forum Comment endpoints](#Forum-Comments-Table)
+- [Appendix](#Appendix)
 
 #### User Table
 ---
@@ -515,13 +516,9 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `comment_owner` | `string` | Username of commenter |
 | `current_user` | `string` | Username of commenter |
 
-## Appendix
-
-Any additional information goes here
-
 # Appendix
 
-Find terms and formats utilized in the API below
+Terms and formats utilized in the API
 
 ### User peer Parameter input
 
