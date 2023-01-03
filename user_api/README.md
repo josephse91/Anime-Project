@@ -26,20 +26,18 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### **User Table** 
-[index](#Retreive-all-users...index)
-
-[user_room_index](#Retreive-all-users-user-room-index)
-
-[user_review_index](#Retreive-all-reviews-the-User...User-Review-Index) /
-[create](#Create-a-user:-create) /
-[show](#Get-specific-User:-show) /
-[update](#Edit-specific-User:-update) /
-[delete](#Delete-User:-destroy)
+[index](#Retreive-all-users:-index) / 
+[user_room_index](#Retreive-all-users:-user-room-index) / 
+[user_review_index](#Retreive-all-reviews-the-User:-User-Review-Index) / 
+[create](#Create-a-user:-create) / 
+[show](#Get-specific-User:-show) / 
+[update](#Edit-specific-User:-update) / 
+[delete](#Delete-User:-destroy) 
 
 [Back to API Reference](#API-Reference)
 
 ---
-#### Retreive all users...index
+#### Retreive all users: index
 
 ```http
   GET /api/users/
@@ -55,7 +53,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | :-------- | :------- | :-------------------------    |
 | `search` | `string` | Username placed w/out brackets |
 
-#### Retreive all user rooms-user room index
+#### Retreive all user rooms: user room index
 
 ```http
   GET /api/users/:user_id/rooms
@@ -65,7 +63,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | :-------- | :------- | :-------------------------    |
 | `user_id` | `string` | Username of user |
 
-#### Retreive all reviews the User...User Review Index
+#### Retreive all reviews the User: User Review Index
 
 ```http
   GET /api/users/:user_id/reviews
@@ -133,13 +131,13 @@ This API will be used to manage any actions done by the user. The tables that wi
 ---
 #### Review Table
 
-[index](#Retreive-all-reviews:-index) /
-[user index](#Retreive-all-reviews-of-user:-user_index) /
-[create](#Create-a-review:-create) /
-[Reviews to Rooms](#Add-Review-of-User-to-all-rooms:-reviews_to_rooms) /
-[show](#Retrieve-the-review-user:-show) /
-[update](#Edit-Review-of-a-User:-update) /
-[delete](#Delete-Review-of-a-User:-destroy)
+[index](#Retreive-all-reviews:-index) / 
+[user index](#Retreive-all-reviews-of-user:-user_index) / 
+[create](#Create-a-review:-create) / 
+[Reviews to Rooms](#Add-Review-of-User-to-all-rooms:-reviews_to_rooms) / 
+[show](#Retrieve-the-review-user:-show) / 
+[update](#Edit-Review-of-a-User:-update) / 
+[delete](#Delete-Review-of-a-User:-destroy) 
 
 [Back to API Reference](#API-Reference)
 
@@ -261,10 +259,10 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Review Comments Table
-[index](#Retreive-all-comments-of-a-Review:-index) /
-[create](#Create-a-Review-Comment:-create) /
-[update](#Edit-Review-Comment-of-a-User:-update) /
-[delete](#Delete-Review-Comments-User:-destroy)
+[index](#Retreive-all-comments-of-a-Review:-index) / 
+[create](#Create-a-Review-Comment:-create) /  
+[update](#Edit-Review-Comment-of-a-User:-update) / 
+[delete](#Delete-Review-Comments-User:-destroy) 
 
 [Back to API Reference](#API-Reference)
 
@@ -325,12 +323,12 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Rooms Table
-[index](#Retreive-all-rooms:-index) /
-[create](#Create-a-Room:-create) /
-[Add user reviews to room](#Add-user's-reviews-room:-add_user_reviews_to_room) /
-[show](#Get-a-Room:-show) /
-[update](#Edit-Room:-update) /
-[delete](#Delete-Room:-destroy)
+[index](#Retreive-all-rooms:-index) / 
+[create](#Create-a-Room:-create) / 
+[Add user reviews to room](#Add-user's-reviews-room:-add_user_reviews_to_room) / 
+[show](#Get-a-Room:-show) / 
+[update](#Edit-Room:-update) / 
+[delete](#Delete-Room:-destroy) 
 
 [Back to API Reference](#API-Reference)
 
@@ -416,11 +414,11 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Forum Table
-[index](#Retreive-all-forums:-index) /
-[Room Forum Index](#Retreive-all-forums-in-room:-room_forum_index)
-[create](#Create-a-forum:-create) /
-[show](#Retrieve-the-Forum-of-user:-show) /
-[update](#Edit-Forum-of-a-Room:-update) /
+[index](#Retreive-all-forums:-index) / 
+[Room Forum Index](#Retreive-all-forums-in-room:-room_forum_index) / 
+[create](#Create-a-forum:-create) / 
+[show](#Retrieve-the-Forum-of-user:-show) / 
+[update](#Edit-Forum-of-a-Room:-update) / 
 [delete](#Delete-Forum-of-User:-destroy)
 
 [Back to API Reference](#API-Reference)
@@ -502,10 +500,10 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Forum Comments Table
-[index](#Retreive-all-the-TOP-forum-comments-of-a-Forum:-index) /
-[create](#Create-a-Forum-Comment:-create) /
-[update](#Edit-Forum-Comment:-update) /
-[delete](#Delete-Forum-Comment-of-User:-destroy)
+[index](#Retreive-all-the-TOP-forum-comments-of-a-Forum:-index) / 
+[create](#Create-a-Forum-Comment:-create) / 
+[update](#Edit-Forum-Comment:-update) / 
+[delete](#Delete-Forum-Comment-of-User:-destroy) 
 
 [Back to API Reference](#API-Reference)
 
@@ -570,6 +568,8 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 Terms and formats utilized in the API
 
+[Back to API Reference](#API-Reference)
+
 ### User peer Parameter input
 
 The format of the parameter required will as follows
@@ -582,6 +582,8 @@ The format of the parameter required will as follows
 * action key: ("add" or "remove")
 * peerFocus key: This will be the desired peer that will be added or removed
 
+[Back to Appendix Title](#Appendix)
+
 ### User Requests Parameter input
 
 The format of the parameter required will as follows
@@ -592,6 +594,8 @@ The format of the parameter required will as follows
 
 * Action key: ("add" or "remove")
 * requestFocus key: This will be the desired peer that will be added or removed
+
+[Back to Appendix Title](#Appendix)
 
 ### Review Table Range Parameter
 
@@ -607,6 +611,8 @@ The format of the parameter required will as follows
 * top: the upper boundary of the select review range
 * bottom: the lower boundary of the select review range
 
+[Back to Appendix Title](#Appendix)
+
 ### Action JSON to add Reviews to Rooms
 
 The format of the parameter required will as follows
@@ -617,6 +623,7 @@ The format of the parameter required will as follows
     "bottom": "20" 
 }
 ```
+[Back to Appendix Title](#Appendix)
 
 ### Votes and Likes Parameters
 
@@ -643,6 +650,8 @@ target: Represents the new vote status that the current user is selecting
 ```
 
 NOTE: With likes, the neutral means no like
+
+[Back to Appendix Title](#Appendix)
 
 ## Authors
 
