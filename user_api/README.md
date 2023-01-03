@@ -26,9 +26,9 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### **User Table** 
-[index](#Retreive-all-users-/-index) /
+[index](#Retreive-all-users...index) /
 [user_room_index](#Retreive-all-users-user-room-index) /
-[user_review_index](#Retreive-all-reviews-the-User:-User-Review-Index) /
+[user_review_index](#Retreive-all-reviews-the-User...User-Review-Index) /
 [create](#Create-a-user:-create) /
 [show](#Get-specific-User:-show) /
 [update](#Edit-specific-User:-update) /
@@ -37,7 +37,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 [Back to API Reference](#API-Reference)
 
 ---
-#### Retreive all users / index
+#### Retreive all users...index
 
 ```http
   GET /api/users/
@@ -63,7 +63,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | :-------- | :------- | :-------------------------    |
 | `user_id` | `string` | Username of user |
 
-#### Retreive all reviews the User: User Review Index
+#### Retreive all reviews the User...User Review Index
 
 ```http
   GET /api/users/:user_id/reviews
