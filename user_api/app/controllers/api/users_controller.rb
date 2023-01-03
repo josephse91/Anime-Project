@@ -96,7 +96,7 @@ class Api::UsersController < ApplicationController
 
         # Should only allow the current user to be the one to change further attributes
 
-        if @user.username != user_params[:username]
+        if @user.username != user_params[:user_id]
             render json: {status: "failed", error: "Not authorized user", user: @user.username, current_user: current_user}
             return
         end
@@ -181,7 +181,7 @@ class Api::UsersController < ApplicationController
     end
 
     def user_params
-        params.permit(:id, :user_id, :username,:password,:genre_preference,:go_to_motto,:user_grade_protocol,:peers,:requests,:new_username,:new_password,:session_token)
+        params.permit(:id, :user_id, :username,:password,:genre_preference,:go_to_motto,:user_grade_protocol,:peers,:requests,:new_username,:new_password,:session_token_input)
     end
 
     def query_params

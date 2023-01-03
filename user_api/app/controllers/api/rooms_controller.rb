@@ -15,20 +15,31 @@ class Api::RoomsController < ApplicationController
     end
 
     def create
-        current_user = rooms_params[:current_user]
+        current_user = find_user
+        return if !current_user
         
         @room = Room.new(
-            room_name: rooms_params[:room_name]
+            room_name: rooms_params[:room_id]
         )
 
-        if @room.valid?
-            @room.users[current_user] = TIME_INPUT
-            @room.admin["admin_users"][current_user] = TIME_INPUT
-            @room.save
-            render json: {status: "complete", room: @room}
-        else
+        privacy = rooms_params[:private_room]
+        privacy ? @room.private_room = privacy : nil
+
+        @room.users[current_user.username] = TIME_INPUT
+        @room.admin["admin_users"][current_user.username] = TIME_INPUT
+
+        if @room.invalid?
             render json: {status: "failed", error: @room.errors.objects.first.full_message}
+            return
         end
+
+        @room.save
+        render json: {
+            status: "complete", 
+            room: @room,
+            action: "member added",
+            user: current_user,
+        }
     end
 
     def add_user_reviews_to_room
@@ -75,14 +86,10 @@ class Api::RoomsController < ApplicationController
     end
 
     def show
-        @room = Room.find_by(room_name: rooms_params[:id])
+        @room = find_room
+        return if !@room
 
-        if @room
-            render json: {status: "complete", room: @room}
-        else
-            render json: {status: "failed", error: "Could not find room"}
-        end
-        
+        render json: {status: "complete", room: @room}  
         clean_expired_keys(@room)
     end
 
@@ -268,6 +275,13 @@ class Api::RoomsController < ApplicationController
             return
         end
 
+        privacy = rooms_params[:private_room]
+        
+        if privacy
+            @room.private_room = privacy
+            @room.save
+        end
+
         render_obj = {
             status: "complete", 
             room: @room
@@ -306,7 +320,7 @@ class Api::RoomsController < ApplicationController
     end
 
     def rooms_params
-        params.permit(:id,:room_name,:users,:pending_approval,:admin,:search,:current_user,:request,:user_remove,:make_entry_key,:submitted_key,:user_id, :room_id, :room_action)
+        params.permit(:id,:pending_approval,:search,:current_user,:request,:user_remove,:make_entry_key,:submitted_key,:user_id, :room_id, :room_action, :private_room)
     end
 
     def find_user

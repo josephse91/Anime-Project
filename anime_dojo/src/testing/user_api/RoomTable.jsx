@@ -83,7 +83,7 @@ function RoomTable() {
       method: requestMethod
     }
 
-    if (room) formData.append('room_name',room);
+    if (room) formData.append('room_id',room);
 
     // This is where you will format the testcase values
     // let testcaseInput = JSON.stringify({action: "add",focusRequest: testcase.value })
@@ -94,7 +94,7 @@ function RoomTable() {
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
       // formData.append("request","Markus Borer LLD")
-      formData.append("submitted_key", "dOHVqfOHP8729TbRgR3Klg")
+      // formData.append("submitted_key", "dOHVqfOHP8729TbRgR3Klg")
       // formData.append("make_entry_key", true)
       // formData.append("user_remove","David")
       // formData.append(testcase.key,testcaseInputString)

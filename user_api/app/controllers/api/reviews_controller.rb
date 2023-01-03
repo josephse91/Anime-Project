@@ -14,9 +14,10 @@ class Api::ReviewsController < ApplicationController
     end
     
     def user_index
-        username = find_user.username
-        return if username.nil?
-        reviews = Review.where(user: username).order(rating: :desc, user: :asc)
+        user = find_user || current_user
+        return if !user
+        
+        reviews = Review.where(user: user.username).order(rating: :desc, user: :asc)
 
         render json: {status: "complete", reviews: reviews}
     end

@@ -6,7 +6,9 @@ class Api::ForumsController < ApplicationController
     end
 
     def room_forum_index
-        room = forums_params[:room_id]
+        room = find_room
+        return if !room
+        
         forum_search = forums_params[:forum_search]
         formatted_search = "%#{forum_search}%"
         anime_search = forums_params[:anime_search]
@@ -35,7 +37,8 @@ class Api::ForumsController < ApplicationController
     end
 
     def show
-        forum = Forum.find_by(id: forums_params[:id])
+        forum = find_forum
+        return if !forum
 
         if !forum
             render json: {status: "failed", error: "Forum could not be found"}
