@@ -24,9 +24,20 @@ This API will be used to manage any actions done by the user. The tables that wi
 - [Forum Comment endpoints](#Forum-Comments-Table)
 - [Appendix](#Appendix)
 
-#### User Table
 ---
-**Retreive all users** (index)
+#### **User Table** 
+[index](#Retreive-all-users:-index) /
+[user_room_index](#Retreive-all-users:-user-room-index) /
+[user_review_index](#Retreive-all-reviews-the-User:-User-Review-Index) /
+[create](#Create-a-user:-create) /
+[show](#Get-specific-User:-show) /
+[update](#Edit-specific-User:-update) /
+[delete](#Delete-User:-destroy)
+
+[Back to API Reference](#API-Reference)
+
+---
+#### Retreive all users: index
 
 ```http
   GET /api/users/
@@ -42,7 +53,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | :-------- | :------- | :-------------------------    |
 | `search` | `string` | Username placed w/out brackets |
 
-**Retreive all rooms that User is a member of**
+#### Retreive all user rooms: user room index
 
 ```http
   GET /api/users/:user_id/rooms
@@ -52,7 +63,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | :-------- | :------- | :-------------------------    |
 | `user_id` | `string` | Username of user |
 
-**Retreive all reviews the User has created**
+#### Retreive all reviews the User: User Review Index
 
 ```http
   GET /api/users/:user_id/reviews
@@ -63,7 +74,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `user_id` | `string` | Username of user |
 
 
-**Create a user** (create)
+#### Create a user: create
 
 ```http
   POST /api/users/
@@ -77,7 +88,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | *`user_grade_protocol` | `text` |                      |
 
 
-**Get specific User JSON object** (show)
+#### Get specific User: show
 
 ```http
   GET /api/users/:id
@@ -87,10 +98,8 @@ This API will be used to manage any actions done by the user. The tables that wi
 | :-------- | :------- | :-------------------------------- |
 | `id`| `string` | Username of User         |
 
-* Refer to JSON object in Appendix
 
-
-**Edit specific User JSON object** (update)
+#### Edit specific User: update
 
 ```http
   PATCH /api/users/:id
@@ -109,9 +118,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `new_username` | `string` | Username to replace previous username                |
 | `new_password` | `string` | Password to replace previous password                      |
 
-*Refer to JSON object in [Appendix](#Appendix)
-
-**Delete User** (destroy)
+#### Delete User: destroy
 
 ```http
   DELETE /api/users/:id
@@ -119,14 +126,23 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `session_token_input`| `string` | User sign in token         |
-
-
+| `session_token_input`| `string` | User sign in token     |
 
 ---
 #### Review Table
+
+[index](#Retreive-all-reviews:-index) /
+[user index](#Retreive-all-reviews-of-user:-user_index) /
+[create](#Create-a-review:-create) /
+[Reviews to Rooms](#Add-Review-of-User-to-all-rooms:-reviews_to_rooms) /
+[show](#Retrieve-the-review-user:-show) /
+[update](#Edit-Review-of-a-User:-update) /
+[delete](#Delete-Review-of-a-User:-destroy)
+
+[Back to API Reference](#API-Reference)
+
 ---
-**Retreive all reviews** (index)
+#### Retreive all reviews: index
 
 ```http
   GET /api/reviews/
@@ -148,7 +164,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `in_network` | `string` | input "true" if you're looking for reviews within network |
 | `range` | `JSON` |  View [JSON format](#Review-Table-Range-Parameter) in Appendex |
 
-**Retreive all reviews of a specific user** (user_index)
+#### Retreive all reviews of user: user_index
 
 ```http
   GET /api/users/:userid/reviews/
@@ -161,7 +177,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 
 
-**Create a review** (create)
+#### Create a review: create
 
 ```http
   POST /api/reviews/
@@ -178,7 +194,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `referral_id` | `string` | This will be the referrer username |
 | `watch_priority` | `integer` | Will be -1, 0 or 1. Insert into form Param |
 
-**Add Review of User to all rooms**
+#### Add Review of User to all rooms: reviews_to_rooms
 
 ```http
   GET /api/reviews/:review_id/rooms
@@ -189,7 +205,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `review_action` | `string` | Will have either values: ("delete review" or "add review")  |
 | `show_object` | `JSON` | Will be a Review object JSON  |
 
-**Retrieve the review of a user**
+#### Retrieve the review user: show
 
 ```http
   GET /api/reviews/:id
@@ -206,7 +222,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 * Refer to JSON object in Appendix
 
 
-**Edit Review of a User** (update)
+#### Edit Review of a User: update
 
 ```http
   PATCH /api/reviews/:id
@@ -227,7 +243,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `watch_priority` | `integer` | Will be -1, 0 or 1. Insert into form Param |
 | `likes` | `JSON` | View [JSON format](#Votes-and-likes-Parameter) in Appendex |
 
-**Delete Review of a User** (destroy)
+#### Delete Review of a User: destroy
 
 ```http
   DELETE /api/reviews/:id
@@ -243,8 +259,15 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Review Comments Table
+[index](#Retreive-all-comments-of-a-Review:-index) /
+[create](#Create-a-Review-Comment:-create) /
+[update](#Edit-Review-Comment-of-a-User:-update) /
+[delete](#Delete-Review-Comments-User:-destroy)
+
+[Back to API Reference](#API-Reference)
+
 ---
-**Retreive all comments of a Review** (index)
+#### Retreive all comments of a Review: index
 
 ```http
   GET /api/review_comments/
@@ -255,7 +278,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `review_id` | `integer` | Parameter inserted into query param from the frontend component  |
 
 
-**Create a Review Comment** (create)
+#### Create a Review Comment: create
 
 ```http
   POST /api/review_comments/
@@ -271,7 +294,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 *Output will be an javascript object that has a status key and review key. The review key will contain the object being created
 
 
-**Edit Review Comment of a User** (update)
+#### Edit Review Comment of a User: update
 
 ```http
   PATCH /api/review_comments/:id
@@ -287,7 +310,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `parent` | `integer` |  |
 | `likes` | `JSON` | View [JSON format](#Votes-and-likes-Parameter) in Appendex |
 
-**Delete Review Comments of a User** (destroy)
+#### Delete Review Comments User: destroy
 
 ```http
   DELETE /api/review_comments/:id
@@ -300,8 +323,17 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Rooms Table
+[index](#Retreive-all-rooms:-index) /
+[create](#Create-a-Room:-create) /
+[Add user reviews to room](#Add-user's-reviews-room:-add_user_reviews_to_room) /
+[show](#Get-a-Room:-show) /
+[update](#Edit-Room:-update) /
+[delete](#Delete-Room:-destroy)
+
+[Back to API Reference](#API-Reference)
+
 ---
-**Retreive all rooms** (index)
+#### Retreive all rooms: index
 
 ```http
   GET /api/rooms/
@@ -318,7 +350,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `search` | `string` | Any consecutive string within Room_name |
 
 
-**Create a Room** (create)
+#### Create a Room: create
 
 ```http
   POST /api/rooms/
@@ -328,7 +360,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `current_user` | `string` | The username interacting with the client  |
 | `room_id` | `string` | Name of Room  |
 
-**Add a user's reviews to the room show object**
+#### Add user's reviews room: add_user_reviews_to_room
 
 ```http
   PATCH /api/rooms/:room_id/add_user_reviews/:user_id
@@ -340,7 +372,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `room_action` | `string` | Values: ("member added" or "member removed") taken from previous API call  |
 
 
-**Get a Room** (show)
+#### Get a Room: show
 
 ```http
   POST /api/rooms/:id
@@ -350,7 +382,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `id` | `string` | Name of the room  |
 
 
-**Edit Room** (update)
+#### Edit Room: update
 
 ```http
   PATCH /api/rooms/:id
@@ -368,7 +400,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `make_entry_key` | `boolean` | Allowed keys generated for access into room |
 | `private_room` | `boolean` | Form data |
 
-**Delete Room** (destroy)
+#### Delete Room: destroy
 
 ```http
   DELETE /api/rooms/:id
@@ -382,14 +414,23 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Forum Table
+[index](#Retreive-all-forums:-index) /
+[Room Forum Index](#Retreive-all-forums-in-room:-room_forum_index)
+[create](#Create-a-forum:-create) /
+[show](#Retrieve-the-Forum-of-user:-show) /
+[update](#Edit-Forum-of-a-Room:-update) /
+[delete](#Delete-Forum-of-User:-destroy)
+
+[Back to API Reference](#API-Reference)
+
 ---
-**Retreive all forums** (index)
+#### Retreive all forums: index
 
 ```http
   GET /api/forums/
 ```
 
-**Retreive all forums within specified room** (room_forum_index)
+#### Retreive all forums in room: room_forum_index
 
 ```http
   GET /api/rooms/:room_id/forums/
@@ -402,7 +443,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `anime_search` | `string` |   |
 
 
-**Create a forum** (create)
+#### Create a forum: create
 
 ```http
   POST /api/forums/
@@ -417,7 +458,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `anime` | `string` | Anime pertaining to subject (Optional) |
 
 
-**Retrieve the Forum of a user**
+#### Retrieve the Forum of user: show
 
 ```http
   GET /api/forums/:id
@@ -428,7 +469,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `id` | `integer` | Primary key of Forum object  |
 
 
-**Edit Forum of a Room** (update)
+#### Edit Forum of a Room: update
 
 ```http
   PATCH /api/forums/:id
@@ -445,7 +486,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `anime` | `string` | Anime pertaining to subject (Optional) |
 | `votes` | `JSON` | View [JSON format](#Votes-and-likes-Parameter) in Appendex |
 
-**Delete Forum of a User** (destroy)
+#### Delete Forum of User: destroy
 
 ```http
   DELETE /api/forums/:id
@@ -459,8 +500,15 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Forum Comments Table
+[index](#Retreive-all-the-TOP-forum-comments-of-a-Forum:-index) /
+[create](#Create-a-Forum-Comment:-create) /
+[update](#Edit-Forum-Comment:-update) /
+[delete](#Delete-Forum-Comment-of-User:-destroy)
+
+[Back to API Reference](#API-Reference)
+
 ---
-**Retreive all the TOP forum comments of a Forum** (index)
+#### Retreive all the TOP forum comments of a Forum: index
 
 ```http
   GET /api/forum_comments/
@@ -471,7 +519,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `forum_id` | `integer` | Forum Primary ID |
 
 
-**Create a Forum Comment** (create)
+#### Create a Forum Comment: create
 
 ```http
   POST /api/forum_comments/
@@ -486,7 +534,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 
 
-**Edit Forum Comment** (update)
+#### Edit Forum Comment: update
 
 ```http
   PATCH /api/forum_comments/:id
@@ -503,7 +551,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `top_comment` | `integer` |  |
 | `votes` | `JSON` | View [JSON format](#Votes-and-likes-Parameter) in Appendex |
 
-**Delete Forum Comment of a User** (destroy)
+#### Delete Forum Comment of User: destroy
 
 ```http
   DELETE /api/forum_comments/:id
@@ -597,3 +645,4 @@ NOTE: With likes, the neutral means no like
 ## Authors
 
 - [Serge-Edouard Joseph](https://josephse91.github.io)
+
