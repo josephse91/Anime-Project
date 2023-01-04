@@ -31,10 +31,10 @@ services:
       - db
     tty: true
     stdin_open: true
-  room-api:
-    container_name: room-api
-    build: ./room_api
-    image: "josephse91/anime_rooms_api"
+  show-ratings-api:
+    container_name: show-ratings-api
+    build: ./show_ratings_api
+    image: "josephse91/show_ratings_api"
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0' -p 3001"
     volumes:
       - .:/Rails-Docker

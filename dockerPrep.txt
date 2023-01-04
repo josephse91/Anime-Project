@@ -76,5 +76,5 @@ There are a number of arrangements that must be made when preparing the Rails AP
     $ docker-compose build
     # Run the commands to create the database and migrate each schema to the volume
     $ docker-compose run user-api rails db:create db:migrate 
-    $ docker-compose run room-api rails db:create db:migrate
+    $ docker-compose run show-ratings-api rails db:create db:migrate
     $ docker-compose up

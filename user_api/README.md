@@ -260,7 +260,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 ---
 #### Review Comments Table
 [index](#Retreive-all-comments-of-a-Review:-index) / 
-[create](#Create-a-Review-Comment:-create) /  
+[create](#Create-a-Review-Comment:-create) / 
 [update](#Edit-Review-Comment-of-a-User:-update) / 
 [delete](#Delete-Review-Comments-User:-destroy) 
 
@@ -611,18 +611,6 @@ The format of the parameter required will as follows
 * top: the upper boundary of the select review range
 * bottom: the lower boundary of the select review range
 
-[Back to Appendix Title](#Appendix)
-
-### Action JSON to add Reviews to Rooms
-
-The format of the parameter required will as follows
-
-```
-{ 
-    "top": "80", 
-    "bottom": "20" 
-}
-```
 [Back to Appendix Title](#Appendix)
 
 ### Votes and Likes Parameters
