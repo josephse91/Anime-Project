@@ -65,6 +65,9 @@ class Api::RoomsController < ApplicationController
             elsif room.shows[review.show] == 1 && action == "member removed"
                 room.shows.delete(review.show)
                 remove_shows.push(review)
+            elsif room.shows[review.show] > 1 && action == "member removed"
+                room.shows[review.show] -= 1
+                edit_existing_shows.push(review)
             end
         end
 
@@ -77,7 +80,8 @@ class Api::RoomsController < ApplicationController
         render json: {
             status: "complete", 
             reviews: reviews, 
-            room: room, 
+            room: room,
+            action: action 
             add_shows: add_new_show,
             edit_existing_shows: edit_existing_shows,
             remove_shows: remove_shows

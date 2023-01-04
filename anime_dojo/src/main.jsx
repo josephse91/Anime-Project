@@ -6,10 +6,12 @@ import ReviewCommentsTable from './testing/user_api/ReviewsCommentsTable'
 import RoomTable from './testing/user_api/RoomTable'
 import ForumsTable from './testing/user_api/ForumsTable'
 import ForumCommentsTable from './testing/user_api/ForumCommentsTable'
+import ShowRatingsTable from './testing/show_rating_api/ShowRatingsTable'
+
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RoomTable />
+    <ShowRatingsTable />
   </React.StrictMode>
 )

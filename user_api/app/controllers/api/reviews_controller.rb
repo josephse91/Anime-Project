@@ -48,19 +48,24 @@ class Api::ReviewsController < ApplicationController
         review = ActiveSupport::JSON.decode(review_params[:show_object])
         show = review["show"]
         
-        add_edit_review_in_shows = []
-        delete_review_in_shows = []
+        rooms_to_add_show = []
+        rooms_to_edit_show = []
+        rooms_to_delete_show = []
 
         rooms = user.rooms.map do |room,enter_date|
             current_room = Room.find_by(room_name: room)
     
             if current_room.shows[show]
                 current_room.shows[show] += 1
-                action != "delete review" ? add_edit_review_in_shows.push(review) : nil
-                action == "delete review" ? delete_review_in_shows.push(review) : nil
+                action != "delete review" ? rooms_to_edit_show.push(room) : nil
+                if action == "delete review" && current_room[show] > 1
+                    rooms_to_edit_show.push(room)
+                else
+                    rooms_to_delete_show.push(room)
+                end
             else
                 current_room.shows[show] = 1
-                action != "delete review" ? add_edit_review_in_shows.push(review) : nil
+                action != "delete review" ? rooms_to_add_show.push(room) : nil
             end
 
             if current_room.invalid?
@@ -77,8 +82,10 @@ class Api::ReviewsController < ApplicationController
             user: user,
             review: review, 
             rooms: rooms,
-            add_edit_review_in_shows: add_edit_review_in_shows,
-            delete_review_in_shows: delete_review_in_shows
+            action: action,
+            rooms_to_add_show: rooms_to_add_show,
+            rooms_to_edit_show: rooms_to_edit_show,
+            rooms_to_delete_show: rooms_to_delete_show
         }
     end
 
