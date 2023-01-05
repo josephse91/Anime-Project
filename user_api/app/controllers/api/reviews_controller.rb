@@ -55,17 +55,22 @@ class Api::ReviewsController < ApplicationController
         rooms = user.rooms.map do |room,enter_date|
             current_room = Room.find_by(room_name: room)
     
-            if current_room.shows[show]
-                current_room.shows[show] += 1
-                action != "delete review" ? rooms_to_edit_show.push(room) : nil
-                if action == "delete review" && current_room[show] > 1
+        if !current_room.shows[show] && action == "add review"
+            current_room.shows[show] = 1
+            rooms_to_add_show.push(room)
+        elsif current_room.shows[show] == 1 && action == "delete review"
+            rooms_to_delete_show.push(room)
+            current_room.shows.delete(show)    
+        elsif current_room.shows[show] && current_room.shows[show] >= 1
+                if action == "delete review"
                     rooms_to_edit_show.push(room)
-                else
-                    rooms_to_delete_show.push(room)
+                    current_room.shows[show] -= 1
+                elsif action == "edit review"
+                    rooms_to_edit_show.push(room)
+                elsif action == "add review"
+                    rooms_to_edit_show.push(room)
+                    current_room.shows[show] += 1
                 end
-            else
-                current_room.shows[show] = 1
-                action != "delete review" ? rooms_to_add_show.push(room) : nil
             end
 
             if current_room.invalid?

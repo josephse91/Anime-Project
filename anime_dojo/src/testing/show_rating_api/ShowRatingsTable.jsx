@@ -64,8 +64,8 @@ function ShowRatingsTable() {
 
       const user = {username: "Allia"}
       const review1 = {
-        user: "Allia", 
-        show: "Jujutsu Kaisen", 
+        user: "Serge", 
+        show: "Code Geass 3", 
         rating: 66
       }
 
@@ -80,7 +80,7 @@ function ShowRatingsTable() {
         {id: 3, room_name: "Bedstuy"}
       ]
 
-      const action = "member removed"
+      const action = "delete review"
 
       const add_shows = [review1,review2]
 
@@ -92,10 +92,10 @@ function ShowRatingsTable() {
       }
 
       formData.append("user", user.username)
-      // formData.append("review", JSON.stringify(data.review))
+      formData.append("review", JSON.stringify(data.review))
       formData.append("rooms", JSON.stringify(data.rooms))
       formData.append("show_action", data.action)
-      formData.append("reviews", JSON.stringify(data.reviews))
+      // formData.append("reviews", JSON.stringify(data.reviews))
 
       if (testcase.key) formData.append(testcase.key,testcaseInputString);
     }

@@ -37,7 +37,7 @@ class Api::ShowRatingsController < ApplicationController
             rooms = ActiveSupport::JSON.decode(show_params[:rooms])
             create_objects = rooms.map do |room|
                 {
-                    room_id: room["room_name"],
+                    room_id: room,
                     show_title:review["show"],
                     reviewers: {review["user"] => review["rating"]},
                     total_points: review["rating"],
@@ -79,11 +79,9 @@ class Api::ShowRatingsController < ApplicationController
             review = ActiveSupport::JSON.decode(show_params[:review])
             user = review["user"]
             rooms = ActiveSupport::JSON.decode(show_params[:rooms])
-            room_names = ""
-            rooms.each { |room| room_names += (room["room_name"] + ",")}
-            room_names_arr = rooms.map { |room| room["room_name"] }
+            room_names = rooms.map { |room| room }
 
-            show_ratings = ShowRating.where(room_id: room_names_arr).where(show_title: review["show"])
+            show_ratings = ShowRating.where(room_id: room_names).where(show_title: review["show"])
 
             show_ratings.each do |rating|
                 current_total_points = rating.total_points
@@ -157,6 +155,43 @@ class Api::ShowRatingsController < ApplicationController
         end
 
         render json: {status: "complete", show: new_shows}
+    end
+
+    def destroy
+        ids = []
+
+        if show_params[:review]
+            review = ActiveSupport::JSON.decode(show_params[:review])
+            rooms = ActiveSupport::JSON.decode(show_params[:rooms])
+
+            show_ratings = ShowRating.where(room_id: rooms).where(show_title: review["show"])
+
+            show_ratings.each { |show| ids.push(show.id)}
+            
+        else
+            reviews = ActiveSupport::JSON.decode(show_params[:reviews])
+            user = show_params[:user]
+            room = show_params[:room_id]
+
+            shows = {}
+            reviews.each { |review| shows[review["show"]] = review["rating"]}
+
+            show_ratings = ShowRating.where(room_id: room).where(show_title: shows.keys)
+
+            show_ratings.each { |show| ids.push(show.id)}
+        end
+
+        new_shows = ShowRating.delete(ids)
+
+        p "These are the ids being deleted: ", ids
+
+        if !new_shows
+            render json: {status: "failed", error: ids}
+            return
+        end
+
+        render json: {status: "complete", shows: ids}
+
     end
 
     def show_params

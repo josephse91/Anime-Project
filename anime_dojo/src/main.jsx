@@ -12,6 +12,6 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ShowRatingsTable />
+    <ReviewTable />
   </React.StrictMode>
 )
