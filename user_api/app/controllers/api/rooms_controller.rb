@@ -81,7 +81,7 @@ class Api::RoomsController < ApplicationController
             status: "complete", 
             reviews: reviews, 
             room: room,
-            action: action 
+            action: action, 
             add_shows: add_new_show,
             edit_existing_shows: edit_existing_shows,
             remove_shows: remove_shows

@@ -69,10 +69,159 @@ function RoomTable() {
         apiRequest2 = await fetch(requestStr2, options2)
         data2 = await apiRequest2.json()
         console.log(apiRequest2, data2, options2)
+
+        return new Promise(resolve => resolve({status: "success", data: data2}))
       }
+
+      return new Promise(resolve => resolve({status: "failed"}))
     }
 
     apiRequest2 = await addReviewsToRooms(data)
+
+    const data3 = apiRequest2.data
+
+    const showEndpoints = await showRatingRequests(data3)
+    const showRequest = await showRatingCalls(showEndpoints)
+
+    return showRequest
+  }
+
+  async function showRatingRequests(data) {
+    if (!data || data.status === "failed") return new Promise(resolve => {
+      console.log("Add reviews to Room Request Failed")
+      resolve({status: "failed"})
+    })
+
+    let endpoints = {};
+    if (data.action === "member added" && data.add_shows.length) {
+      endpoints["POST"] = {
+        endpoint: "/api/show_ratings/",
+        params: [
+          ["reviews", data.add_shows],
+          ["room_id", data.room.room_name],
+        ]
+      }
+    }
+
+    if (data.action === "member added" && data.edit_existing_shows.length) {
+      endpoints["PATCH"] = {
+        endpoint: "/api/show_ratings/fill",
+        params: [
+          ["reviews", data.edit_existing_shows],
+          ["room_id", data.room.room_name],
+          ["show_action", data.action]
+        ]
+      }
+    }
+
+    if (data.action === "member removed" && data.remove_shows.length) {
+      endpoints["DELETE"] = {
+        endpoint: "/api/show_ratings/fill",
+        params: [
+          ["reviews", data.remove_shows],
+          ["room_id", data.room.room_name]
+        ]
+      }
+    }
+
+    if (data.action === "member removed" && data.edit_existing_shows.length) {
+      endpoints["PATCH"] = {
+        endpoint: "/api/show_ratings/fill",
+        params: [
+          ["reviews", data.edit_existing_shows],
+          ["room_id", data.room.room_name],
+          ["show_action", data.action]
+        ]
+      }
+    }
+
+    if (data.action === "add review" && data.rooms_to_add_show.length) {
+      endpoints["POST"] = {
+        endpoint: "/api/show_ratings/",
+        params: [
+          ["review", data.review],
+          ["rooms", data.rooms_to_add_show],
+        ]
+      }
+    }
+
+    if (data.action === "add review" && data.rooms_to_edit_show.length) {
+      endpoints["PATCH"] = {
+        endpoint: "/api/show_ratings/fill",
+        params: [
+          ["review", data.review],
+          ["rooms", data.rooms_to_edit_show],
+          ["show_action", data.action]
+        ]
+      }
+    }
+
+    if (data.action === "edit review" && data.rooms_to_edit_show.length) {
+      endpoints["PATCH"] = {
+        endpoint: "/api/show_ratings/fill",
+        params: [
+          ["review", data.review],
+          ["rooms", data.rooms_to_edit_show],
+          ["show_action", data.action]
+        ]
+      }
+    }
+
+    if (data.action === "delete review" && data.rooms_to_edit_show.length) {
+      endpoints["PATCH"] = {
+        endpoint: "/api/show_ratings/fill",
+        params: [
+          ["review", data.review],
+          ["rooms", data.rooms_to_edit_show],
+          ["show_action", data.action]
+        ]
+      }
+    }
+
+    if (data.action === "delete review" && data.rooms_to_delete_show.length) {
+      endpoints["DELETE"] = {
+        endpoint: "/api/show_ratings/fill",
+        params: [
+          ["review", data.review],
+          ["rooms", data.rooms_to_delete_show]
+        ]
+      }
+    }
+    return endpoints
+  }
+
+  async function showRatingCalls(requestInfo) {
+    if (requestInfo.status === "failed") return new Promise(resolve => {
+      console.log("Show API was not run")
+      resolve({status: "failed"})
+    })
+
+    const options3 = {
+      headers: myHeaders,
+    }
+    
+    let requestStr = "http://localhost:3001";
+    let currentReq = ""
+    for (let [method,info] of Object.entries(requestInfo)) {
+      options3.method = method;
+      let formData3 = new FormData()
+      options3.body = formData3
+
+      for (let i = 0; i < info.params.length; i++) {
+        let param = info.params[i][0]
+        let value = info.params[i][1]
+        if (param === "reviews" || param === "rooms" || param === "review") {
+          value = JSON.stringify(value)
+        }
+        formData3.append(param,value)
+      }
+
+      currentReq = requestStr + info.endpoint
+      let apiRequest = await fetch(currentReq, options3)
+      let data = await apiRequest.json()
+      console.log(currentReq, data)
+    }
+    return "Function call complete"
   }
   
   let sendRequest = function(e) {
@@ -93,10 +242,10 @@ function RoomTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      // formData.append("request","Markus Borer LLD")
-      // formData.append("submitted_key", "dOHVqfOHP8729TbRgR3Klg")
+      formData.append("request","David")
+      // formData.append("submitted_key", "gswTLYuwqwMHA-mr0b_DrQ")
       // formData.append("make_entry_key", true)
-      // formData.append("user_remove","David")
+      formData.append("user_remove","Aviel")
       // formData.append(testcase.key,testcaseInputString)
     }
 

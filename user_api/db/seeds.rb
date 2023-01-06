@@ -467,5 +467,85 @@ david_review_2 = {
     overall_review: "I can see why this show is the OG. It doesn't do much wrong",
     watch_priority: 1
 }
-serge_review_2 = create_review(david,david_review_2)
+david_review_2 = create_review(david,david_review_2)
 
+jamal = User.create({
+    username: "Jamal",
+    password_digest: password_digest,
+    genre_preference: "Seinen",
+    go_to_motto: "Go Go Gadget Hands",
+    peers: {aldane.username => TIME_INPUT}
+})
+
+aldane.peers[jamal.username] = TIME_INPUT
+aldane.save
+
+jamal_review_1 = {
+    show: "Hellsing",
+    rating: 88,
+    overall_review: "I'm really feeling it.",
+    watch_priority: 1
+}
+jamal_review_1 = create_review(jamal,jamal_review_1)
+
+jamal_review_2 = {
+    show: "Tokyo Ghoul",
+    rating: 72,
+    overall_review: "This was really rushed and didn't capture the manga.",
+    watch_priority: 1
+}
+jamal_review_1 = create_review(jamal,jamal_review_2)
+
+aviel = User.create({
+    username: "Aviel",
+    password_digest: password_digest,
+    genre_preference: "Ecchi",
+    go_to_motto: "Japanese is easy as 1-2-3",
+    peers: {serge.username => TIME_INPUT}
+})
+
+serge.peers[aviel.username] = TIME_INPUT
+serge.save
+
+aviel_review_1 = {
+    show: "Prison School",
+    rating: 70,
+    overall_review: "This was mid.",
+    watch_priority: -1
+}
+aviel_review_1 = create_review(aviel,aviel_review_1)
+
+aviel_review_2 = {
+    show: "Jobless Reincarnation",
+    rating: 81,
+    overall_review: "This is cool. I like Rudeus",
+    watch_priority: -1
+}
+aviel_review_1 = create_review(aviel,aviel_review_2)
+
+allia = User.create({
+    username: "Allia",
+    password_digest: password_digest,
+    genre_preference: "Shojo",
+    go_to_motto: "Japanese Romance is the way to go",
+    peers: {aldane.username => TIME_INPUT}
+})
+
+aldane.peers[allia.username] = TIME_INPUT
+aldane.save
+
+allia_review_1 = {
+    show: "Ouran High School Host Club",
+    rating: 88,
+    overall_review: "This was really sweet. I see why it is so popular",
+    watch_priority: -1
+}
+allia_review_1 = create_review(allia,allia_review_1)
+
+allia_review_2 = {
+    show: "Sailor Moon",
+    rating: 96,
+    overall_review: "I haven't enjoyed an anime more",
+    watch_priority: -1
+}
+allia_review_2 = create_review(allia,allia_review_2)

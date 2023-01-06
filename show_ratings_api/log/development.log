@@ -2462,3 +2462,319 @@ Processing by Api::ShowRatingsController#destroy as */*
 Completed 200 OK in 52ms (Views: 0.3ms | ActiveRecord: 5.3ms | Allocations: 3913)
 
 
+  [1m[36mActiveRecord::SchemaMigration Pluck (2.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (49.6ms)[0m  [1m[35mDROP DATABASE IF EXISTS "show_ratings_api_development"[0m
+  [1m[35m (30.2ms)[0m  [1m[35mDROP DATABASE IF EXISTS "show_ratings_api_test"[0m
+  [1m[35m (113.9ms)[0m  [1m[35mCREATE DATABASE "show_ratings_api_development" ENCODING = 'unicode'[0m
+  [1m[35m (83.0ms)[0m  [1m[35mCREATE DATABASE "show_ratings_api_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "show_ratings" CASCADE[0m
+  [1m[35m (18.2ms)[0m  [1m[35mCREATE TABLE "show_ratings" ("id" bigserial primary key, "show_title" character varying NOT NULL, "room_id" character varying NOT NULL, "reviewers" json DEFAULT '{}', "total_points" integer NOT NULL, "number_of_reviews" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (6.5ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20230104152350)[0m
+  [1m[35m (6.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (1.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-01-05 19:36:07.829477"], ["updated_at", "2023-01-05 19:36:07.829477"]]
+  [1m[36mTRANSACTION (2.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.9ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "0afa32d42b92a88ca62184d7a863f4a66defcbae"], ["created_at", "2023-01-05 19:36:07.854366"], ["updated_at", "2023-01-05 19:36:07.854366"]]
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35mSQL (0.6ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "show_ratings" CASCADE[0m
+  [1m[35m (31.3ms)[0m  [1m[35mCREATE TABLE "show_ratings" ("id" bigserial primary key, "show_title" character varying NOT NULL, "room_id" character varying NOT NULL, "reviewers" json DEFAULT '{}', "total_points" integer NOT NULL, "number_of_reviews" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (8.5ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20230104152350)[0m
+  [1m[35m (8.6ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.9ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-01-05 19:36:07.988148"], ["updated_at", "2023-01-05 19:36:07.988148"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.5ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = $1, "updated_at" = $2 WHERE "ar_internal_metadata"."key" = $3[0m  [["value", "test"], ["updated_at", "2023-01-05 19:36:07.995765"], ["key", "environment"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "0afa32d42b92a88ca62184d7a863f4a66defcbae"], ["created_at", "2023-01-05 19:36:08.008928"], ["updated_at", "2023-01-05 19:36:08.008928"]]
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "My Hero"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.6ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "My Hero"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jarret\":76}"], ["total_points", 76], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:36:08.259567"], ["updated_at", "2023-01-05 19:36:08.259567"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.5ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Attack on Titan"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jarret\":99,\"Aldane\":99}"], ["total_points", 198], ["number_of_reviews", 2], ["created_at", "2023-01-05 19:36:08.273015"], ["updated_at", "2023-01-05 19:36:08.273015"]]
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Jobless Reincarnation"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.6ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Jobless Reincarnation"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jarret\":89}"], ["total_points", 89], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:36:08.284310"], ["updated_at", "2023-01-05 19:36:08.284310"]]
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.5ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Bleach"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Aldane\":90,\"David\":80}"], ["total_points", 170], ["number_of_reviews", 2], ["created_at", "2023-01-05 19:36:08.294836"], ["updated_at", "2023-01-05 19:36:08.294836"]]
+  [1m[36mTRANSACTION (3.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Naruto"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.5ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Naruto"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Serge\":90}"], ["total_points", 90], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:36:08.310248"], ["updated_at", "2023-01-05 19:36:08.310248"]]
+  [1m[36mTRANSACTION (1.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Jujutsu Kaisen"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.4ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Jujutsu Kaisen"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"David\":92}"], ["total_points", 92], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:36:08.321491"], ["updated_at", "2023-01-05 19:36:08.321491"]]
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Tokyo Revengers"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.7ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Tokyo Revengers"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jarret\":86,\"Serge\":78}"], ["total_points", 92], ["number_of_reviews", 2], ["created_at", "2023-01-05 19:36:08.331658"], ["updated_at", "2023-01-05 19:36:08.331658"]]
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+Started POST "/api/show_ratings/" for ::1 at 2023-01-05 14:46:20 -0500
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":12,\"user\":\"David\",\"show\":\"Jujutsu Kaisen\",\"rating\":92,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"The animation is ridiculous. The action is out of this world\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2023-01-05T19:35:57.087Z\",\"updated_at\":\"2023-01-05T19:35:57.087Z\"}]", "room_id"=>"[object Object]"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Jujutsu Kaisen"], ["room_id", "[object Object]"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Create (0.6ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Jujutsu Kaisen"], ["room_id", "[object Object]"], ["reviewers", "{\"David\":92}"], ["total_points", 92], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:46:21.317644"], ["updated_at", "2023-01-05 19:46:21.317644"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+Completed 200 OK in 115ms (Views: 0.3ms | ActiveRecord: 5.1ms | Allocations: 44270)
+
+
+Started PATCH "/api/show_ratings//api/show_ratings/fill" for ::1 at 2023-01-05 14:46:21 -0500
+  
+ActionController::RoutingError (No route matches [PATCH] "/api/show_ratings/api/show_ratings/fill"):
+  
+Started POST "/api/show_ratings/" for ::1 at 2023-01-05 14:52:50 -0500
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":16,\"user\":\"Jamal\",\"show\":\"Hellsing\",\"rating\":88,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"I'm really feeling it.\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2023-01-05T19:35:57.174Z\",\"updated_at\":\"2023-01-05T19:35:57.174Z\"},{\"id\":17,\"user\":\"Jamal\",\"show\":\"Tokyo Ghoul\",\"rating\":72,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This was really rushed and didn't capture the manga.\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2023-01-05T19:35:57.184Z\",\"updated_at\":\"2023-01-05T19:35:57.184Z\"}]", "room_id"=>"Planet Vegeta"}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Hellsing"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Create (0.8ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Hellsing"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jamal\":88}"], ["total_points", 88], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:52:51.050695"], ["updated_at", "2023-01-05 19:52:51.050695"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Tokyo Ghoul"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Create (0.5ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Tokyo Ghoul"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jamal\":72}"], ["total_points", 72], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:52:51.067100"], ["updated_at", "2023-01-05 19:52:51.067100"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+Completed 200 OK in 49ms (Views: 0.7ms | ActiveRecord: 13.1ms | Allocations: 8475)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2023-01-05 14:53:34 -0500
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":18,\"user\":\"Aviel\",\"show\":\"Prison School\",\"rating\":70,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This was mid.\",\"referral_id\":null,\"watch_priority\":-1,\"likes\":0,\"created_at\":\"2023-01-05T19:35:57.219Z\",\"updated_at\":\"2023-01-05T19:35:57.219Z\"}]", "room_id"=>"Planet Vegeta"}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Prison School"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Create (0.5ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Prison School"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Aviel\":70}"], ["total_points", 70], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:53:34.634201"], ["updated_at", "2023-01-05 19:53:34.634201"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+Completed 200 OK in 12ms (Views: 0.3ms | ActiveRecord: 2.1ms | Allocations: 3034)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2023-01-05 14:59:22 -0500
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":20,\"user\":\"Allia\",\"show\":\"Ouran High School Host Club\",\"rating\":88,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This was really sweet. I see why it is so popular\",\"referral_id\":null,\"watch_priority\":-1,\"likes\":0,\"created_at\":\"2023-01-05T19:35:57.256Z\",\"updated_at\":\"2023-01-05T19:35:57.256Z\"},{\"id\":21,\"user\":\"Allia\",\"show\":\"Sailor Moon\",\"rating\":96,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"I haven't enjoyed an anime more\",\"referral_id\":null,\"watch_priority\":-1,\"likes\":0,\"created_at\":\"2023-01-05T19:35:57.265Z\",\"updated_at\":\"2023-01-05T19:35:57.265Z\"}]", "room_id"=>"Planet Vegeta"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Ouran High School Host Club"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Create (1.0ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Ouran High School Host Club"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Allia\":88}"], ["total_points", 88], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:59:22.686389"], ["updated_at", "2023-01-05 19:59:22.686389"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Sailor Moon"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Create (0.5ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Sailor Moon"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Allia\":96}"], ["total_points", 96], ["number_of_reviews", 1], ["created_at", "2023-01-05 19:59:22.698595"], ["updated_at", "2023-01-05 19:59:22.698595"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+Completed 200 OK in 34ms (Views: 1.2ms | ActiveRecord: 9.2ms | Allocations: 8476)
+
+
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (1.7ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (55.0ms)[0m  [1m[35mDROP DATABASE IF EXISTS "show_ratings_api_development"[0m
+  [1m[35m (33.3ms)[0m  [1m[35mDROP DATABASE IF EXISTS "show_ratings_api_test"[0m
+  [1m[35m (141.8ms)[0m  [1m[35mCREATE DATABASE "show_ratings_api_development" ENCODING = 'unicode'[0m
+  [1m[35m (123.6ms)[0m  [1m[35mCREATE DATABASE "show_ratings_api_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (0.8ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "show_ratings" CASCADE[0m
+  [1m[35m (21.9ms)[0m  [1m[35mCREATE TABLE "show_ratings" ("id" bigserial primary key, "show_title" character varying NOT NULL, "room_id" character varying NOT NULL, "reviewers" json DEFAULT '{}', "total_points" integer NOT NULL, "number_of_reviews" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (10.4ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (2.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20230104152350)[0m
+  [1m[35m (9.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.9ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-01-05 20:00:13.073183"], ["updated_at", "2023-01-05 20:00:13.073183"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.6ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "0afa32d42b92a88ca62184d7a863f4a66defcbae"], ["created_at", "2023-01-05 20:00:13.096742"], ["updated_at", "2023-01-05 20:00:13.096742"]]
+  [1m[36mTRANSACTION (1.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "show_ratings" CASCADE[0m
+  [1m[35m (18.3ms)[0m  [1m[35mCREATE TABLE "show_ratings" ("id" bigserial primary key, "show_title" character varying NOT NULL, "room_id" character varying NOT NULL, "reviewers" json DEFAULT '{}', "total_points" integer NOT NULL, "number_of_reviews" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (9.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20230104152350)[0m
+  [1m[35m (9.9ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.6ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-01-05 20:00:13.232979"], ["updated_at", "2023-01-05 20:00:13.232979"]]
+  [1m[36mTRANSACTION (1.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.4ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = $1, "updated_at" = $2 WHERE "ar_internal_metadata"."key" = $3[0m  [["value", "test"], ["updated_at", "2023-01-05 20:00:13.246500"], ["key", "environment"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "0afa32d42b92a88ca62184d7a863f4a66defcbae"], ["created_at", "2023-01-05 20:00:13.260138"], ["updated_at", "2023-01-05 20:00:13.260138"]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "My Hero"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.6ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "My Hero"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jarret\":76}"], ["total_points", 76], ["number_of_reviews", 1], ["created_at", "2023-01-05 20:00:13.446048"], ["updated_at", "2023-01-05 20:00:13.446048"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.5ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Attack on Titan"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jarret\":99,\"Aldane\":99}"], ["total_points", 198], ["number_of_reviews", 2], ["created_at", "2023-01-05 20:00:13.455151"], ["updated_at", "2023-01-05 20:00:13.455151"]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Jobless Reincarnation"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.4ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Jobless Reincarnation"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jarret\":89}"], ["total_points", 89], ["number_of_reviews", 1], ["created_at", "2023-01-05 20:00:13.463845"], ["updated_at", "2023-01-05 20:00:13.463845"]]
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.4ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Bleach"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Aldane\":90,\"David\":80}"], ["total_points", 170], ["number_of_reviews", 2], ["created_at", "2023-01-05 20:00:13.471968"], ["updated_at", "2023-01-05 20:00:13.471968"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Naruto"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.4ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Naruto"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Serge\":90}"], ["total_points", 90], ["number_of_reviews", 1], ["created_at", "2023-01-05 20:00:13.480751"], ["updated_at", "2023-01-05 20:00:13.480751"]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Jujutsu Kaisen"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.4ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Jujutsu Kaisen"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"David\":92}"], ["total_points", 92], ["number_of_reviews", 1], ["created_at", "2023-01-05 20:00:13.489767"], ["updated_at", "2023-01-05 20:00:13.489767"]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Tokyo Revengers"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  [1m[36mShowRating Create (0.4ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Tokyo Revengers"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Jarret\":86,\"Serge\":78}"], ["total_points", 92], ["number_of_reviews", 2], ["created_at", "2023-01-05 20:00:13.499430"], ["updated_at", "2023-01-05 20:00:13.499430"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+Started POST "/api/show_ratings/" for ::1 at 2023-01-05 15:04:20 -0500
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":13,\"user\":\"David\",\"show\":\"Jujutsu Kaisen\",\"rating\":92,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"The animation is ridiculous. The action is out of this world\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2023-01-05T20:00:14.455Z\",\"updated_at\":\"2023-01-05T20:00:14.455Z\"}]", "room_id"=>"Planet Vegeta"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Jujutsu Kaisen"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+Completed 200 OK in 91ms (Views: 0.2ms | ActiveRecord: 3.2ms | Allocations: 43163)
+
+
+Started PATCH "/api/show_ratings/fill" for ::1 at 2023-01-05 15:04:21 -0500
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"reviews"=>"[{\"id\":16,\"user\":\"David\",\"show\":\"Naruto\",\"rating\":91,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"I can see why this show is the OG. It doesn't do much wrong\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2023-01-05T20:00:14.489Z\",\"updated_at\":\"2023-01-05T20:00:14.489Z\"}]", "room_id"=>"Planet Vegeta", "show_action"=>"member added", "id"=>"fill"}
+  [1m[36mShowRating Load (0.2ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Naruto"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:122:in `update'
+  [1m[36mShowRating Load (0.3ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Naruto"], ["id", 5], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Update (0.8ms)[0m  [1m[33mUPDATE "show_ratings" SET "reviewers" = $1, "total_points" = $2, "number_of_reviews" = $3, "updated_at" = $4 WHERE "show_ratings"."id" = $5[0m  [["reviewers", "{\"Serge\":90,\"\":91}"], ["total_points", 181], ["number_of_reviews", 2], ["updated_at", "2023-01-05 20:04:21.121920"], ["id", 5]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (1.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+Completed 200 OK in 25ms (Views: 0.5ms | ActiveRecord: 3.7ms | Allocations: 6084)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2023-01-05 15:10:56 -0500
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":19,\"user\":\"Aviel\",\"show\":\"Prison School\",\"rating\":70,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This was mid.\",\"referral_id\":null,\"watch_priority\":-1,\"likes\":0,\"created_at\":\"2023-01-05T20:00:14.538Z\",\"updated_at\":\"2023-01-05T20:00:14.538Z\"}]", "room_id"=>"Planet Vegeta"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Prison School"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mShowRating Create (0.9ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Prison School"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Aviel\":70}"], ["total_points", 70], ["number_of_reviews", 1], ["created_at", "2023-01-05 20:10:57.238419"], ["updated_at", "2023-01-05 20:10:57.238419"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:63:in `create'
+Completed 200 OK in 56ms (Views: 0.8ms | ActiveRecord: 6.2ms | Allocations: 8348)
+
+
+Started PATCH "/api/show_ratings/fill" for ::1 at 2023-01-05 15:10:57 -0500
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"reviews"=>"[{\"id\":20,\"user\":\"Aviel\",\"show\":\"Jobless Reincarnation\",\"rating\":81,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is cool. I like Rudeus\",\"referral_id\":null,\"watch_priority\":-1,\"likes\":0,\"created_at\":\"2023-01-05T20:00:14.544Z\",\"updated_at\":\"2023-01-05T20:00:14.544Z\"}]", "room_id"=>"Planet Vegeta", "show_action"=>"member added", "id"=>"fill"}
+  [1m[36mShowRating Load (0.3ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Jobless Reincarnation"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:121:in `update'
+  [1m[36mShowRating Load (0.2ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Jobless Reincarnation"], ["id", 3], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+  [1m[36mShowRating Update (0.4ms)[0m  [1m[33mUPDATE "show_ratings" SET "reviewers" = $1, "total_points" = $2, "number_of_reviews" = $3, "updated_at" = $4 WHERE "show_ratings"."id" = $5[0m  [["reviewers", "{\"Jarret\":89,\"Aviel\":81}"], ["total_points", 170], ["number_of_reviews", 2], ["updated_at", "2023-01-05 20:10:57.361282"], ["id", 3]]
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+Completed 200 OK in 19ms (Views: 0.3ms | ActiveRecord: 2.9ms | Allocations: 5069)
+
+
+Started DELETE "/api/show_ratings/fill" for ::1 at 2023-01-05 15:13:29 -0500
+Processing by Api::ShowRatingsController#destroy as */*
+  Parameters: {"reviews"=>"[{\"id\":19,\"user\":\"Aviel\",\"show\":\"Prison School\",\"rating\":70,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This was mid.\",\"referral_id\":null,\"watch_priority\":-1,\"likes\":0,\"created_at\":\"2023-01-05T20:00:14.538Z\",\"updated_at\":\"2023-01-05T20:00:14.538Z\"}]", "room_id"=>"Planet Vegeta", "id"=>"fill"}
+  [1m[36mShowRating Load (0.2ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Prison School"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:180:in `destroy'
+  [1m[36mShowRating Delete All (1.9ms)[0m  [1m[31mDELETE FROM "show_ratings" WHERE "show_ratings"."id" = $1[0m  [["id", 8]]
+  ↳ app/controllers/api/show_ratings_controller.rb:183:in `destroy'
+Completed 200 OK in 37ms (Views: 0.2ms | ActiveRecord: 4.9ms | Allocations: 3994)
+
+
+Started PATCH "/api/show_ratings/fill" for ::1 at 2023-01-05 15:13:29 -0500
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"reviews"=>"[{\"id\":20,\"user\":\"Aviel\",\"show\":\"Jobless Reincarnation\",\"rating\":81,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is cool. I like Rudeus\",\"referral_id\":null,\"watch_priority\":-1,\"likes\":0,\"created_at\":\"2023-01-05T20:00:14.544Z\",\"updated_at\":\"2023-01-05T20:00:14.544Z\"}]", "room_id"=>"Planet Vegeta", "show_action"=>"member removed", "id"=>"fill"}
+  [1m[36mShowRating Load (0.5ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Jobless Reincarnation"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:121:in `update'
+  [1m[36mShowRating Load (0.3ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Jobless Reincarnation"], ["id", 3], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+  [1m[36mShowRating Update (0.5ms)[0m  [1m[33mUPDATE "show_ratings" SET "reviewers" = $1, "total_points" = $2, "number_of_reviews" = $3, "updated_at" = $4 WHERE "show_ratings"."id" = $5[0m  [["reviewers", "{\"Jarret\":89}"], ["total_points", 89], ["number_of_reviews", 1], ["updated_at", "2023-01-05 20:13:29.807867"], ["id", 3]]
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:149:in `update'
+Completed 200 OK in 18ms (Views: 0.3ms | ActiveRecord: 2.9ms | Allocations: 5186)
+
+

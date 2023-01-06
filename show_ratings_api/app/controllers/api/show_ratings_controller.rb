@@ -111,12 +111,11 @@ class Api::ShowRatingsController < ApplicationController
             end
         else
             reviews = ActiveSupport::JSON.decode(show_params[:reviews])
-            user = show_params[:user]
             room = show_params[:room_id]
 
             shows = {}
             reviews.each { |review| shows[review["show"]] = review["rating"]}
-
+            user = reviews[0]["user"]
             show_ratings = ShowRating.where(room_id: room).where(show_title: shows.keys)
 
             show_ratings.each do |rating|
@@ -170,7 +169,7 @@ class Api::ShowRatingsController < ApplicationController
             
         else
             reviews = ActiveSupport::JSON.decode(show_params[:reviews])
-            user = show_params[:user]
+            user = reviews[0]["user"]
             room = show_params[:room_id]
 
             shows = {}
