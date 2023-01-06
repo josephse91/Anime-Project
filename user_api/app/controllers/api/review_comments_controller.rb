@@ -225,7 +225,7 @@ class Api::ReviewCommentsController < ApplicationController
             recipient: comment.user_id,
             action: event,
             action_user: user.username,
-            target_item: "Comment"
+            target_item: "Review Comment"
         }
         event == "like" ? notifications.push(data) : nil
         render_obj = {status: "complete", event: event, comment: comment}
