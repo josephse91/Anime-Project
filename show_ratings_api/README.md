@@ -8,7 +8,7 @@ Refer to Reviews and Rooms frontend testing to see how to implement parameters
 ---
 #### **Show Rating Table** 
 [index](#retreive-all-shows-index) / 
-[room_show_index](#retreive-all-room-shows-room-show-index) /  
+[room_show_index](#retreive-all-room-shows-room-show-index) / 
 [create](#create-a-show-rating-create) / 
 [update](#edit-show-rating-update) / 
 [delete](#delete-show-rating-destroy) 

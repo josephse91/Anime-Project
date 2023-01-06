@@ -243,7 +243,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `overall_review` | `text` |  |
 | `referral_id` | `string` | This will be the referrer username. Insert into form Param |
 | `watch_priority` | `integer` | Will be -1, 0 or 1. Insert into form Param |
-| `likes` | `JSON` | View [JSON format](#Votes-and-likes-Parameter) in Appendex |
+| `likes` | `JSON` | View [JSON format](#votes-and-likes-parameters) in Appendex |
 
 #### Delete Review of a User: destroy
 
@@ -310,7 +310,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `user_id` | `string` | Username of User |
 | `comment_type` | `string` | "comment" or "reply"  |
 | `parent` | `integer` |  |
-| `likes` | `JSON` | View [JSON format](#Votes-and-likes-Parameter) in Appendex |
+| `likes` | `JSON` | View [JSON format](#votes-and-likes-parameters) in Appendex |
 
 #### Delete Review Comments User: destroy
 
@@ -486,7 +486,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `creator` | `string` | User that creates or edits forum post |
 | `content` | `text` | Content in regards to the topic |
 | `anime` | `string` | Anime pertaining to subject (Optional) |
-| `votes` | `JSON` | View [JSON format](#Votes-and-likes-Parameter) in Appendex |
+| `votes` | `JSON` | View [JSON format](#votes-and-likes-parameters) in Appendex |
 
 #### Delete Forum of User: destroy
 
@@ -551,7 +551,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 | `current_user` | `string` | Username of commenter |
 | `parent` | `integer` | Primary ID of parent comment. NULL if there is no parent |
 | `top_comment` | `integer` |  |
-| `votes` | `JSON` | View [JSON format](#Votes-and-likes-Parameter) in Appendex |
+| `votes` | `JSON` | View [JSON format](#votes-and-likes-parameters) in Appendex |
 
 #### Delete Forum Comment of User: destroy
 
