@@ -23,6 +23,7 @@ class Api::ShowRatingsController < ApplicationController
         SELECT *, total_points / number_of_reviews AS Average_grade
         FROM show_ratings
         WHERE room_id = #{sql_room}
+        ORDER BY Average_grade DESC
         SQL
 
         shows = ShowRating.find_by_sql(sql)
@@ -181,8 +182,6 @@ class Api::ShowRatingsController < ApplicationController
         end
 
         new_shows = ShowRating.delete(ids)
-
-        p "These are the ids being deleted: ", ids
 
         if !new_shows
             render json: {status: "failed", error: ids}

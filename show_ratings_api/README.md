@@ -1,24 +1,84 @@
-# README
+# Show-Ratings-Api-Documentation
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The Show Ratings API will be used to persist data pertaining to the group reviews within a room.
 
-Things you may want to cover:
+Refer to Reviews and Rooms frontend testing to see how to implement parameters
 
-* Ruby version
+[Go to Appendix](#Appendix)
+---
+#### **Show Rating Table** 
+[index](#retreive-all-shows-index) / 
+[room_show_index](#retreive-all-room-shows-room-show-index) /  
+[create](#create-a-show-rating-create) / 
+[update](#edit-show-rating-update) / 
+[delete](#delete-show-rating-destroy) 
 
-* System dependencies
+[Back to API Reference](#API-Reference)
 
-* Configuration
+---
+#### Retreive all shows: index
 
-* Database creation
+```http
+  GET /api/show_ratings/
+```
 
-* Database initialization
+#### Retreive all room shows: room show index
 
-* How to run the test suite
+```http
+  GET /api/rooms/:room_id/show_ratings/
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+| Parameter | Type     | Description                   |
+| :-------- | :------- | :-------------------------    |
+| `room_id` | `string` | Room_name of Room |
 
-* Deployment instructions
+#### Create a Show Rating: create
 
-* ...
+```http
+  POST /api/show_ratings/
+```
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `room_id` | `string` | Room_name which will receive Reviews to add or remove|
+| `rooms` | `string` | Array of rooms which will add or remove a single review.|
+| `review` | `JSON` | Single review which will be added to multiple rooms |
+| `reviews` | `JSON` | Array of reviews which will be added to a single room |
+
+
+#### Edit Show Rating: update
+
+```http
+  PATCH /api/show_ratings/fill
+```
+
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `show_action` | `string` | Shows action taken for review(s). [Appendix for options](#update-show-actions|
+| `room_id` | `string` | Room_name which will receive Reviews to add or remove|
+| `rooms` | `string` | Array of rooms which will add or remove a single review.|
+| `review` | `JSON` | Single review which will be added to multiple rooms |
+| `reviews` | `JSON` | Array of reviews which will be added to a single room |
+
+#### Delete Show Rating: destroy
+
+```http
+  DELETE /api/show_ratings/fill
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `string` | Room_name which will receive Reviews to add or remove|
+| `rooms` | `string` | Array of rooms which will add or remove a single review.|
+| `review` | `JSON` | Single review which will be added to multiple rooms |
+| `reviews` | `JSON` | Array of reviews which will be added to a single room |
+
+# Appendix
+
+Terms and formats utilized in the API
+
+## Update Show Actions
+- add review
+- edit review
+- delete review
+- member added
+- member removed
