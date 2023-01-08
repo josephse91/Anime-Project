@@ -33,49 +33,137 @@ function ReviewTable() {
   let myHeaders = new Headers();
 
   async function apiRequest(searchParam,options) {
-    let requestStr = "http://localhost:3000/" + request + searchParam, requestStr2;
-    let apiRequest = await fetch(requestStr, options), apiRequest2
-    let data = await apiRequest.json(), data2
+    let requestStr = "http://localhost:3000/" + request + searchParam;
+    let apiRequest = await fetch(requestStr, options)
+    let data = await apiRequest.json()
     console.log(requestStr, data)
+
+    setResponse(data)
+
+    let followUp = await followUpAPIs(data,searchParam)
+  }
+
+  async function followUpAPIs(data,searchParam) {
+    if (data.status === "failed") return new Promise(resolve => {
+      resolve({status: "N/A", message: "follow up API was not utilized"})
+    })
+
+    const likeActions = new Set(["like","neutral","unlike"])
+    const reviewActions = new Set(["add review","edit review","delete review"])
+    const roomActions = new Set(["member added","member removed"])
+    
+
+    if (likeActions.has(data.action)) {
+      const endpoints = await likeAPIendpoint(data)
+      const likeRequest = await likeAPICall(endpoints.endpoints)
+
+      return likeRequest
+    } else {
+      let apiRequest2 = await addReviewsToRooms(data,searchParam)
+      // data2 = await apiRequest2.json()
+      const data3 = apiRequest2.data
+
+      const showEndpoints = await showRatingRequests(data3)
+      const showRequest = await showRatingCalls(showEndpoints)
+
+      return showRequest
+    }
+  }
+
+  async function likeAPIendpoint(data) {
+
+    let endpoints = {};
+    const itemID = data.like_action.id
+
+    let runAPI = true;
+
+    if (data.like_action.net === 0) {
+      endpoints["POST"] = {
+        endpoint: "/api/likes/",
+        params: [
+          ["like_action", data.like_action]
+        ]
+      }
+    } else if (data.action === "neutral") {
+
+      endpoints["DELETE"] = {
+        endpoint: `/api/likes/${itemID}`,
+        params: [
+          ["like_action", data.like_action]
+        ]
+      }
+    } else if (data.action === "like" || data.action === "unlike") {
+      endpoints["PATCH"] = {
+        endpoint: `/api/likes/${itemID}`,
+        params: [
+          ["like_action", data.like_action]
+        ]
+      }
+    }
+    return new Promise(resolve => resolve({status: "success", endpoints: endpoints}))
+  }
+
+  async function likeAPICall(likeEndpoint) {
+    const options4 = {
+      headers: myHeaders,
+    }
+    
+    let requestStr = "http://localhost:3002";
+
+    const method = Object.keys(likeEndpoint)[0]
+
+    options4.method = method
+
+    let formData4 = new FormData()
+    options4.body = formData4
+
+    let params = likeEndpoint[method].params
+
+    for (let i = 0; i < params.length; i++) {
+      let param = params[i][0]
+      let value = params[i][1]
+      if (param === "like_action") {
+        value = JSON.stringify(value)
+      }
+      formData4.append(param,value)
+    }
+
+    requestStr += likeEndpoint[method].endpoint
+    let apiRequest = await fetch(requestStr, options4)
+    let data = await apiRequest.json()
+    console.log(requestStr, data) 
+
+    return "Function call complete"
+  }
+
+  async function addReviewsToRooms(data,searchParam) {
+    let data2
+    let apiRequest2
 
     const options2 = {
       headers: myHeaders,
       method: "PATCH"
     }
+
     let requestMethod2 = options2.method
 
-    async function addReviewsToRooms(data) {
-      if (data.status === "complete" && requestMethod2 === "PATCH") {
-        options2.body = formData2;
-        let review = data.review
-        let reviewAction = data.action
-        // console.log("This is complete data: ",data, "This is the data action: ", data.action, action, typeof action)
-        formData2.append("review_action",reviewAction)
-        formData2.append("show_object",JSON.stringify(review))
+    if (data.status === "complete" && requestMethod2 === "PATCH") {
+      options2.body = formData2;
+      let review = data.review
+      let reviewAction = data.action
+      // console.log("This is complete data: ",data, "This is the data action: ", data.action, action, typeof action)
+      formData2.append("review_action",reviewAction)
+      formData2.append("show_object",JSON.stringify(review))
 
-        requestStr2 = `http://localhost:3000/api/reviews/${review.show}/rooms`+ searchParam;
-        apiRequest2 = await fetch(requestStr2, options2)
-        data2 = await apiRequest2.json()
-        console.log(apiRequest2, data2,options2)
+      let requestStr2 = `http://localhost:3000/api/reviews/${review.show}/rooms`+ searchParam;
+      let apiRequest2 = await fetch(requestStr2, options2)
+      let data2 = await apiRequest2.json()
+      console.log(apiRequest2, data2,options2)
 
-        return new Promise(resolve => resolve({status: "success", data: data2}))
-      }
-
-      return new Promise(resolve => resolve({status: "failed"}))
+      return new Promise(resolve => resolve({status: "success", data: data2}))
     }
 
-    setResponse(data)
-
-    apiRequest2 = await addReviewsToRooms(data)
-    // data2 = await apiRequest2.json()
-    const data3 = apiRequest2.data
-
-    console.log(requestStr2, data2)
-
-    const showEndpoints = await showRatingRequests(data3)
-    const showRequest = await showRatingCalls(showEndpoints)
-
-    return showRequest
+    return new Promise(resolve => resolve({status: "failed"}))
   }
 
   async function showRatingRequests(data) {
@@ -234,14 +322,14 @@ function ReviewTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
       options.body = formData;
-      formData.append("rating",90)
-      formData.append("amount_watched","Completed")
+      // formData.append("rating",96)
+      // formData.append("amount_watched","Completed")
       // // formData.append("highlighted_points",'[]')
-      formData.append("overall_review","This anime is growing on me")
+      // formData.append("overall_review","Naruto is the GOAT")
       // formData.append("referral_id","Jarret")
-      formData.append("watch_priority",0)
-      // let likesAction = {user: user, net: 0, target: 1}
-      // formData.append("likes",JSON.stringify(likesAction))
+      // formData.append("watch_priority",0)
+      let likesAction = {user: user, net: 1, target: 0}
+      formData.append("likes",JSON.stringify(likesAction))
 
       if (testcase.key) formData.append(testcase.key,testcaseInputString);
     }

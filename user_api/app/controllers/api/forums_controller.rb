@@ -266,13 +266,14 @@ class Api::ForumsController < ApplicationController
         data = {
             id: forum.id,
             recipient: forum.creator,
+            net: net,
             action: event,
             action_user: user.username,
             target_item: "Forum"
         }
 
         event == "like" ? notifications.push(data) : nil
-        render_obj = {status: "complete", event: event, forum: forum}
+        render_obj = {status: "complete", action: event, like_action: data, forum: forum}
         notifications.length > 0 ? render_obj[:notifications] = notifications : nil
 
         render json: render_obj

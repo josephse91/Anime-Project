@@ -303,7 +303,7 @@ class Api::ReviewsController < ApplicationController
             event = "like"
         elsif net > target
             review.likes = like_count - 1
-            event = "unlike"
+            event = "neutral"
         end
 
         review.save
@@ -312,11 +312,12 @@ class Api::ReviewsController < ApplicationController
             id: review.id,
             recipient: review.user,
             action: event,
+            net: net,
             action_user: user.username,
             target_item: "Review"
         }
         event == "like" ? notifications.push(data) : nil
-        render_obj = {status: "complete", event: event, review: review}
+        render_obj = {status: "complete", action: event, like_action: data, review: review}
         notifications.length > 0 ? render_obj[:notifications] = notifications : nil
 
         render json: render_obj

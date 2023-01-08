@@ -223,12 +223,13 @@ class Api::ReviewCommentsController < ApplicationController
         data = {
             id: comment.id,
             recipient: comment.user_id,
+            net: net,
             action: event,
             action_user: user.username,
             target_item: "Review Comment"
         }
         event == "like" ? notifications.push(data) : nil
-        render_obj = {status: "complete", event: event, comment: comment}
+        render_obj = {status: "complete", action: event, like_action: data, comment: comment}
         notifications.length > 0 ? render_obj[:notifications] = notifications : nil
 
         render json: render_obj

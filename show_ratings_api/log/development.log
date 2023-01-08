@@ -2838,3 +2838,72 @@ Processing by Api::ShowRatingsController#update as */*
 Completed 200 OK in 28ms (Views: 0.3ms | ActiveRecord: 2.9ms | Allocations: 4164)
 
 
+Started POST "/api/show_ratings/" for ::1 at 2023-01-06 13:02:05 -0500
+  [1m[36mActiveRecord::SchemaMigration Pluck (1.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"review"=>"{\"id\":27,\"user\":\"Serge\",\"show\":\"Code Geass 5\",\"rating\":90,\"amount_watched\":\"Completed\",\"highlighted_points\":null,\"overall_review\":\"This anime is growing on me\",\"referral_id\":null,\"watch_priority\":0,\"likes\":0,\"created_at\":\"2023-01-06T18:02:04.198Z\",\"updated_at\":\"2023-01-06T18:02:04.198Z\"}", "rooms"=>"[\"Planet Vegeta\"]"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:64:in `create'
+  [1m[36mShowRating Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Code Geass 5"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:64:in `create'
+  [1m[36mShowRating Create (1.6ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Code Geass 5"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Serge\":90}"], ["total_points", 90], ["number_of_reviews", 1], ["created_at", "2023-01-06 18:02:07.031859"], ["updated_at", "2023-01-06 18:02:07.031859"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:64:in `create'
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:64:in `create'
+Completed 200 OK in 176ms (Views: 0.4ms | ActiveRecord: 18.2ms | Allocations: 44290)
+
+
+Started PATCH "/api/show_ratings/fill" for ::1 at 2023-01-06 13:03:20 -0500
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"review"=>"{\"user\":\"Serge\",\"show\":\"Naruto\",\"rating\":96,\"amount_watched\":\"Completed\",\"highlighted_points\":[],\"overall_review\":\"Naruto is the GOAT\",\"referral_id\":null,\"watch_priority\":0,\"likes\":3,\"id\":12,\"created_at\":\"2023-01-05T20:00:14.441Z\",\"updated_at\":\"2023-01-06T18:03:20.236Z\"}", "rooms"=>"[\"Planet Vegeta\"]", "show_action"=>"edit review", "id"=>"fill"}
+  [1m[36mShowRating Load (0.5ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Naruto"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:87:in `update'
+  [1m[36mShowRating Load (0.4ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Naruto"], ["id", 5], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Update (0.7ms)[0m  [1m[33mUPDATE "show_ratings" SET "reviewers" = $1, "total_points" = $2, "updated_at" = $3 WHERE "show_ratings"."id" = $4[0m  [["reviewers", "{\"Serge\":96,\"\":91,\"David\":91}"], ["total_points", 278], ["updated_at", "2023-01-06 18:03:20.671232"], ["id", 5]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+Completed 200 OK in 30ms (Views: 0.5ms | ActiveRecord: 4.8ms | Allocations: 5177)
+
+
+Started PATCH "/api/show_ratings/fill" for ::1 at 2023-01-06 13:04:08 -0500
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"review"=>"{\"id\":12,\"user\":\"Serge\",\"show\":\"Naruto\",\"rating\":96,\"amount_watched\":\"Completed\",\"highlighted_points\":[],\"overall_review\":\"Naruto is the GOAT\",\"referral_id\":null,\"watch_priority\":0,\"likes\":3,\"created_at\":\"2023-01-05T20:00:14.441Z\",\"updated_at\":\"2023-01-06T18:03:20.236Z\"}", "rooms"=>"[\"Planet Vegeta\"]", "show_action"=>"delete review", "id"=>"fill"}
+  [1m[36mShowRating Load (0.4ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Naruto"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:87:in `update'
+  [1m[36mShowRating Load (0.5ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Naruto"], ["id", 5], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Update (0.5ms)[0m  [1m[33mUPDATE "show_ratings" SET "reviewers" = $1, "total_points" = $2, "number_of_reviews" = $3, "updated_at" = $4 WHERE "show_ratings"."id" = $5[0m  [["reviewers", "{\"\":91,\"David\":91}"], ["total_points", 182], ["number_of_reviews", 2], ["updated_at", "2023-01-06 18:04:08.254203"], ["id", 5]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+Completed 200 OK in 32ms (Views: 0.3ms | ActiveRecord: 4.2ms | Allocations: 4194)
+
+
+Started PATCH "/api/show_ratings/fill" for ::1 at 2023-01-06 13:04:49 -0500
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"review"=>"{\"id\":28,\"user\":\"Serge\",\"show\":\"Naruto\",\"rating\":96,\"amount_watched\":\"Completed\",\"highlighted_points\":null,\"overall_review\":\"Naruto is the GOAT\",\"referral_id\":null,\"watch_priority\":0,\"likes\":0,\"created_at\":\"2023-01-06T18:04:49.363Z\",\"updated_at\":\"2023-01-06T18:04:49.363Z\"}", "rooms"=>"[\"Planet Vegeta\"]", "show_action"=>"add review", "id"=>"fill"}
+  [1m[36mShowRating Load (0.3ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Naruto"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:87:in `update'
+  [1m[36mShowRating Load (0.4ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Naruto"], ["id", 5], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Update (0.6ms)[0m  [1m[33mUPDATE "show_ratings" SET "reviewers" = $1, "total_points" = $2, "number_of_reviews" = $3, "updated_at" = $4 WHERE "show_ratings"."id" = $5[0m  [["reviewers", "{\"\":91,\"David\":91,\"Serge\":96}"], ["total_points", 278], ["number_of_reviews", 3], ["updated_at", "2023-01-06 18:04:49.718969"], ["id", 5]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+Completed 200 OK in 20ms (Views: 0.3ms | ActiveRecord: 2.7ms | Allocations: 4209)
+
+

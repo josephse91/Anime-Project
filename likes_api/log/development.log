@@ -1,2 +1,287 @@
   [1m[35m (347.3ms)[0m  [1m[35mCREATE DATABASE "likes_api_development" ENCODING = 'unicode'[0m
   [1m[35m (185.3ms)[0m  [1m[35mCREATE DATABASE "likes_api_test" ENCODING = 'unicode'[0m
+  [1m[35m (27.3ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (8.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT pg_try_advisory_lock(421428029630940255)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateLikes (20230106152059)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (14.4ms)[0m  [1m[35mCREATE TABLE "likes" ("id" bigserial primary key, "user" character varying NOT NULL, "type" character varying NOT NULL, "type_id" integer NOT NULL, "upvote" boolean DEFAULT FALSE, "downvote" boolean DEFAULT FALSE, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (2.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20230106152059"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.9ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (1.9ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-01-06 15:29:42.205744"], ["updated_at", "2023-01-06 15:29:42.205744"]]
+  [1m[36mTRANSACTION (1.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_advisory_unlock(421428029630940255)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mLike Load (3.1ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user=Jamal AND type=Review AND type_id=12)[0m
+  [1m[36mLike Load (1.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user=Jamal AND type=Review AND type_id=12) /* loading for inspect */ LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[36mLike Load (9.9ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND type= 'Review' AND type_id= 12)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (56.4ms)[0m  [1m[35mDROP DATABASE IF EXISTS "likes_api_development"[0m
+  [1m[35m (39.0ms)[0m  [1m[35mDROP DATABASE IF EXISTS "likes_api_test"[0m
+  [1m[35m (190.3ms)[0m  [1m[35mCREATE DATABASE "likes_api_development" ENCODING = 'unicode'[0m
+  [1m[35m (69.3ms)[0m  [1m[35mCREATE DATABASE "likes_api_test" ENCODING = 'unicode'[0m
+  [1m[35m (18.9ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (5.8ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(421428029630940255)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateLikes (20230106152059)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (10.3ms)[0m  [1m[35mCREATE TABLE "likes" ("id" bigserial primary key, "user" character varying NOT NULL, "item_type" character varying NOT NULL, "item_id" integer NOT NULL, "upvote" boolean DEFAULT FALSE, "downvote" boolean DEFAULT FALSE, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.9ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20230106152059"]]
+  [1m[36mTRANSACTION (3.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (2.6ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-01-06 16:29:46.088817"], ["updated_at", "2023-01-06 16:29:46.088817"]]
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(421428029630940255)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mLike Create (0.7ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Jamal"], ["item_type", "Review"], ["item_id", 12], ["upvote", true], ["downvote", false], ["created_at", "2023-01-06 16:30:49.526605"], ["updated_at", "2023-01-06 16:30:49.526605"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mLike Create (0.3ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Jarret"], ["item_type", "Review"], ["item_id", 12], ["upvote", true], ["downvote", false], ["created_at", "2023-01-06 16:30:49.531886"], ["updated_at", "2023-01-06 16:30:49.531886"]]
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mLike Create (0.2ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "David"], ["item_type", "Review"], ["item_id", 12], ["upvote", true], ["downvote", false], ["created_at", "2023-01-06 16:30:49.539694"], ["updated_at", "2023-01-06 16:30:49.539694"]]
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mLike Create (0.2ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Aldane"], ["item_type", "Forum"], ["item_id", 1], ["upvote", true], ["downvote", false], ["created_at", "2023-01-06 16:30:49.547907"], ["updated_at", "2023-01-06 16:30:49.547907"]]
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mLike Create (0.6ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Aviel"], ["item_type", "Forum"], ["item_id", 1], ["upvote", false], ["downvote", true], ["created_at", "2023-01-06 16:30:49.553469"], ["updated_at", "2023-01-06 16:30:49.553469"]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND type= 'Review' AND type_id= 12)[0m
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND type= 'Review' AND type_id= 12) /* loading for inspect */ LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[36mLike Load (0.7ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND type= 'Review' AND type_id= 12) LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[36mLike Load (0.7ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND type= 'Review' AND type_id= 12)[0m
+  [1m[36mLike Load (0.6ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND type= 'Review' AND type_id= 12)[0m
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND type= 'Review' AND type_id= 12) /* loading for inspect */ LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[36mLike Load (0.7ms)[0m  [1m[34mSELECT "likes".* FROM "likes"[0m
+  [1m[36mLike Load (2.4ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND type= 'Review' AND type_id= 12)[0m
+  [1m[36mLike Load (9.0ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND type= 'Review' AND type_id= 12) /* loading for inspect */ LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[36mLike Load (1.2ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND item_type= 'Review' AND item_id= 12)[0m
+  [1m[36mLike Load (0.2ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE "likes"."user" = $1[0m  [["user", "Jamal"]]
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE "likes"."item_type" = $1[0m  [["item_type", "Review"]]
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE "likes"."item_id" = $1[0m  [["item_id", 12]]
+  [1m[36mLike Load (0.4ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (user= 'Jamal' AND item_type= 'Review' AND item_id= 12)[0m
+  [1m[36mLike Load (0.6ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Jamal' AND item_type= 'Review' AND item_id= 12)[0m
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Jamal' AND item_type= 'Review' AND item_id= 12) LIMIT $1[0m  [["LIMIT", 1]]
+Started GET "/api/likes/" for ::1 at 2023-01-06 11:51:46 -0500
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [GET] "/api/likes"):
+  
+Started GET "/api/likes/" for ::1 at 2023-01-06 11:54:46 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/api/likes"):
+  
+Started GET "/api/likes/" for ::1 at 2023-01-06 11:54:54 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/api/likes"):
+  
+Started GET "/api/likes/" for ::1 at 2023-01-06 11:56:03 -0500
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::LikesController#index as */*
+  Parameters: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]"}
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes"[0m
+  ↳ app/controllers/api/likes_controller.rb:10:in `index'
+Completed 200 OK in 124ms (Views: 13.0ms | ActiveRecord: 3.8ms | Allocations: 38463)
+
+
+Started GET "/api/likes/12?item_type=Review" for ::1 at 2023-01-06 11:56:48 -0500
+Processing by Api::LikesController#show as */*
+  Parameters: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]", "item_type"=>"Review", "id"=>"12"}
+[31mUnpermitted parameters: :username, :password, :session_token_input. Context: { controller: Api::LikesController, action: show, request: #<ActionDispatch::Request:0x00007ff508018f10>, params: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]", "item_type"=>"Review", "controller"=>"api/likes", "action"=>"show", "id"=>"12"} }[0m
+[31mUnpermitted parameters: :username, :password, :session_token_input. Context: { controller: Api::LikesController, action: show, request: #<ActionDispatch::Request:0x00007ff508018f10>, params: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]", "item_type"=>"Review", "controller"=>"api/likes", "action"=>"show", "id"=>"12"} }[0m
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (item_type= 'Review' AND item_id = '12')[0m
+  ↳ app/controllers/api/likes_controller.rb:44:in `show'
+Completed 200 OK in 6ms (Views: 0.8ms | ActiveRecord: 0.5ms | Allocations: 1196)
+
+
+Started GET "/api/likes/1?item_type=Forum" for ::1 at 2023-01-06 11:57:00 -0500
+Processing by Api::LikesController#show as */*
+  Parameters: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]", "item_type"=>"Forum", "id"=>"1"}
+[31mUnpermitted parameters: :username, :password, :session_token_input. Context: { controller: Api::LikesController, action: show, request: #<ActionDispatch::Request:0x00007ff4fc008888>, params: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]", "item_type"=>"Forum", "controller"=>"api/likes", "action"=>"show", "id"=>"1"} }[0m
+[31mUnpermitted parameters: :username, :password, :session_token_input. Context: { controller: Api::LikesController, action: show, request: #<ActionDispatch::Request:0x00007ff4fc008888>, params: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]", "item_type"=>"Forum", "controller"=>"api/likes", "action"=>"show", "id"=>"1"} }[0m
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (item_type= 'Forum' AND item_id = '1')[0m
+  ↳ app/controllers/api/likes_controller.rb:44:in `show'
+Completed 200 OK in 4ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 1071)
+
+
+Started GET "/api/likes/1?item_type=Forums" for ::1 at 2023-01-06 11:57:07 -0500
+Processing by Api::LikesController#show as */*
+  Parameters: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]", "item_type"=>"Forums", "id"=>"1"}
+[31mUnpermitted parameters: :username, :password, :session_token_input. Context: { controller: Api::LikesController, action: show, request: #<ActionDispatch::Request:0x00007ff500ffa440>, params: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]", "item_type"=>"Forums", "controller"=>"api/likes", "action"=>"show", "id"=>"1"} }[0m
+[31mUnpermitted parameters: :username, :password, :session_token_input. Context: { controller: Api::LikesController, action: show, request: #<ActionDispatch::Request:0x00007ff500ffa440>, params: {"username"=>"Aldane", "password"=>"[FILTERED]", "session_token_input"=>"[FILTERED]", "item_type"=>"Forums", "controller"=>"api/likes", "action"=>"show", "id"=>"1"} }[0m
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (item_type= 'Forums' AND item_id = '1')[0m
+  ↳ app/controllers/api/likes_controller.rb:44:in `show'
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 848)
+
+
+Started PATCH "/api/likes/28" for ::1 at 2023-01-06 13:45:00 -0500
+Processing by Api::LikesController#update as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}", "id"=>"28"}
+  [1m[36mLike Load (4.7ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '28') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:63:in `update'
+Completed 200 OK in 84ms (Views: 1.4ms | ActiveRecord: 23.7ms | Allocations: 4599)
+
+
+Started DELETE "/api/likes/28" for ::1 at 2023-01-06 13:45:53 -0500
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}", "id"=>"28"}
+  [1m[36mLike Load (1.1ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '28') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:90:in `destroy'
+Completed 200 OK in 6ms (Views: 0.4ms | ActiveRecord: 1.1ms | Allocations: 710)
+
+
+Started PATCH "/api/likes/28" for ::1 at 2023-01-06 13:46:28 -0500
+Processing by Api::LikesController#update as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}", "id"=>"28"}
+  [1m[36mLike Load (0.4ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '28') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:63:in `update'
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 712)
+
+
+Started DELETE "/api/likes/28" for ::1 at 2023-01-06 13:48:57 -0500
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}", "id"=>"28"}
+  [1m[36mLike Load (0.7ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '28') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:90:in `destroy'
+Completed 200 OK in 6ms (Views: 0.1ms | ActiveRecord: 0.7ms | Allocations: 728)
+
+
+Started POST "/api/likes/" for ::1 at 2023-01-06 13:49:11 -0500
+Processing by Api::LikesController#create as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}"}
+Completed 500 Internal Server Error in 42ms (ActiveRecord: 0.0ms | Allocations: 2476)
+
+
+
+ActiveModel::UnknownAttributeError - unknown attribute 'type' for Like.:
+  app/controllers/api/likes_controller.rb:21:in `create'
+
+Started POST "/api/likes/" for ::1 at 2023-01-06 13:55:00 -0500
+Processing by Api::LikesController#create as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}"}
+Completed 200 OK in 45ms (Views: 0.8ms | ActiveRecord: 13.5ms | Allocations: 2747)
+
+
+Started POST "/api/likes/" for ::1 at 2023-01-06 13:55:37 -0500
+Processing by Api::LikesController#create as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mLike Create (2.7ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Aldane"], ["item_type", "Review"], ["item_id", 28], ["upvote", true], ["downvote", false], ["created_at", "2023-01-06 18:55:37.913295"], ["updated_at", "2023-01-06 18:55:37.913295"]]
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+Completed 200 OK in 55ms (Views: 0.4ms | ActiveRecord: 5.9ms | Allocations: 5189)
+
+
+Started DELETE "/api/likes/28" for ::1 at 2023-01-06 13:56:03 -0500
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}", "id"=>"28"}
+  [1m[36mLike Load (0.6ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '28') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+  [1m[36mLike Destroy (1.8ms)[0m  [1m[31mDELETE FROM "likes" WHERE "likes"."id" = $1[0m  [["id", 6]]
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+Completed 500 Internal Server Error in 35ms (ActiveRecord: 3.6ms | Allocations: 5854)
+
+
+
+NoMethodError - undefined method `is_destroyed?' for #<Like:0x00007ff4f803cec0>
+Did you mean?  destroyed?:
+  app/controllers/api/likes_controller.rb:101:in `destroy'
+
+Started DELETE "/api/likes/28" for ::1 at 2023-01-06 13:56:23 -0500
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}", "id"=>"28"}
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '28') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 37ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 1085)
+
+
+Started DELETE "/api/likes/28" for ::1 at 2023-01-06 13:56:40 -0500
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}", "id"=>"28"}
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '28') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.5ms | Allocations: 710)
+
+
+Started DELETE "/api/likes/28" for ::1 at 2023-01-06 13:56:45 -0500
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}", "id"=>"28"}
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '28') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.3ms | Allocations: 710)
+
+
+Started POST "/api/likes/" for ::1 at 2023-01-06 13:57:59 -0500
+Processing by Api::LikesController#create as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mLike Create (0.3ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Aldane"], ["item_type", "Review"], ["item_id", 28], ["upvote", true], ["downvote", false], ["created_at", "2023-01-06 18:57:59.573707"], ["updated_at", "2023-01-06 18:57:59.573707"]]
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+Completed 200 OK in 20ms (Views: 0.5ms | ActiveRecord: 5.3ms | Allocations: 3944)
+
+
+Started DELETE "/api/likes/28" for ::1 at 2023-01-06 13:58:17 -0500
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":28,\"recipient\":\"Serge\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"target_item\":\"Review\"}", "id"=>"28"}
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '28') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+  [1m[36mLike Destroy (0.5ms)[0m  [1m[31mDELETE FROM "likes" WHERE "likes"."id" = $1[0m  [["id", 7]]
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+Completed 200 OK in 13ms (Views: 0.4ms | ActiveRecord: 2.3ms | Allocations: 2103)
+
+
+Started POST "/api/likes/" for ::1 at 2023-01-08 12:57:16 -0500
+Processing by Api::LikesController#create as */*
+  Parameters: {"like_action"=>"{\"id\":13,\"recipient\":\"David\",\"action\":\"like\",\"net\":0,\"action_user\":\"Serge\",\"target_item\":\"Review\"}"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mLike Create (5.9ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Serge"], ["item_type", "Review"], ["item_id", 13], ["upvote", true], ["downvote", false], ["created_at", "2023-01-08 17:57:16.499223"], ["updated_at", "2023-01-08 17:57:16.499223"]]
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+Completed 200 OK in 190ms (Views: 4.9ms | ActiveRecord: 22.6ms | Allocations: 4626)
+
+
+Started DELETE "/api/likes/13" for ::1 at 2023-01-08 12:59:50 -0500
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":13,\"recipient\":\"David\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Serge\",\"target_item\":\"Review\"}", "id"=>"13"}
+  [1m[36mLike Load (2.6ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Serge' AND item_type= 'Review' AND item_id = '13') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+  [1m[36mLike Destroy (0.8ms)[0m  [1m[31mDELETE FROM "likes" WHERE "likes"."id" = $1[0m  [["id", 8]]
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+Completed 200 OK in 39ms (Views: 2.8ms | ActiveRecord: 5.2ms | Allocations: 2188)
+
+

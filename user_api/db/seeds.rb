@@ -348,7 +348,8 @@ forum_1 = Forum.create({
     creator: serge.username,
     content: "Between voluntarily dying more than once, letting his enemies live and thrive and simply putting his kid in danger, Goku is as bad a father as it gets. There are good moments like their training in the hyperbolic time chamber but that gets nullified because he threw cell a sensu bean. Goku was an acting threat to Gohan's life at times.",
     anime: "Dragon Ball Z",
-    room_id: planet_vegeta.room_name
+    room_id: planet_vegeta.room_name,
+    votes: {"up"=>1, "down"=>1}
 })
 
 forum_2 = Forum.create({
@@ -434,6 +435,7 @@ serge_review_1 = {
     rating: 90,
     overall_review: "Naruto is the gold standard of Shounin anime. Shippuden is still stronger but this is the gold standard",
     watch_priority: 1
+    likes: 3
 }
 serge_review_1 = create_review(serge,serge_review_1)
 
