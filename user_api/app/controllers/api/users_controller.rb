@@ -85,7 +85,7 @@ class Api::UsersController < ApplicationController
             render_obj = {status: "complete", user: @user}
 
             if requests_action == "add"
-                add_notification(notifications,@user,request_obj,"Request")
+                add_notification(notifications,@user,request_obj,"Sent a Request")
                 request_obj.save
                 render_obj[:notifications] = notifications
             end
@@ -132,7 +132,7 @@ class Api::UsersController < ApplicationController
             elsif peers_action == "add"
                 user_peers[peer_focus] = TIME_INPUT
                 peer_obj.peers[@user.username] = TIME_INPUT
-                add_notification(notifications,@user,peer_obj,"Accept")
+                add_notification(notifications,@user,peer_obj,"Accepted Request")
                 peer_obj.save
                 @user.requests["peer"].delete(peer_focus)
             end

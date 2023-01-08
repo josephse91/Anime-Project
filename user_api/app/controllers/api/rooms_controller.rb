@@ -269,11 +269,11 @@ class Api::RoomsController < ApplicationController
             @room.pending_approval.delete(request)
             clear_admin_request(@room,request)
             @room.save
-            add_notification(notifications,@room,request_user)
+            add_notification(notifications,@room,request_user, "Accepted request to join")
         elsif member_request && !room_admins && !@room.pending_approval[request]
             request_user.requests["room"][@room.room_name] = current_user
             request_user.save
-            add_notification(notifications,@room,request_user,"Request")
+            add_notification(notifications,@room,request_user,"Requested to Join")
         else
             render json: {status: "failed", error: "Only the authorized user can bring in users into the room"}
             return
@@ -383,7 +383,7 @@ class Api::RoomsController < ApplicationController
             admin_user = User.find_by(username: admin_names)
             admin_user.requests["roomAuth"][request] = TIME_INPUT
             admin_user.save
-            add_notification(notifications,@room,admin_user,"Request")
+            add_notification(notifications,@room,admin_user,"Requested to join")
         end
     end
 

@@ -256,7 +256,7 @@ class Api::ReviewCommentsController < ApplicationController
                 recipient: comment.user_id,
                 review: comment.review_id,
                 show: review.show,
-                target_item: "Comment",
+                target_item: "Review Comment",
                 action: "Comment",
                 action_user: current_user
             }

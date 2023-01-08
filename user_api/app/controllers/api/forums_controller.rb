@@ -208,8 +208,8 @@ class Api::ForumsController < ApplicationController
     def add_notification(notifications,forum_post,room)
         users = room.users.each_key do |username|
             data = {
-                action: "Forum Post",
-                target_item: "User",
+                action: "Created a forum post",
+                target_item: "Room",
                 action_user: room.room_name,
                 recipient: username,
                 id: forum_post.id,
