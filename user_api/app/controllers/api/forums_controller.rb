@@ -207,14 +207,15 @@ class Api::ForumsController < ApplicationController
 
     def add_notification(notifications,forum_post,room)
         users = room.users.each_key do |username|
+            next if username == forum_post.creator
             data = {
                 action: "Created a forum post",
                 target_item: "Room",
-                action_user: room.room_name,
+                action_user: forum_post.creator,
                 recipient: username,
                 id: forum_post.id,
                 topic: forum_post.topic,
-                forum_owner: forum_post.creator
+                room: room.room_name
             }
             notifications.push(data)
             notifications
@@ -269,7 +270,8 @@ class Api::ForumsController < ApplicationController
             net: net,
             action: event,
             action_user: user.username,
-            target_item: "Forum"
+            target_item: "Forum",
+            room: forum.room_id
         }
 
         event == "like" ? notifications.push(data) : nil

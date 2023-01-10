@@ -154,7 +154,7 @@ class Api::ReviewCommentsController < ApplicationController
         if comments_param[:id]
             target_comment = find_comment
 
-            likes_hash = target_comment ? adjust_likes(notifications,user,target_comment) : {}
+            likes_hash = target_comment ? adjust_likes(notifications,review,target_comment) : {}
             likes = likes_hash[:likes]
             return nil if likes_hash[:action]
         end
@@ -194,7 +194,7 @@ class Api::ReviewCommentsController < ApplicationController
         {components: components, notification: notifications}
     end
 
-    def adjust_likes(notifications,user,comment)
+    def adjust_likes(notifications,review,comment)
         action_hash = comments_param[:likes]
         return {action: nil, likes: comment.likes} if !action_hash
 
@@ -225,8 +225,9 @@ class Api::ReviewCommentsController < ApplicationController
             recipient: comment.user_id,
             net: net,
             action: event,
-            action_user: user.username,
-            target_item: "Review Comment"
+            action_user: review.user,
+            target_item: "Review Comment",
+            show: review.show
         }
         event == "like" ? notifications.push(data) : nil
         render_obj = {status: "complete", action: event, like_action: data, comment: comment}
@@ -243,10 +244,10 @@ class Api::ReviewCommentsController < ApplicationController
             recipient: review.user,
             show: review.show,
             action: "Comment",
-            action_user: current_user.username,
+            action_user: current_user,
             target_item: "Review"
         }
-        if current_user.username != review.user
+        if current_user != review.user
             notifications.push(reviewer)
         end
 

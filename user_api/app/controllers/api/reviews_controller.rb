@@ -314,6 +314,7 @@ class Api::ReviewsController < ApplicationController
             action: event,
             net: net,
             action_user: user.username,
+            show: review.show,
             target_item: "Review"
         }
         event == "like" ? notifications.push(data) : nil

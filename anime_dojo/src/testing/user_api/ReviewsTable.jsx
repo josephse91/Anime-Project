@@ -52,12 +52,13 @@ function ReviewTable() {
     const reviewActions = new Set(["add review","edit review","delete review"])
     const roomActions = new Set(["member added","member removed"])
     
+    let followUpData
 
     if (likeActions.has(data.action)) {
       const endpoints = await likeAPIendpoint(data)
       const likeRequest = await likeAPICall(endpoints.endpoints)
 
-      return likeRequest
+      followUpData = likeRequest
     } else {
       let apiRequest2 = await addReviewsToRooms(data,searchParam)
       // data2 = await apiRequest2.json()
@@ -66,8 +67,72 @@ function ReviewTable() {
       const showEndpoints = await showRatingRequests(data3)
       const showRequest = await showRatingCalls(showEndpoints)
 
-      return showRequest
+      followUpData =  showRequest
     }
+
+    if (data.notifications || data.notification_count) {
+      const notificationsEndpoint = await notificationRequests(data)
+      const notifications = await notificationsCall(notificationsEndpoint,data)
+    }
+  }
+
+  async function notificationRequests(data) {
+    let endpoints = {};
+    let user = data.notifications[0].recipient
+    let actionUser = data.notifications[0].action_user
+
+    if (data.notification_count) {
+      endpoints["GET"] = {
+        endpoint: `/api/notifications_count/${user}`,
+        params: []
+      }
+    } else if (user === actionUser) {
+      endpoints["PATCH"] = {
+        endpoint: `/api/notifications/${user}`,
+        params: []
+      }
+    } else if (user !== actionUser) {
+      endpoints["POST"] = {
+        endpoint: `/api/notifications/`,
+        params: ["notification", data]
+      }
+    }
+    return new Promise(resolve => resolve({status: "success", endpoints: endpoints}))
+  }
+
+  async function notificationsCall(endpointData,actionData) {
+    const options5 = {
+      headers: myHeaders,
+    }
+    
+    let requestStr = "http://localhost:3003";
+
+    const method = Object.keys(endpointData.endpoints)[0]
+    const endpoints = endpointData.endpoints
+
+    options5.method = method
+
+    let formData5 = new FormData()
+    options5.body = formData5
+
+    let notifications = actionData.notifications
+    let notificationData = []
+
+    console.log(endpointData,actionData, method,notifications)
+
+    for (let notification of notifications) {
+      let param = "notification"
+      let value = notification
+      formData5.append(param,JSON.stringify(value))
+
+      requestStr += endpoints[method].endpoint
+      let apiRequest = await fetch(requestStr, options5)
+      let data = await apiRequest.json()
+      console.log(requestStr, data)
+      notificationData.push(data) 
+    }
+
+    return new Promise(resolve => resolve({status: "success", data: notificationData}))
   }
 
   async function likeAPIendpoint(data) {
@@ -133,7 +198,7 @@ function ReviewTable() {
     let data = await apiRequest.json()
     console.log(requestStr, data) 
 
-    return "Function call complete"
+    return new Promise(resolve => resolve({status: "success", data: data}))
   }
 
   async function addReviewsToRooms(data,searchParam) {
@@ -294,7 +359,7 @@ function ReviewTable() {
       let data = await apiRequest.json()
       console.log(currentReq, data) 
     }
-    return "Function call complete"
+    return new Promise(resolve => resolve({status: "success", data: data}))
   }
 
   
@@ -328,7 +393,7 @@ function ReviewTable() {
       // formData.append("overall_review","Naruto is the GOAT")
       // formData.append("referral_id","Jarret")
       // formData.append("watch_priority",0)
-      let likesAction = {user: user, net: 1, target: 0}
+      let likesAction = {user: user, net: 0, target: 1}
       formData.append("likes",JSON.stringify(likesAction))
 
       if (testcase.key) formData.append(testcase.key,testcaseInputString);

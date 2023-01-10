@@ -107,7 +107,7 @@ end
 # Seeded information
 
 num_of_users = 5;
-num_of_reviews = Random.new.rand(5..10)
+num_of_reviews = 5
 watch_priorities = [-1,0,1]
 
 names = Array.new(num_of_users).map do |name|
@@ -134,28 +134,32 @@ username_4 = User.find_by(username: names[4])
     })
 end
 
-reviews = Review.all.shuffle()
-reviews.each do |review|
+10.times {
+    id_num = rand(1..5)
+
     ReviewComment.create({
         comment:Faker::Marketing.buzzwords,
-        review_id: review.id,
+        review_id: id_num,
         user_id: names.sample,
-        parent: review.id,
+        parent: id_num,
         comment_type: "comment"
     })
-end
+}
 
-review_comments = ReviewComment.all.shuffle().slice(0,num_of_reviews - 2)
+toggle_num = 1
+review_comments = ReviewComment.all.shuffle()
 review_comments.each do |comment|
-
-    ReviewComment.create({
-        comment:Faker::Marketing.buzzwords,
-        review_id: comment.parent,
-        user_id: names.sample,
-        parent: comment.id,
-        comment_type: "reply",
-        top_comment: comment.id
-    })
+    if toggle_num == 1
+        ReviewComment.create({
+            comment:Faker::Marketing.buzzwords,
+            review_id: comment.parent,
+            user_id: names.sample,
+            parent: comment.id,
+            comment_type: "reply",
+            top_comment: comment.id
+        })
+    end
+    toggle_num = toggle_num == 1 ? 0 : 1
 end
 
 password_digest = BCrypt::Password.create("password")
@@ -434,7 +438,7 @@ serge_review_1 = {
     show: "Naruto",
     rating: 90,
     overall_review: "Naruto is the gold standard of Shounin anime. Shippuden is still stronger but this is the gold standard",
-    watch_priority: 1
+    watch_priority: 1,
     likes: 3
 }
 serge_review_1 = create_review(serge,serge_review_1)

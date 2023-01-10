@@ -54,13 +54,13 @@ function ReviewCommentsTable() {
 
     let search = "?"
     let user = "Serge"
-    let comment = "I love very good things"
+    let comment = "Attack is the golden standard"
 
-      // search += "review_id=" + review;
-      // search += `&comment=${comment}`;
+      search += "review_id=" + review;
+      search += `&comment=${comment}`;
       search += `&user_id=${user}`;
-      // search += "&comment_type=reply";
-      // search += "&parent=" + 20;
+      search += "&comment_type=comment";
+      search += "&parent=" + 7;
       // search += "&top_comment=" + 16;
 
     if (search.length === 1) search = ""

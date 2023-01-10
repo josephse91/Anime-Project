@@ -224,6 +224,7 @@ class Api::ForumCommentsController < ApplicationController
             recipient: recipient,
             target_item: target_item,
             topic: forum.topic,
+            room: forum.room_id,
             id: parent.id
         }
 
@@ -280,6 +281,7 @@ class Api::ForumCommentsController < ApplicationController
             net: net,
             action_user: user.username,
             recipient: comment.comment_owner,
+            room: forum.room_id,
             id: comment.id
         }
 

@@ -403,7 +403,8 @@ class Api::RoomsController < ApplicationController
             recipient: user.username,
             action: request_type,
             action_user: room.room_name,
-            target_item: "Room"
+            target_item: "Room",
+            room: room.room_name
         }
         
         notifications.push(data)
