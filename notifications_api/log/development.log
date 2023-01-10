@@ -2794,3 +2794,43 @@ Processing by Api::NotificationsController#create as */*
 Completed 200 OK in 23ms (Views: 0.3ms | ActiveRecord: 4.6ms | Allocations: 4589)
 
 
+Started POST "/api/recommendations/" for ::1 at 2023-01-10 15:02:07 -0500
+  
+ActionController::RoutingError (No route matches [POST] "/api/recommendations"):
+  
+Started POST "/api/recommendations/" for ::1 at 2023-01-10 15:02:43 -0500
+  
+ActionController::RoutingError (No route matches [POST] "/api/recommendations"):
+  
+Started POST "/api/notifications/" for ::1 at 2023-01-10 15:09:32 -0500
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":11,\"recipient\":\"David\",\"action\":\"recommendation sent\",\"action_user\":\"Aldane\",\"target_item\":\"recommendation\",\"show\":\"Bleach\"}"}
+  [1m[36mNotification Load (7.0ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'recommendation' AND target_id = 11 AND recipient = 'David' AND action_user = 'Aldane') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (1.9ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'recommendation' AND notifications.target_id = 11 AND notifications.recipient = 'David' AND notifications.updated_at > '2023-01-10 20:08:33.527045') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (3.2ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "recommendation sent"], ["target", "recommendation"], ["target_id", 11], ["action_user", "Aldane"], ["recipient", "David"], ["seen", false], ["common_actions", 0], ["message", "Aldane sent you a recommendation for Bleach"], ["selected", true], ["created_at", "2023-01-10 20:09:33.789017"], ["updated_at", "2023-01-10 20:09:33.789017"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (5.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 327ms (Views: 4.6ms | ActiveRecord: 45.7ms | Allocations: 8936)
+
+
+Started POST "/api/notifications/" for ::1 at 2023-01-10 16:10:40 -0500
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":3,\"recipient\":\"Jamal\",\"action\":\"accepted recommendation\",\"action_user\":\"Jarret\",\"show\":\"Hellsing\",\"target_item\":\"Recommendation\"}"}
+  [1m[36mNotification Load (4.0ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'recommendation' AND target_id = 3 AND recipient = 'Jamal' AND action_user = 'Jarret') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (1.1ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'recommendation' AND notifications.target_id = 3 AND notifications.recipient = 'Jamal' AND notifications.updated_at > '2023-01-10 21:09:40.860690') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (1.6ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "accepted recommendation"], ["target", "recommendation"], ["target_id", 3], ["action_user", "Jarret"], ["recipient", "Jamal"], ["seen", false], ["common_actions", 0], ["message", "Jarret accepted your recommendation for Hellsing"], ["selected", true], ["created_at", "2023-01-10 21:10:40.967759"], ["updated_at", "2023-01-10 21:10:40.967759"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (2.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 142ms (Views: 3.7ms | ActiveRecord: 32.8ms | Allocations: 5889)
+
+

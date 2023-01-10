@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_10_163927) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -36,6 +36,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
     t.string "room_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "recommendations", force: :cascade do |t|
+    t.string "user_id", null: false
+    t.string "show", null: false
+    t.string "referral_id", null: false
+    t.boolean "accepted", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["referral_id"], name: "index_recommendations_on_referral_id"
+    t.index ["user_id"], name: "index_recommendations_on_user_id"
   end
 
   create_table "review_comments", force: :cascade do |t|
@@ -90,6 +101,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_120120) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["username"], name: "index_users_on_username"
+  end
+
+  create_table "watch_laters", force: :cascade do |t|
+    t.string "user_id", null: false
+    t.string "show", null: false
+    t.string "referral_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["referral_id"], name: "index_watch_laters_on_referral_id"
+    t.index ["user_id"], name: "index_watch_laters_on_user_id"
   end
 
 end

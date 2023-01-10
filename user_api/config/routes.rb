@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     end
     resources :forums
     resources :forum_comments
+    resources :watch_laters, only: [:index, :create, :show, :destroy ]
+    resources :recommendations, only: [:index, :create, :show, :destroy ]
     resources :sessions, only: [:create,:destroy]
   end
   

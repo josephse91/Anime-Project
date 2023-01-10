@@ -169,6 +169,14 @@ class Api::NotificationsController < ApplicationController
         if event_action == "comment" && (target_item == "forum" || target_item == "forum comment")
             message = "#{action_user} commented on your #{target_item} in #{notification["room"]}"
         end
+
+        if event_action == "accepted recommendation"
+            message = "#{action_user} accepted your #{target_item} for #{notification["show"]}"
+        end
+
+        if event_action == "recommendation sent"
+            message = "#{action_user} sent you a #{target_item} for #{notification["show"]}"
+        end
         message
     end
 

@@ -80,18 +80,19 @@ function ReviewTable() {
     let endpoints = {};
     let user = data.notifications[0].recipient
     let actionUser = data.notifications[0].action_user
+    let targetItem = data.notifications[0].target_item.toLowerCase()
 
     if (data.notification_count) {
       endpoints["GET"] = {
         endpoint: `/api/notifications_count/${user}`,
         params: []
       }
-    } else if (user === actionUser) {
+    } else if (user === actionUser && targetItem !== "recommendation") {
       endpoints["PATCH"] = {
         endpoint: `/api/notifications/${user}`,
         params: []
       }
-    } else if (user !== actionUser) {
+    } else if (user !== actionUser || targetItem == "recommendation") {
       endpoints["POST"] = {
         endpoint: `/api/notifications/`,
         params: ["notification", data]
@@ -338,6 +339,8 @@ function ReviewTable() {
     const options3 = {
       headers: myHeaders,
     }
+
+    let data
     
     let requestStr = "http://localhost:3001";
     for (let [method,info] of Object.entries(requestInfo)) {
@@ -356,7 +359,7 @@ function ReviewTable() {
 
       let currentReq = requestStr += info.endpoint
       let apiRequest = await fetch(currentReq, options3)
-      let data = await apiRequest.json()
+      data = await apiRequest.json()
       console.log(currentReq, data) 
     }
     return new Promise(resolve => resolve({status: "success", data: data}))
@@ -387,14 +390,15 @@ function ReviewTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
       options.body = formData;
-      // formData.append("rating",96)
-      // formData.append("amount_watched","Completed")
+      formData.append("rating",83)
+      formData.append("amount_watched","Completed")
       // // formData.append("highlighted_points",'[]')
-      // formData.append("overall_review","Naruto is the GOAT")
-      // formData.append("referral_id","Jarret")
-      // formData.append("watch_priority",0)
-      let likesAction = {user: user, net: 0, target: 1}
-      formData.append("likes",JSON.stringify(likesAction))
+      formData.append("overall_review","This is a sturdy and mature anime.")
+      formData.append("watch_priority",0)
+      // let likesAction = {user: user, net: 0, target: 1}
+      // formData.append("likes",JSON.stringify(likesAction))
+
+      // formData.append("referral_id","Jarret") (Never required)
 
       if (testcase.key) formData.append(testcase.key,testcaseInputString);
     }

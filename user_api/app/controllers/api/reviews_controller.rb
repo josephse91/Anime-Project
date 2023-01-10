@@ -28,8 +28,7 @@ class Api::ReviewsController < ApplicationController
 
         components = components_hash[:components]
         user = components_hash[:user]
-
-        
+        notification = components_hash[:notifications]
 
         @review = Review.new(components)
 
@@ -39,7 +38,21 @@ class Api::ReviewsController < ApplicationController
         end
 
         @review.save
-        render json: {status: "complete", user: user, review: @review, action: "add review"}
+
+        render_obj = {
+            status: "complete", 
+            user: user, 
+            review: @review, 
+            action: "add review"
+        }
+
+        notifications = []
+        if notification
+            notifications.push(notification)
+            render_obj[:notifications] = notifications 
+        end
+
+        render json: render_obj
     end
 
     def add_review_to_rooms
@@ -177,7 +190,7 @@ class Api::ReviewsController < ApplicationController
             show
             ]).take
 
-        if review_params[:id] && !review
+        if (review_params[:id] || review_params[:review_id]) && !review
             render json: {status: "failed", review: review,show: show, user: user, error: "This user has not reviewed this show"}
             return
         end
@@ -186,6 +199,7 @@ class Api::ReviewsController < ApplicationController
     end
 
     def review_attrs
+        output = {}
         client_user = current_user || find_user
         return if !client_user
         
@@ -193,7 +207,10 @@ class Api::ReviewsController < ApplicationController
         return if !review_hash
 
         show = review_hash[:show]
+
         review = review_hash[:review]
+        output[:review] = review
+        output[:user] = client_user
         user = review_hash[:user]
         return if !review && review_params[:id]
 
@@ -206,27 +223,46 @@ class Api::ReviewsController < ApplicationController
             return
         end
 
-        rating = review_params[:rating] || review&.rating
-        amount_watched = review_params[:amount_watched] || review&.amount_watched
-        hps = review_params[:highlighted_points] || review&.highlighted_points
-        overall_review = review_params[:overall_review] || review&.overall_review
-        referral_id = review_params[:referral_id] || review&.referral_id
-        wp = review_params[:watch_priority] || review&.watch_priority
+        rating = review_params[:rating]
+        amount_watched = review_params[:amount_watched]
+        hps = review_params[:highlighted_points]
+        overall_review = review_params[:overall_review]
+        referral_id = review_params[:referral_id]
+        wp = review_params[:watch_priority]
 
-        components = {
-            user: user.username,
-            show: show,
-            rating: rating
-        }
+        components = {}
 
-        components[:amount_watched] = amount_watched
-        components[:highlighted_points] = hps
-        components[:overall_review] = overall_review
-        components[:referral_id] = referral_id
-        components[:watch_priority] = wp
-        likes ? components[:likes] = likes : nil
+        if !review_params[:id]
+            components[:user] = user.username
+            components[:show] = show
+        end
 
-        {review: review, user: client_user, components: components}
+        rating ? components[:rating] = rating : nil
+        amount_watched ? components[:amount_watched] = amount_watched : nil
+        hps ? components[:highlighted_points] = hps : nil
+        overall_review ? components[:overall_review] = overall_review : nil
+        wp ? components[:watch_priority] = wp : nil
+
+        recommendation = Recommendation.where(user_id: user.username, show: show).take
+        if recommendation && !recommendation.accepted
+            if !recommendation.accepted
+                recommendation.accepted = true
+                recommendation.save
+            end
+
+            output[:notifications] = {
+                id: recommendation.id,
+                recipient: recommendation.referral_id,
+                action: "accepted recommendation",
+                action_user: user.username,
+                show: show,
+                target_item: "Recommendation"
+            }
+        end
+
+        output[:components] = components
+        components[:referral_id] = recommendation.referral_id   
+        output
     end
 
     def query_peers_array(user)

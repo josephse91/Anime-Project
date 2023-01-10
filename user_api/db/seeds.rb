@@ -555,3 +555,43 @@ allia_review_2 = {
     watch_priority: -1
 }
 allia_review_2 = create_review(allia,allia_review_2)
+
+jarret_aldane_rec = Recommendation.create({
+    user_id: aldane.username,
+    show: "Jobless Reincarnation",
+    referral_id: jarret.username
+})
+
+serge_jamal_rec = Recommendation.create({
+    user_id: jamal.username,
+    show: "Naruto",
+    referral_id: serge.username
+})
+
+jamal_jarret_rec = Recommendation.create({
+    user_id: jarret.username,
+    show: "Hellsing",
+    referral_id: jamal.username
+})
+
+serge_aviel_rec = Recommendation.create({
+    user_id: aviel.username,
+    show: "Naruto",
+    referral_id: serge.username
+})
+
+aviel_allia_rec = Recommendation.create({
+    user_id: allia.username,
+    show: "Prison School",
+    referral_id: aviel.username
+})
+
+serge_later_1 = WatchLater.create({
+    user_id: serge.username,
+    show: "Bleach"
+})
+
+serge_later_1 = WatchLater.create({
+    user_id: serge.username,
+    show: "Made in Abyss"
+})

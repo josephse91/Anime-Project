@@ -8,11 +8,12 @@ import ForumsTable from './testing/user_api/ForumsTable'
 import ForumCommentsTable from './testing/user_api/ForumCommentsTable'
 import ShowRatingsTable from './testing/show_rating_api/ShowRatingsTable'
 import NotificationsTable from './testing/notification_api/notificationsTable'
+import WatchLaterTable from './testing/user_api/watchLaterTable'
 
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ReviewCommentsTable />
+    <ReviewTable />
   </React.StrictMode>
 )
