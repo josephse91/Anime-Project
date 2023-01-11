@@ -18,7 +18,7 @@ The Notifications API will be used to persist data pertaining to notifications
 ```http
   GET /api/notifications/
 ```
-[Back to top of Notifications]()
+[Back to top of Notifications](#notifications-table)
 
 #### Create a like: create
 
@@ -29,7 +29,7 @@ The Notifications API will be used to persist data pertaining to notifications
 | :--------- | :------- | :-------------------------     |
 | `notification` | `JSON` | [View JSON format in Appendex]()|
 
-[Back to top of Notifications]()
+[Back to top of Notifications](#notifications-table)
 
 #### Show unread notification count of a user: new_notifications
 
@@ -42,7 +42,7 @@ The Notifications API will be used to persist data pertaining to notifications
 
 *The purpose of this endpoint is to retrieve the number of unseen notifications.*
 
-[Back to top of Notifications]()
+[Back to top of Notifications](#notifications-table)
 
 #### Show notifications of a user: show
 
@@ -53,7 +53,7 @@ The Notifications API will be used to persist data pertaining to notifications
 | :--------- | :------- | :-------------------------     |
 | `id` | `integer` | The id will represent the recipient of the notification|
 
-[Back to top of Notifications]()
+[Back to top of Notifications](#notifications-table)
 
 #### Edit all unseen notifications: update
 
@@ -68,14 +68,14 @@ The Notifications API will be used to persist data pertaining to notifications
 *The purpose of this endpoint is to take all of the unseen notifications of a 
 recipient and change them to seen.*
 
-[Back to top of Notifications]() / 
-[Back to Top]()
+[Back to top of Notifications](#notifications-table) / 
+[Back to Top](#notifications-api-documentation)
 
 # Appendix
 
 Terms and formats utilized in the API
 
-[Back to Top]()
+[Back to Top](#notifications-api-documentation)
 
 ## Notification JSON
 

@@ -101,6 +101,6 @@ class Api::WatchLatersController < ApplicationController
     end
 
     def watch_later_params
-        params.permit(:id,:user_id,:show,:referral_id)
+        params.permit(:id,:user_id,:show)
     end
 end
