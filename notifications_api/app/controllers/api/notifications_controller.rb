@@ -20,7 +20,7 @@ class Api::NotificationsController < ApplicationController
         action_user = notification["action_user"]
         recipient = notification["recipient"]
 
-        time_block = Time.now - 60.second
+        time_block = Time.now - 1.hour
 
         where_query = ""
         where_query += "notifications.target = ? "

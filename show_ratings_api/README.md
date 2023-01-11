@@ -32,6 +32,8 @@ Refer to Reviews and Rooms frontend testing to see how to implement parameters
 | :-------- | :------- | :-------------------------    |
 | `room_id` | `string` | Room_name of Room |
 
+[Back to Show Title](#show-rating-table)
+
 #### Create a Show Rating: create
 
 ```http
@@ -44,6 +46,7 @@ Refer to Reviews and Rooms frontend testing to see how to implement parameters
 | `review` | `JSON` | Single review which will be added to multiple rooms |
 | `reviews` | `JSON` | Array of reviews which will be added to a single room |
 
+[Back to Show Title](#show-rating-table)
 
 #### Edit Show Rating: update
 
@@ -59,6 +62,8 @@ Refer to Reviews and Rooms frontend testing to see how to implement parameters
 | `review` | `JSON` | Single review which will be added to multiple rooms |
 | `reviews` | `JSON` | Array of reviews which will be added to a single room |
 
+[Back to Show Title](#show-rating-table)
+
 #### Delete Show Rating: destroy
 
 ```http
@@ -72,6 +77,8 @@ Refer to Reviews and Rooms frontend testing to see how to implement parameters
 | `review` | `JSON` | Single review which will be added to multiple rooms |
 | `reviews` | `JSON` | Array of reviews which will be added to a single room |
 
+[Back to Show Title](#show-rating-table)
+
 # Appendix
 
 Terms and formats utilized in the API
@@ -82,3 +89,5 @@ Terms and formats utilized in the API
 - delete review
 - member added
 - member removed
+
+[Back to Top](#show-ratings-api-documentation)

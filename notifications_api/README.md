@@ -1,24 +1,96 @@
-# README
+# Notifications-Api-Documentation
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The Notifications API will be used to persist data pertaining to notifications
 
-Things you may want to cover:
+[Go to Appendix](#Appendix)
 
-* Ruby version
+---
+#### **Notifications Table** 
+[index](#retreive-all-notifications-index) / 
+[create](#create-a-like-create) / 
+[notification count](#show-unread-notification-count-of-a-user-new_notifications) / 
+[show](#show-notifications-of-a-user-show) / 
+[update](#edit-all-unseen-notifications-update)
 
-* System dependencies
+---
+#### Retreive all notifications: index
 
-* Configuration
+```http
+  GET /api/notifications/
+```
+[Back to top of Notifications]()
 
-* Database creation
+#### Create a like: create
 
-* Database initialization
+```http
+  POST /api/notifications/
+```
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `notification` | `JSON` | [View JSON format in Appendex]()|
 
-* How to run the test suite
+[Back to top of Notifications]()
 
-* Services (job queues, cache servers, search engines, etc.)
+#### Show unread notification count of a user: new_notifications
 
-* Deployment instructions
+```http
+  GET /api/notifications_count/:id
+```
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `id` | `integer` | The id will be the recipient of the notifications|
 
-* ...
+*The purpose of this endpoint is to retrieve the number of unseen notifications.*
+
+[Back to top of Notifications]()
+
+#### Show notifications of a user: show
+
+```http
+  GET /api/notifications/:id
+```
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `id` | `integer` | The id will represent the recipient of the notification|
+
+[Back to top of Notifications]()
+
+#### Edit all unseen notifications: update
+
+```http
+  PATCH /api/notifications/:id
+```
+
+| Parameter  | Type     | Description                    |
+| :--------- | :------- | :-------------------------     |
+| `id` | `integer` | The id will represent the recipient of the notification|
+
+*The purpose of this endpoint is to take all of the unseen notifications of a 
+recipient and change them to seen.*
+
+[Back to top of Notifications]() / 
+[Back to Top]()
+
+# Appendix
+
+Terms and formats utilized in the API
+
+[Back to Top]()
+
+## Notification JSON
+
+```
+notification: {
+    id: ${content primary id},
+    recipient: ${recipient username},
+    action: ${like, neutral or unlike},
+    action_user: ${username of user making action},
+    target_item: ${Type of item being acted upon}
+}
+```
+
+Optional Keys:
+
+`show` : This key will be present in the notification JSON if the target_item is a review or review comment
+
+`room` : This key will be present in the notification JSON if the target_item is a forum or forum comment
