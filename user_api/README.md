@@ -2,81 +2,112 @@
 
 This document details the information available for the users of the Anime Dojo application as well as the parameter requirements
 
-## Table Summaries
+## API Reference
 
 This API will be used to manage any actions done by the user. The tables that will be included are a User table, Reviews table a reviews comment table.
 
-**User Table**: Will provide details of the user and maintain the inputs specific to the user such as the rooms that they are in, their peers and their pending requests
+[**Users**](#User-Table)
 
-**Review Table**: Holds user information about each review that they have made
+Will provide details of the user and maintain the inputs specific to the user such as the rooms that they are in, their peers, credentials and any other inputs that the user has personal to themselves
 
-**Review Comments Table**: Holds comments that will be nested under each review
+[index](#create-a-user-create) / 
+[user_room_index](#retreive-all-user-rooms-user-room-index) / 
+[user_review_index](#retreive-all-reviews-the-user-user-Review-Index) / 
+[create](#create-a-user-create) / 
+[show](#get-specific-user-show) / 
+[update](#edit-specific-user-update) / 
+[delete](#delete-user-destroy) 
 
-**Rooms Table**: Contains Room data
+[**Reviews**](#Review-Table)
 
-**Forum Table**: Contains Forum data
+Within the review table, contains actions that will manage occurances with reviews. Reviews impact a number of other tables such as review comments, rooms, recommendations, watch laters.
 
-**Forum Comments Table**: Contains Forum Comment data
+Additionally, there will be follow up API actions such as the likes and shows API
 
-**Recommendations Table**: Contains recommendation data
+[index](#retreive-all-reviews-index) / 
+[user index](#retreive-all-reviews-of-user-user_index) / 
+[create](#create-a-review-create) / 
+[Reviews to Rooms](#add-review-of-user-to-all-rooms-reviews_to_rooms) / 
+[show](#retrieve-the-review-user-show) / 
+[update](#edit-review-of-a-user-update) / 
+[delete](#delete-review-of-a-user-destroy) 
 
-**Watch Later Table**: Contains watch later data
-## API Reference
-- [User endpoints](#User-Table)
-  - [index](#create-a-user-create) / 
-    [user_room_index](#retreive-all-user-rooms-user-room-index) / 
-    [user_review_index](#retreive-all-reviews-the-user-user-Review-Index) / 
-    [create](#create-a-user-create) / 
-    [show](#get-specific-user-show) / 
-    [update](#edit-specific-user-update) / 
-    [delete](#delete-user-destroy) 
-- [Review endpoints](#Review-Table)
-  - [index](#retreive-all-reviews-index) / 
-    [user index](#retreive-all-reviews-of-user-user_index) / 
-    [create](#create-a-review-create) / 
-    [Reviews to Rooms](#add-review-of-user-to-all-rooms-reviews_to_rooms) / 
-    [show](#retrieve-the-review-user-show) / 
-    [update](#edit-review-of-a-user-update) / 
-    [delete](#delete-review-of-a-user-destroy) 
-- [Review Comment endpoints](#Review-Comments-Table)
-  - [index](#retreive-all-comments-of-a-review-index) / 
-    [create](#create-a-review-comment-create) / 
-    [update](#edit-review-comment-of-a-user-update) / 
-    [delete](#delete-review-comments-user-destroy) 
-- [Room endpoints](#Rooms-Table)
-  - [index](#retreive-all-rooms-index) / 
-    [create](#create-a-room:-create) / 
-    [Add user reviews to room](#add-users-reviews-room-add_user_reviews_to_room) / 
-    [show](#get-a-room-show) / 
-    [update](#edit-room-update) / 
-    [delete](#delete-room-destroy) 
-- [Forum endpoints](#Forum-Table)
-  - [index](#retreive-all-forums-index) / 
-    [Room Forum Index](#retreive-all-forums-in-room-room_forum_index) / 
-    [create](#create-a-forum-create) / 
-    [show](#retrieve-the-forum-of-user-show) / 
-    [update](#edit-forum-of-a-room-update) / 
-    [delete](#delete-forum-of-user-destroy)
-- [Forum Comment endpoints](#Forum-Comments-Table)
-  - [index](#retreive-all-the-TOP-forum-comments-of-a-forum-index) / 
-    [create](#create-a-forum-comment-create) / 
-    [update](#edit-forum-comment-update) / 
-    [delete](#delete-forum-comment-of-user-destroy)
-- [Watch Later endpoints]()
-  - [index]() / 
-    [create]() / 
-    [show]() / 
-    [destroy]()
-- [Recommendation endpoints]()
-  - [index]() / 
-    [create]() / 
-    [show]() / 
-    [destroy]() 
+[**Review Comments**](#Review-Comments-Table)
 
-- [Appendix](#Appendix)
+This will have a two level commenting capability. The first level will be the comments, the second level will be the reply to their respective comments.  
 
+[index](#retreive-all-comments-of-a-review-index) / 
+[create](#create-a-review-comment-create) / 
+[update](#edit-review-comment-of-a-user-update) / 
+[delete](#delete-review-comments-user-destroy) 
+
+[**Rooms**](#Rooms-Table) 
+
+Rooms will be where groups of users can assemble to look at the consensus for the congregation of shows that all users have watched.
+The rooms controllers have the capabilities to add or remove users. 
+
+This will also interact with a number of the tables (user,review,forum,forum comments) and other API. (notifications)
+
+[index](#retreive-all-rooms-index) / 
+[create](#create-a-room:-create) / 
+[Add user reviews to room](#add-users-reviews-room-add_user_reviews_to_room) / 
+[show](#get-a-room-show) / 
+[update](#edit-room-update) / 
+[delete](#delete-room-destroy) 
+
+[**Forums**](#Forum-Table)
+
+Similar to Reddit, each room will have its own list of topic threads that will allow the users within the room to create and comment on these threads.
+
+Each forum has the ability to be liked or disliked
+
+[index](#retreive-all-forums-index) / 
+[Room Forum Index](#retreive-all-forums-in-room-room_forum_index) / 
+[create](#create-a-forum-create) / 
+[show](#retrieve-the-forum-of-user-show) / 
+[update](#edit-forum-of-a-room-update) / 
+[delete](#delete-forum-of-user-destroy)
+
+[**Forum Comments**](#Forum-Comments-Table)
+
+Again, similar to reddit, these forum posts have an infitite comment nesting capabilities. Each comment has the ability to be liked or disliked
+
+[index](#retreive-all-the-TOP-forum-comments-of-a-forum-index) / 
+[create](#create-a-forum-comment-create) / 
+[update](#edit-forum-comment-update) / 
+[delete](#delete-forum-comment-of-user-destroy)
+
+[**Recommendations**](#recommendations-table)
+
+Each user has the ability to recommend shows to other users. There are a maximum of 3 live recommendations that a user can suggest to another user at any given time
+
+[index](#retreive-all-recommendations-index) / 
+[create](#create-a-recommendation-create) / 
+[show](#show-the-recommendations-of-a-user-show) / 
+[destroy](#delete-recommendation-of-user-destroy)
+
+[**Watch Later**](#watch-later-table)
+
+There may be shows that a user can't get to until later. This allows user to save any shows of interest for later
+
+[index](#retreive-all-watch-laters-index) / 
+[create](#create-a-watch-later-create) / 
+[show](#show-the-watch-laters-of-a-user-show) / 
+[destroy](#delete-watch-later-of-user-destroy)
+
+[Appendix](#Appendix)
 ---
-#### **User Table** 
+#### **User Table**
+
+Will provide details of the user and maintain the inputs specific to the user such as the rooms that they are in, their peers, credentials and any other inputs that the user has personal to themselves
+
+[index](#create-a-user-create) / 
+[user_room_index](#retreive-all-user-rooms-user-room-index) / 
+[user_review_index](#retreive-all-reviews-the-user-user-Review-Index) / 
+[create](#create-a-user-create) / 
+[show](#get-specific-user-show) / 
+[update](#edit-specific-user-update) / 
+[delete](#delete-user-destroy) 
 
 [Back to API Reference](#API-Reference)
 
@@ -192,6 +223,19 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Review Table
+
+Within the review table, contains actions that will manage occurances with reviews. Reviews impact a number of other tables such as review comments, rooms, recommendations, watch laters.
+
+Additionally, there will be follow up API actions such as the likes and shows API
+
+[index](#retreive-all-reviews-index) / 
+[user index](#retreive-all-reviews-of-user-user_index) / 
+[create](#create-a-review-create) / 
+[Reviews to Rooms](#add-review-of-user-to-all-rooms-reviews_to_rooms) / 
+[show](#retrieve-the-review-user-show) / 
+[update](#edit-review-of-a-user-update) / 
+[delete](#delete-review-of-a-user-destroy) 
+
 
 [Back to API Reference](#API-Reference)
 
@@ -331,6 +375,13 @@ This API will be used to manage any actions done by the user. The tables that wi
 ---
 #### Review Comments Table
 
+This will have a two level commenting capability. The first level will be the comments, the second level will be the reply to their respective comments.  
+
+[index](#retreive-all-comments-of-a-review-index) / 
+[create](#create-a-review-comment-create) / 
+[update](#edit-review-comment-of-a-user-update) / 
+[delete](#delete-review-comments-user-destroy) 
+
 [Back to API Reference](#API-Reference)
 
 ---
@@ -400,6 +451,18 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Rooms Table
+
+Rooms will be where groups of users can assemble to look at the consensus for the congregation of shows that all users have watched.
+The rooms controllers have the capabilities to add or remove users. 
+
+This will also interact with a number of the tables (user,review,forum,forum comments) and other API. (notifications)
+
+[index](#retreive-all-rooms-index) / 
+[create](#create-a-room:-create) / 
+[Add user reviews to room](#add-users-reviews-room-add_user_reviews_to_room) / 
+[show](#get-a-room-show) / 
+[update](#edit-room-update) / 
+[delete](#delete-room-destroy) 
 
 [Back to API Reference](#API-Reference)
 
@@ -500,6 +563,17 @@ This API will be used to manage any actions done by the user. The tables that wi
 ---
 #### Forum Table
 
+Similar to Reddit, each room will have its own list of topic threads that will allow the users within the room to create and comment on these threads.
+
+Each forum has the ability to be liked or disliked
+
+[index](#retreive-all-forums-index) / 
+[Room Forum Index](#retreive-all-forums-in-room-room_forum_index) / 
+[create](#create-a-forum-create) / 
+[show](#retrieve-the-forum-of-user-show) / 
+[update](#edit-forum-of-a-room-update) / 
+[delete](#delete-forum-of-user-destroy)
+
 [Back to API Reference](#API-Reference)
 
 ---
@@ -594,6 +668,13 @@ This API will be used to manage any actions done by the user. The tables that wi
 ---
 #### Forum Comments Table
 
+Again, similar to reddit, these forum posts have an infitite comment nesting capabilities. Each comment has the ability to be liked or disliked
+
+[index](#retreive-all-the-TOP-forum-comments-of-a-forum-index) / 
+[create](#create-a-forum-comment-create) / 
+[update](#edit-forum-comment-update) / 
+[delete](#delete-forum-comment-of-user-destroy)
+
 [Back to API Reference](#API-Reference)
 
 ---
@@ -665,6 +746,13 @@ This API will be used to manage any actions done by the user. The tables that wi
 ---
 #### Recommendations Table
 
+Each user has the ability to recommend shows to other users. There are a maximum of 3 live recommendations that a user can suggest to another user at any given time
+
+[index](#retreive-all-recommendations-index) / 
+[create](#create-a-recommendation-create) / 
+[show](#show-the-recommendations-of-a-user-show) / 
+[destroy](#delete-recommendation-of-user-destroy)
+
 [Back to API Reference](#API-Reference)
 
 ---
@@ -704,7 +792,7 @@ This API will be used to manage any actions done by the user. The tables that wi
 [Back to API Reference](#API-Reference) / 
 [Top of the Recommendations Table](#recommendations-table)
 
-#### Delete Forum Comment of User: destroy
+#### Delete Recommendation of User: destroy
 
 ```http
   DELETE /api/recommendations/:id
@@ -720,6 +808,13 @@ This API will be used to manage any actions done by the user. The tables that wi
 
 ---
 #### Watch Later Table
+
+There may be shows that a user can't get to until later. This allows user to save any shows of interest for later
+
+[index](#retreive-all-watch-laters-index) / 
+[create](#create-a-watch-later-create) / 
+[show](#show-the-watch-laters-of-a-user-show) / 
+[destroy](#delete-watch-later-of-user-destroy)
 
 [Back to API Reference](#API-Reference)
 
