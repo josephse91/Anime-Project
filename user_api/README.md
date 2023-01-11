@@ -49,7 +49,7 @@ The rooms controllers have the capabilities to add or remove users.
 This will also interact with a number of the tables (user,review,forum,forum comments) and other API. (notifications)
 
 [index](#retreive-all-rooms-index) / 
-[create](#create-a-room:-create) / 
+[create](#create-a-room-create) / 
 [Add user reviews to room](#add-users-reviews-room-add_user_reviews_to_room) / 
 [show](#get-a-room-show) / 
 [update](#edit-room-update) / 
@@ -95,7 +95,8 @@ There may be shows that a user can't get to until later. This allows user to sav
 [show](#show-the-watch-laters-of-a-user-show) / 
 [destroy](#delete-watch-later-of-user-destroy)
 
-[Appendix](#Appendix)
+[**Go to Appendix**](#Appendix)
+
 ---
 #### **User Table**
 
@@ -458,7 +459,7 @@ The rooms controllers have the capabilities to add or remove users.
 This will also interact with a number of the tables (user,review,forum,forum comments) and other API. (notifications)
 
 [index](#retreive-all-rooms-index) / 
-[create](#create-a-room:-create) / 
+[create](#create-a-room-create) / 
 [Add user reviews to room](#add-users-reviews-room-add_user_reviews_to_room) / 
 [show](#get-a-room-show) / 
 [update](#edit-room-update) / 
@@ -866,7 +867,9 @@ There may be shows that a user can't get to until later. This allows user to sav
 | `show` | `string` |   |
 
 [Back to API Reference](#API-Reference) / 
-[Top of the Watch Later Table](#watch-later-table)# Appendix
+[Top of the Watch Later Table](#watch-later-table)
+
+# Appendix
 
 Terms and formats utilized in the API
 
