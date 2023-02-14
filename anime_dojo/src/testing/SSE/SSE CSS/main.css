@@ -1,0 +1,76 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+}
+
+.interface {
+    display: flex;
+    background-color: blanchedalmond;
+    flex-direction: column;
+    width: 100vw;
+}
+
+.userData {
+    width: 100%;
+    padding: 1rem;
+    display: grid;
+    grid-template-areas: "login summary requests notifications"
+                         "content content content content";
+    grid-template-columns: repeat(3, 1fr) 2fr;
+    grid-template-rows: auto 1fr;
+    align-items: center;
+    row-gap: 1rem;
+    column-gap: 2rem;
+}
+
+.box {
+    width: 100%;
+    border: .15rem solid black;
+    border-radius: 2rem;
+    min-height: 5rem;
+}
+
+#one {
+    background-color: chocolate;
+    height: 5rem;
+}
+
+#two {
+    background-color:lightseagreen;
+    height: 10rem;
+}
+
+#three {
+    background-color:olivedrab;
+}
+
+#four {
+    background-color:darkred;
+}
+
+#five {
+    grid-area: content;
+    background-color:rgba(25, 25, 112, 0.418);
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    gap: 1rem;
+}
+
+.accordian {
+    height: 5rem;
+    width: 100%;
+    background-color: gold;
+    border-radius: 2rem;
+}
+
+.userEntry {
+    margin-top: 1rem;
+    margin-left: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+}
+
