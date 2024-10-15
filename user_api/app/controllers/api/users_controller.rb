@@ -97,7 +97,7 @@ class Api::UsersController < ApplicationController
         # Should only allow the current user to be the one to change further attributes
 
         if @user.username != user_params[:user_id]
-            render json: {status: "failed", error: "Not authorized user", user: @user.username, current_user: current_user}
+            render json: {status: "failed", error: "Not authorized user", user: @user.username, current_user: @user, params: user_params}
             return
         end
 
@@ -127,8 +127,9 @@ class Api::UsersController < ApplicationController
             peer_check = peer_check(@user,peer_focus,peers_action)
             return if peer_check
             
-            if peers_action == "remove"
+            if peers_action == "remove" # delete peers on both sides
                 user_peers.delete(peer_focus)
+                peer_obj.peers.delete(@user.username)
             elsif peers_action == "add"
                 user_peers[peer_focus] = TIME_INPUT
                 peer_obj.peers[@user.username] = TIME_INPUT
@@ -212,8 +213,7 @@ class Api::UsersController < ApplicationController
         peer_exist = user.peers[param_user]
 
         if peer_exist && action == "add"
-            render json: {status: "complete", peers: user.peers, message: "User already has this peer"}
-            return
+            render json: {status: "complete", user: user.username, peers: user.peers, message: "User already has this peer"}
         end
 
         peer_exist && action == "add"

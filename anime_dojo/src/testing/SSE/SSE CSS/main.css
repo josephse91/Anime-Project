@@ -20,7 +20,6 @@
                          "content content content content";
     grid-template-columns: repeat(3, 1fr) 2fr;
     grid-template-rows: auto 1fr;
-    align-items: center;
     row-gap: 1rem;
     column-gap: 2rem;
 }
@@ -34,12 +33,10 @@
 
 #one {
     background-color: chocolate;
-    height: 5rem;
 }
 
 #two {
     background-color:lightseagreen;
-    height: 10rem;
 }
 
 #three {

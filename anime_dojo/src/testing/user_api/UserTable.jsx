@@ -3,7 +3,7 @@ import './UserTable.css';
 
 
 function UserTable() {
-  const [username, setUsername] = useState("");
+  const [currentUser, setUsername] = useState("");
   const [password,setPassword] = useState("");
   const [request,setRequest] = useState("");
   const [response,setResponse] = useState(null);
@@ -14,7 +14,7 @@ function UserTable() {
     e.preventDefault;
 
     let input = e.target
-    if (input.id ==="username") {
+    if (input.id ==="currentUser") {
       setUsername(input.value)
     } else if (input.id === "password") {
       setPassword(input.value)
@@ -27,7 +27,7 @@ function UserTable() {
     } else if (input.id === "value") {
       setTestcase({...testcase, value: input.value})
     }
-    console.log(username,password)
+    console.log(currentUser,password)
     console.log(testcase, request)
   }
 
@@ -50,9 +50,9 @@ function UserTable() {
       method: requestMethod
     }
 
-    if (username) formData.append('username',username);
+    if (currentUser) formData.append('user_id',currentUser);
     if (password) formData.append('password',password);
-
+    console.log(currentUser)
     // This is where you will format the testcase values
     // let testcaseInput = JSON.stringify({action: "add",focusRequest: testcase.value })
     let testcaseInput;
@@ -61,12 +61,14 @@ function UserTable() {
     let requestParam = new Set(["requests"])
 
     if (roomPeerParam.has(testcase.key)) {
-      testcaseInput = {action: "add", peerFocus: testcase.value };
+      let [action, peerFocus] = testcase.value.split("-");
+      testcaseInput = {action: action, peerFocus: peerFocus };
       testcaseInput = JSON.stringify(testcaseInput)
     } else if (requestParam.has(testcase.key)) {
+      let [action, requestFocus] = testcase.value.split("-");
       testcaseInput = {
-        action: "add",
-        requestFocus: testcase.value
+        action: action,
+        requestFocus: requestFocus
       };
       testcaseInput = JSON.stringify(testcaseInput)
     } else {
@@ -100,8 +102,8 @@ function UserTable() {
     <div className="App" id="container">
       <div className='testForm' id='userTableForm'>
       <form className="credentials" onChange={handleChange}>
-        <label htmlFor="username">Username:</label>
-        <input type="text" id="username" name="username" value={username}></input>
+        <label htmlFor="currentUser">Current User:</label>
+        <input type="text" id="currentUser" name="currentUser" value={currentUser}></input>
         <label htmlFor="password">Password:</label>
         <input type="text" id="password" name="password" value={password}/>
 

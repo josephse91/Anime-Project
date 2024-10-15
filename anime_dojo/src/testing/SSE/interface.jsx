@@ -20,22 +20,29 @@ export default function Interface() {
                 </div>
             </div>
             <UserSelect userType="actionUser" username={actionUser} setUsername={setActionUser} />
-            <div className="actionUserAction"></div>
-            
+            <div className="actionUserBox"></div> 
         </div>
     )
 }
 
 function UserSelect(props) {
     const userType = props.userType;
+    const username = props.username;
     const setUsername = props.setUsername;
 
     const userID = userType == "user" ? "User" : "ActionUser";
 
+    const handleChange = function(e) {
+        e.preventDefault();
+
+        setUsername(e.target.value)
+        console.log(username)
+    }
+
     return(
         <div className="userEntry" id={userID}>
             <p>{userID}: </p>
-            <input className="userInputField"></input>
+            <input className="userInputField" type="text" onChange={handleChange}/>
         </div>
     )
 }
