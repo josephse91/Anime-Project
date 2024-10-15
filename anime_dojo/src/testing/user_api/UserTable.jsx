@@ -52,7 +52,6 @@ function UserTable() {
 
     if (currentUser) formData.append('user_id',currentUser);
     if (password) formData.append('password',password);
-    console.log(currentUser)
     // This is where you will format the testcase values
     // let testcaseInput = JSON.stringify({action: "add",focusRequest: testcase.value })
     let testcaseInput;

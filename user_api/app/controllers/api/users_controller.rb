@@ -53,31 +53,34 @@ class Api::UsersController < ApplicationController
         @user = find_user
         return if !@user
 
-        user_peer_request = user_params[:requests]
+        request_param = user_params[:requests]
         notifications = []
 
         # Conditional for an incoming request
-        if user_peer_request
-            user_requests = !@user.requests["peer"].nil? ? @user.requests["peer"] : {}
-            param_obj = ActiveSupport::JSON.decode(user_peer_request)
-            requests_action = param_obj["action"]
-            request_focus = param_obj["requestFocus"]
-            request_obj = User.find_by(username: request_focus)
+        if request_param
+            user_requests_hash = !@user.requests["peer"].nil? ? @user.requests["peer"] : {}
+            request_param_hash = ActiveSupport::JSON.decode(request_param)
+            requests_action = request_param_hash["action"]
+            request_focus = request_param_hash["requestFocus"]
+            requester_object = User.find_by(username: request_focus)
 
+            #peer_check is a function below
             peer_check = peer_check(@user,request_focus,requests_action)
             return if peer_check
 
             peer_request_check = @user.requests["peer"][request_focus]
-
             if peer_request_check && requests_action == "add"
-                render json: {status: "complete", requests: @user.requests["peer"], message: "User already sent request to this peer"}
+                render json: {status: "failed", 
+                    error: "request already sent", requester: requester_object, 
+                    user_requested: {username:@user.username, peer_requests: @user.requests["peer"]}
+                }
                 return
             end
 
             if requests_action == "remove"
-                user_requests.delete(request_focus)
+                user_requests_hash.delete(request_focus)
             elsif requests_action == "add"
-                user_requests[request_focus] = TIME_INPUT
+                user_requests_hash[request_focus] = TIME_INPUT
             end
 
             @user.save
@@ -85,8 +88,8 @@ class Api::UsersController < ApplicationController
             render_obj = {status: "complete", user: @user}
 
             if requests_action == "add"
-                add_notification(notifications,@user,request_obj,"Sent a Request")
-                request_obj.save
+                add_notification(notifications,requester_object,@user,"Sent a Request")
+                #requester_object.save
                 render_obj[:notifications] = notifications
             end
 
