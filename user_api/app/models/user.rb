@@ -7,10 +7,11 @@ class User < ApplicationRecord
     # validates :password, allow_nil: true
     validates :password_digest, presence: true
 
-    has_many :recommendations, dependent: :destroy
-    has_many :watch_laters, dependent: :destroy
-    has_many :reviews
+    has_many :reviews, foreign_key: 'username', dependent: :destroy
+    has_many :recommendations, foreign_key: 'username', dependent: :destroy
+    has_many :watch_laters, foreign_key: 'username', dependent: :destroy
     has_many :review_comments, :through => :reviews
+    has_many :forums, foreign_key: 'username'
 
     def self.find_by_credentials(username,password)
         user = User.find_by(username: username)

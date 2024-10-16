@@ -178,10 +178,10 @@ class Api::UsersController < ApplicationController
             render json: {status: "failed",error: "Invalid Password"}
             return
         end
-
+        temp_user = @user
         @user.destroy
 
-        render json: {status: "complete"}
+        render json: {status: "complete", deleted_user: temp_user}
     end
 
     def user_params
