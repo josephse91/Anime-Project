@@ -7,6 +7,6 @@ class Review < ApplicationRecord
     validates :rating, presence: true, comparison: {greater_than: 0, less_than: 100}
     validates :watch_priority, comparison: {greater_than: -2, less_than: 2}
 
-    has_one :users, :foreign_key => 'user'
+    has_one :users
     has_many :review_comments, dependent: :destroy
 end

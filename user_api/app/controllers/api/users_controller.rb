@@ -162,8 +162,9 @@ class Api::UsersController < ApplicationController
     end
 
     def destroy
+        token = request.headers['HTTP_AD_SESSION_TOKEN']
         if !current_user
-            render json: {status: "failed", error: "not signed in"}
+            render json: {status: "failed", error: "not signed in", headers: token}
             return
         end
 
@@ -178,6 +179,10 @@ class Api::UsersController < ApplicationController
             render json: {status: "failed",error: "Invalid Password"}
             return
         end
+
+        #delete features that are tied to the respective user
+        reviews = Review.where(user: @user.username)
+        reviews.destroy_all
         temp_user = @user
         @user.destroy
 

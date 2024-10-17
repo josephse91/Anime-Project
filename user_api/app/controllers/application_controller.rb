@@ -4,8 +4,11 @@ class ApplicationController < ActionController::Base
     helper_method :current_user, :current_user_username, :logged_in?, :login_user!
 
     def current_user
-        return nil unless session[:session_token]
-        @current_user ||= User.find_by(session_token: session[:session_token])
+        ad_session_token = request.headers['HTTP_AD_SESSION_TOKEN']
+        return nil unless ad_session_token 
+        @current_user = User.find_by(session_token: ad_session_token)
+        # Old method below with session_token is not appropriate due to separate client sessionStorage
+        #@current_user ||= User.find_by(session_token: session[:session_token])
     end
     
     def current_user_username
@@ -13,11 +16,12 @@ class ApplicationController < ActionController::Base
     end
   
     def logged_in?
-      !!@current_user
+      !!current_user
     end
   
     def login_user!(user)
-      session[:session_token] = user.reset_session_token!
+      #session[:session_token] = user.reset_session_token!
+      @session_token = user.reset_session_token!
     end
     
     #   def require_user!

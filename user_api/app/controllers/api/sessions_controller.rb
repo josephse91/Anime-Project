@@ -13,20 +13,25 @@ class Api::SessionsController < ApplicationController
           login_user!(user)
           render json: {
             status: "complete",
-            current_user: current_user, 
-            current_user_token: session[:session_token]
+            user: user,
+            ad_session_token: user.session_token
           }
         end
     end
     
     def destroy
-        current_user.update(session_token: nil)
-        session[:session_token] = nil
+        destroyed_user = current_user
+
+        if !destroyed_user
+          render json: {status: "failed", error: "can't find user to destory session",current_user: destroyed_user}
+        end
+
+        destroyed_user.update(session_token: nil)
 
         render json: {
           status: "complete",
           current_user: @current_user, 
-          current_user_token: session[:session_token]
+          ad_session_token: nil
         }
     end
 

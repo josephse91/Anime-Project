@@ -33,6 +33,7 @@ function UserTable() {
 
   let formData = new FormData();
   let myHeaders = new Headers();
+  //myHeaders.append("session_token","DIDA4gm9QYmulrzs29CPTA");
 
   async function apiRequest(options,query) {
     let requestStr = "http://localhost:3000" + request + query;
@@ -40,6 +41,20 @@ function UserTable() {
     let data = await apiRequest.json()
     setResponse(data)
     console.log(requestStr,data)
+
+    // Logic meant to focus on the localStorage and sessionStorage
+    let dataMap = new Map(Object.entries(data))
+    
+    let AdSessionTokenKey = [...dataMap.keys()].includes("ad_session_token")
+    let AdSessionTokenValue = dataMap.get("ad_session_token")
+    if(AdSessionTokenKey && AdSessionTokenValue) {
+      localStorage.setItem("ad_session_token",data["ad_session_token"])
+      console.log("new session_token: ", data["ad_session_token"])
+    } else if (AdSessionTokenKey && !AdSessionTokenValue) {
+      localStorage.removeItem("ad_session_token")
+      console.log("removed session_token: ", data["ad_session_token"])
+    }
+
   }
   
   let sendRequest = function(e) {
@@ -50,7 +65,12 @@ function UserTable() {
       method: requestMethod
     }
 
+    const adSessionToken = localStorage.getItem('ad_session_token')
+    myHeaders.append("ad_session_token",adSessionToken);
+
     if (currentUser) formData.append('user_id',currentUser);
+    if (request.includes("/api/sessions")) formData.append('username',currentUser);
+    //myHeaders.append("ad_session_token",adSessionToken);
     if (password) formData.append('password',password);
     // This is where you will format the testcase values
     // let testcaseInput = JSON.stringify({action: "add",focusRequest: testcase.value })
@@ -81,7 +101,7 @@ function UserTable() {
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
       if (testcase.key) formData.append(testcase.key,testcaseInput)
-      // formData.append("new_username","Aldane1")
+      //formData.append("session_token","DIDA4gm9QYmulrzs29CPTA")
       // formData.append("new_password","password")
       // formData.append("password_digest",'password')
       // formData.append("genre_preference","Shounen")
