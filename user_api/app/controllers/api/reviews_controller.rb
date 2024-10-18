@@ -179,10 +179,14 @@ class Api::ReviewsController < ApplicationController
     end
 
     def find_show
+        # prioritizes a target user before the current user
         user = find_user || current_user
         return nil if user.nil?
 
+        #id is used as a wildcard for the typical /api/reviews/ requests
+        #review_id is used as a wildcard in the request to add reviews to all applicable rooms
         show = review_params[:id] || review_params[:review_id]
+        # if there is no review wildcard, there will be a show input instead of searched
         return {user: user, show: review_params[:show]} if !show
 
         review = Review.where([
@@ -205,6 +209,7 @@ class Api::ReviewsController < ApplicationController
         return if !client_user
         
         review_hash = find_show
+        # return if the inputted show was not reviewed by the target user/current user
         return if !review_hash
 
         show = review_hash[:show]
@@ -213,37 +218,37 @@ class Api::ReviewsController < ApplicationController
         output[:review] = review
         output[:user] = client_user
         user = review_hash[:user]
-        return if !review && review_params[:id]
+        # If there is intention to capture an existing review with the wildcards but there is no show review, it must return
+        return if !review && (review_params[:id] || review_params[:review_id])
 
         likes_hash = review_params[:id] ? adjust_likes(review) : {}
         likes = likes_hash[:likes]
         return if likes_hash[:action]
         
+        #everything beyond this point requires the review user being the current_user
         if review && review.user != client_user.username
             render json: {status: "failed", error: "User not authorized to edit this review"}
             return
         end
 
-        rating = review_params[:rating]
-        amount_watched = review_params[:amount_watched]
-        hps = review_params[:highlighted_points]
-        overall_review = review_params[:overall_review]
-        referral_id = review_params[:referral_id]
-        wp = review_params[:watch_priority]
-
         components = {}
 
+        # fields required to create the review for the first time
         if !review_params[:id]
             components[:user] = user.username
             components[:show] = show
         end
 
-        rating ? components[:rating] = rating : nil
-        amount_watched ? components[:amount_watched] = amount_watched : nil
-        hps ? components[:highlighted_points] = hps : nil
-        overall_review ? components[:overall_review] = overall_review : nil
-        wp ? components[:watch_priority] = wp : nil
+        #fields capable of being editted
+        existing_highlights = review ? review.highlighted_points : [];
 
+        components[:rating] = review_params[:rating] || review.rating
+        components[:amount_watched] = review_params[:amount_watched] || review.amount_watched
+        components[:highlighted_points] = [*existing_highlights,review_params[:highlighted_points]]
+        components[:overall_review] = review_params[:overall_review] || review.overall_review
+        components[:watch_priority] = review_params[:watch_priority] || review.watch_priority
+
+        #recommendation acceptance is slightly broken. There is no indicator that a recommendation has been addressed. 
         recommendation = Recommendation.where(user_id: user.username, show: show).take
         if recommendation && !recommendation.accepted
             if !recommendation.accepted
@@ -259,10 +264,10 @@ class Api::ReviewsController < ApplicationController
                 show: show,
                 target_item: "Recommendation"
             }
+            components[:referral_id] = recommendation.referral_id 
         end
 
-        output[:components] = components
-        components[:referral_id] = recommendation.referral_id   
+        output[:components] = components  
         output
     end
 

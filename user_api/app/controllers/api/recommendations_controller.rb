@@ -137,6 +137,8 @@ class Api::RecommendationsController < ApplicationController
             return
         end
 
+        # need another conditional for people that already have a referral
+
         already_watched =  Review.where(user: user_id.username, show: show).take
 
         review.show
