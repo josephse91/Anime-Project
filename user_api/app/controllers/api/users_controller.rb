@@ -33,6 +33,7 @@ class Api::UsersController < ApplicationController
         @user.password(user_params[:password]) if @user
 
         if @user.save
+            login_user!(@user)
             render json: {status: "complete", user: @user}
         else
             error = @user.errors.messages.length > 0 ? @user.errors.messages : "Either the username or password is invalid"
@@ -99,7 +100,7 @@ class Api::UsersController < ApplicationController
 
         # Should only allow the current user to be the one to change further attributes
 
-        if @user.username != user_params[:user_id]
+        if !logged_in?()
             render json: {status: "failed", error: "Not authorized user", user: @user.username, current_user: @user, params: user_params}
             return
         end
@@ -199,6 +200,11 @@ class Api::UsersController < ApplicationController
         watch_laters = WatchLater.where(user_id: user.username)
         watch_laters.destroy_all
 
+        # logic for orphaned data. forum and forum comments
+        Forum.where(creator: user.username).update_all(creator: "Deleted User")
+        ForumComment.where(comment_owner: user.username).update_all(comment_owner: "Deleted User")
+
+        # DELETE USER
         temp_user = user
         user.destroy
 
@@ -223,8 +229,8 @@ class Api::UsersController < ApplicationController
     end
 
     def find_user
-        current_user = user_params[:id] || user_params[:user_id]
-        user = User.find_by(username: current_user)
+        search_user = user_params[:id] || user_params[:user_id]
+        user = User.find_by(username: search_user)
         
         if !user
             render json: {status: "failed", error: "no existing user"}
