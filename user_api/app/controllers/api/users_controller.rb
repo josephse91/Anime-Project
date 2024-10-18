@@ -162,29 +162,23 @@ class Api::UsersController < ApplicationController
     end
 
     def destroy
-        token = request.headers['HTTP_AD_SESSION_TOKEN']
-        if !current_user
-            render json: {status: "failed", error: "not signed in", headers: token}
+        user = current_user
+
+        if !user
+            render json: {status: "failed", error: "not signed in"}
             return
         end
 
-        @user = User.find_by(session_token: user_params[:session_token_input])
-
-        if !@user
-            render json: {status: "failed", error: "not signed in - Invalid Session token"}
-            return
-        end
-
-        if !user_params[:password] || !@user.is_password?(user_params[:password])
+        if !user_params[:password] || !user.is_password?(user_params[:password])
             render json: {status: "failed",error: "Invalid Password"}
             return
         end
 
         #delete features that are tied to the respective user
-        reviews = Review.where(user: @user.username)
+        reviews = Review.where(user: user.username)
         reviews.destroy_all
-        temp_user = @user
-        @user.destroy
+        temp_user = user
+        user.destroy
 
         render json: {status: "complete", deleted_user: temp_user}
     end
