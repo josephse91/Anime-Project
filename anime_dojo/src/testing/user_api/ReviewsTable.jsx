@@ -411,25 +411,28 @@ function ReviewTable() {
     <div className="App" id="container">
       <div className='testForm' id='reviewTableForm'>
       <form className="credentials" onChange={handleChange}>
-        <label htmlFor="reviewUser">User:</label>
-        <input type="text" id="reviewUser" name="reviewUser" value={user}/>
-        <label htmlFor="reviewKey">Key:</label>
-        <input type="text" id="reviewKey" name="reviewKey" value={testcase.key}/>
-        <label htmlFor="value">Value:</label>
-        <input type="text" id="value" name="value" value={testcase.value}/>
-
-        <div id="requestLabels">
-          <label htmlFor="method">Method:</label>
-          <label htmlFor="request">Request:</label>
+        <div className='inputLine'>
+          <label htmlFor="reviewUser">User:</label>
+          <input type="text" id="reviewUser" name="reviewUser" value={user}/>
         </div>
-        
-        <div id="requestInputs">
+        <div className='inputLine'>
+          <label htmlFor="reviewKey">Key:</label>
+          <input type="text" id="reviewKey" name="reviewKey" value={testcase.key}/>
+        </div>
+        <div className='inputLine'>
+          <label htmlFor="value">Value:</label>
+          <input type="text" id="value" name="value" value={testcase.value}/>
+        </div>
+        <div className='inputLine'>
+          <label htmlFor="method">Method:</label>
           <input type="text" id="requestMethod" name="requestMethod" value={requestMethod}/>
+          <label htmlFor="request">Request:</label>
           <input type="text" id="request" name="request" value={request}/>
         </div>
         
       </form>
       <button className='request' id="requestButton" onClick={sendRequest}>Send</button>
+      
       </div>
       
     </div>

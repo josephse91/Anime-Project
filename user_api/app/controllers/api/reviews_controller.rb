@@ -166,11 +166,11 @@ class Api::ReviewsController < ApplicationController
     end
 
     def current_user
-        user_input =  review_params[:current_user]
-        current_user = User.find_by(username: user_input)
+        #user_input =  review_params[:current_user]
+        #current_user = User.find_by(username: user_input)
 
         if !current_user
-            render json: {status: "failed", user: current_user,error: "Could not find current user"}
+            render json: {status: "failed", user: current_user,error: "User Not signed in"}
             return
         end
 
@@ -294,8 +294,9 @@ class Api::ReviewsController < ApplicationController
         where_array = [""]
 
         if network === "true"
-            user = find_user
-            return if user.nil?
+            #user = find_user
+            return if !logged_in?()
+            #return if user.nil?
 
             peers_query = "reviews.user IN " + query_peers_array(user)
             
