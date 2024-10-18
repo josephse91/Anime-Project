@@ -388,19 +388,22 @@ function ReviewTable() {
 
     let search = ""
     if (user) {
-      search += "?current_user=" + user;
-      search += "&in_network=true";
+      // Since there is no body allowed in form data in a GET request, this must be sent through the query data
+      search += "?user_id=" + user;
+      //search += "&in_network=true";
       // let range = JSON.stringify({"top": 95, "bottom":80})
       // search += `&range=${range}`;
     }
+    myHeaders.append("user_id",user);
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
-      options.body = formData;
-      formData.append("rating",83)
-      formData.append("amount_watched","Completed")
-      // // formData.append("highlighted_points",'[]')
-      formData.append("overall_review","This is a sturdy and mature anime.")
-      formData.append("watch_priority",0)
+      options.body = formData
+      if (testcase.key) formData.append(testcase.key,testcaseInput)
+      //formData.append("rating",89)
+      //formData.append("amount_watched","completed")
+      formData.append("highlighted_points",'The dynamic trio were the symbol of a random crew')
+      //formData.append("overall_review","What Cowboy Bebob should've been")
+      //formData.append("watch_priority",1)
       // let likesAction = {user: user, net: 0, target: 1}
       // formData.append("likes",JSON.stringify(likesAction))
 
