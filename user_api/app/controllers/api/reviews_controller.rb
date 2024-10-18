@@ -2,15 +2,20 @@ class Api::ReviewsController < ApplicationController
 
     def index
         where_array = where_filter
+        active_user = current_user
+        network_filter = review_params[:in_network]
+        range_filter = review_params[:range]
 
-        if review_params[:in_network] === "true" || review_params[:range]
+        if active_user && network_filter
             reviews = Review.where(where_array).order(rating: :desc)
             render json: {status: "complete",type: "peers", reviews: reviews}
+        elsif !active_user && network_filter
+            reviews = Review.all.order(rating: :desc);
+            render json: {status: "complete",type: "all", reviews: reviews}
         else
             reviews = Review.all.order(rating: :desc);
             render json: {status: "complete",type: "all", reviews: reviews}
         end
-
     end
     
     def user_index
@@ -150,14 +155,14 @@ class Api::ReviewsController < ApplicationController
 
     #helper functions
     def review_params
-        params.permit(:id,:user_id, :current_user, :show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range, :likes, :review_id, :review_action, :show_object)
+        params.permit(:id,:user_id, :show,:rating,:amount_watched,:highlighted_points,:overall_review,:referral_id,:watch_priority,:in_network,:range, :likes, :review_id, :review_action, :show_object)
     end
 
     def find_user
         input_user =  review_params[:user_id]
         user = User.find_by(username: input_user)
 
-        if !user && !review_params[:current_user]
+        if !user
             render json: {status: "failed", user: user,error: "Invalid user"}
             return
         end
@@ -165,13 +170,9 @@ class Api::ReviewsController < ApplicationController
         user
     end
 
-    def current_user
-        #user_input =  review_params[:current_user]
-        #current_user = User.find_by(username: user_input)
-
+    def current_reviewer
         if !current_user
             render json: {status: "failed", user: current_user,error: "User Not signed in"}
-            return
         end
 
         current_user
@@ -294,9 +295,8 @@ class Api::ReviewsController < ApplicationController
         where_array = [""]
 
         if network === "true"
-            #user = find_user
-            return if !logged_in?()
-            #return if user.nil?
+            user = current_user
+            return if user.nil?
 
             peers_query = "reviews.user IN " + query_peers_array(user)
             

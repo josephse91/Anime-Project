@@ -375,6 +375,12 @@ function ReviewTable() {
       method: requestMethod
     }
 
+    //Local storage has been selected as the cookie to preserve the session token.
+    // Since the local storage cannot be captured by the rails API directly, the localstorage is always sent through the header
+
+    const adSessionToken = localStorage.getItem('ad_session_token')
+    myHeaders.append("ad_session_token",adSessionToken);
+
     // This is where you will format the testcase values
     // let testcaseInput = JSON.stringify({action: "add",focusRequest: testcase.value })
     let testcaseInput = testcase.value;
@@ -383,7 +389,7 @@ function ReviewTable() {
     let search = ""
     if (user) {
       search += "?current_user=" + user;
-      // search += "&in_network=true";
+      search += "&in_network=true";
       // let range = JSON.stringify({"top": 95, "bottom":80})
       // search += `&range=${range}`;
     }
@@ -418,8 +424,6 @@ function ReviewTable() {
         <div className='inputLine'>
           <label htmlFor="reviewKey">Key:</label>
           <input type="text" id="reviewKey" name="reviewKey" value={testcase.key}/>
-        </div>
-        <div className='inputLine'>
           <label htmlFor="value">Value:</label>
           <input type="text" id="value" name="value" value={testcase.value}/>
         </div>
