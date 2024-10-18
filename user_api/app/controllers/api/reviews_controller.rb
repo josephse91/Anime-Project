@@ -136,13 +136,21 @@ class Api::ReviewsController < ApplicationController
     end
 
     def destroy
+        if !current_user
+            render json: {status: "failed", error: "User is not owner of review"}
+            return
+        end
+        
         review_hash = find_show
-        return if !review_hash
+        review = review_hash ? review_hash[:review] : nil
 
-        review = review_hash[:review]
+        # if there is no review by this user, return. Error will be rendered already
+        return if !review
+
         review_copy = review
 
         comments = ReviewComment.where(review_id: review.id)
+        # The review_comments are deleted automatically due to the model validations
         review.destroy
 
         if !review.destroyed?
@@ -243,10 +251,15 @@ class Api::ReviewsController < ApplicationController
         existing_highlights = review ? review.highlighted_points : [];
 
         components[:rating] = review_params[:rating] || review.rating
-        components[:amount_watched] = review_params[:amount_watched] || review.amount_watched
         components[:highlighted_points] = [*existing_highlights,review_params[:highlighted_points]]
-        components[:overall_review] = review_params[:overall_review] || review.overall_review
-        components[:watch_priority] = review_params[:watch_priority] || review.watch_priority
+
+        overall_review = review ? review.overall_review : nil
+        watch_priority = review ? review.watch_priority : nil
+        amount_watched = review ? review.watch_priority : nil
+
+        components[:overall_review] = review_params[:overall_review] || overall_review
+        components[:watch_priority] = review_params[:watch_priority] || watch_priority
+        components[:amount_watched] = review_params[:amount_watched] || amount_watched
 
         #recommendation acceptance is slightly broken. There is no indicator that a recommendation has been addressed. 
         recommendation = Recommendation.where(user_id: user.username, show: show).take

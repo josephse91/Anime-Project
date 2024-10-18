@@ -401,7 +401,7 @@ function ReviewTable() {
       if (testcase.key) formData.append(testcase.key,testcaseInput)
       //formData.append("rating",89)
       //formData.append("amount_watched","completed")
-      formData.append("highlighted_points",'The dynamic trio were the symbol of a random crew')
+      //formData.append("highlighted_points",'The dynamic trio were the symbol of a random crew')
       //formData.append("overall_review","What Cowboy Bebob should've been")
       //formData.append("watch_priority",1)
       // let likesAction = {user: user, net: 0, target: 1}
