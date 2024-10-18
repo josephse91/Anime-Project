@@ -174,6 +174,8 @@ jarret = User.create({
     }
 })
 
+jarret.reset_session_token!
+
 aldane = User.create({
     username: "Aldane",
     password_digest: password_digest,
@@ -185,6 +187,8 @@ aldane = User.create({
         jarret.username => TIME_INPUT
     }
 })
+
+aldane.reset_session_token!
 
 jarret.peers[aldane.username] = TIME_INPUT
 jarret.save
@@ -295,6 +299,8 @@ serge = User.create({
         aldane.username => TIME_INPUT
     }
 })
+
+serge.reset_session_token!
 
 jarret.peers[serge.username] = TIME_INPUT
 aldane.peers[serge.username] = TIME_INPUT
