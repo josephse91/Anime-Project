@@ -66,6 +66,8 @@ class Api::RecommendationsController < ApplicationController
         render json: {status: "complete", recommendations: recs}
     end
 
+    # need to create the update controller. This will allow the person that received the recommendation to 
+
     def destroy
         user_id = find_user&.username
         return if !user_id

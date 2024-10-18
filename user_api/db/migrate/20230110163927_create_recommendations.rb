@@ -4,7 +4,7 @@ class CreateRecommendations < ActiveRecord::Migration[7.0]
       t.string :user_id, null: false, index: true
       t.string :show, null: false
       t.string :referral_id, null: false, index: true
-      t.boolean :accepted, default: false
+      t.integer :accepted, default: 0
       
       t.timestamps
     end

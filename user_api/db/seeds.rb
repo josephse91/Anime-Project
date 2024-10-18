@@ -565,8 +565,23 @@ allia_review_2 = create_review(allia,allia_review_2)
 jarret_aldane_rec = Recommendation.create({
     user_id: aldane.username,
     show: "Jobless Reincarnation",
-    referral_id: jarret.username
+    referral_id: jarret.username,
+    accepted: 1
 })
+
+jarret_aldane_rec = Recommendation.create({
+    user_id: aldane.username,
+    show: "Assassination Classroom",
+    referral_id: serge.username,
+    accepted: -1
+})
+
+jarret_aldane_rec = Recommendation.create({
+    user_id: aldane.username,
+    show: "Golden Boy",
+    referral_id: serge.username
+})
+
 
 serge_jamal_rec = Recommendation.create({
     user_id: jamal.username,

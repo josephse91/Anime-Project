@@ -399,13 +399,14 @@ function ReviewTable() {
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod == "DELETE") {
       options.body = formData
       if (testcase.key) formData.append(testcase.key,testcaseInput)
-      //formData.append("rating",89)
+      // The next few lines are meant for review creation and editting
+      //formData.append("rating",87)
       //formData.append("amount_watched","completed")
-      //formData.append("highlighted_points",'The dynamic trio were the symbol of a random crew')
-      //formData.append("overall_review","What Cowboy Bebob should've been")
+      //formData.append("highlighted_points",'Surprisingly and epicly sad ending')
+      //formData.append("overall_review","This has the qualities to be a classic")
       //formData.append("watch_priority",1)
-      // let likesAction = {user: user, net: 0, target: 1}
-      // formData.append("likes",JSON.stringify(likesAction))
+      let likesAction = {user: user, net: 0, target: 1}
+      formData.append("likes",JSON.stringify(likesAction))
 
       // formData.append("referral_id","Jarret") (Never required)
 

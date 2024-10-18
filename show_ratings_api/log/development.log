@@ -3074,3 +3074,36 @@ Processing by Api::ShowRatingsController#destroy as */*
 Completed 200 OK in 29ms (Views: 0.5ms | ActiveRecord: 8.2ms | Allocations: 4207)
 
 
+Started PATCH "/api/show_ratings/fill" for ::1 at 2024-10-18 19:12:36 -0400
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"review"=>"{\"id\":21,\"user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"rating\":83,\"amount_watched\":\"completed\",\"highlighted_points\":[\"The Dragon Fight was cool\"],\"overall_review\":\"The show is better than I thought\",\"referral_id\":\"Jarret\",\"watch_priority\":0,\"likes\":0,\"created_at\":\"2024-10-18T23:12:32.881Z\",\"updated_at\":\"2024-10-18T23:12:32.881Z\"}", "rooms"=>"[\"Planet Vegeta\"]", "show_action"=>"add review", "id"=>"fill"}
+  [1m[36mShowRating Load (0.5ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Jobless Reincarnation"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:87:in `update'
+  [1m[36mShowRating Load (0.5ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Jobless Reincarnation"], ["id", 3], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mShowRating Update (1.5ms)[0m  [1m[33mUPDATE "show_ratings" SET "reviewers" = $1, "total_points" = $2, "number_of_reviews" = $3, "updated_at" = $4 WHERE "show_ratings"."id" = $5[0m  [["reviewers", "{\"Jarret\":89,\"Aviel\":81,\"Aldane\":83}"], ["total_points", 253], ["number_of_reviews", 3], ["updated_at", "2024-10-18 23:12:38.623101"], ["id", 3]]
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:150:in `update'
+Completed 200 OK in 241ms (Views: 0.8ms | ActiveRecord: 16.0ms | Allocations: 45860)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-18 19:18:11 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"review"=>"{\"id\":22,\"user\":\"Aldane\",\"show\":\"Assassination Classroom\",\"rating\":87,\"amount_watched\":\"completed\",\"highlighted_points\":[\"Surprisingly and epicly sad ending\"],\"overall_review\":\"This has the qualities to be a classic\",\"referral_id\":\"Serge\",\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-18T23:18:10.987Z\",\"updated_at\":\"2024-10-18T23:18:10.987Z\"}", "rooms"=>"[\"Planet Vegeta\"]"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:64:in `create'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Assassination Classroom"], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:64:in `create'
+  [1m[36mShowRating Create (0.5ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Assassination Classroom"], ["room_id", "Planet Vegeta"], ["reviewers", "{\"Aldane\":87}"], ["total_points", 87], ["number_of_reviews", 1], ["created_at", "2024-10-18 23:18:11.434814"], ["updated_at", "2024-10-18 23:18:11.434814"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:64:in `create'
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:64:in `create'
+Completed 200 OK in 13ms (Views: 0.4ms | ActiveRecord: 2.5ms | Allocations: 3084)
+
+

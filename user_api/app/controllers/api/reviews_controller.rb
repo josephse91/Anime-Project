@@ -38,7 +38,7 @@ class Api::ReviewsController < ApplicationController
         @review = Review.new(components)
 
         if !@review.valid?
-            render json: {status: "failed", errors: @review.errors.objects.first.full_message}
+            render json: {status: "failed", review: @review, errors: @review.errors.objects.first.full_message}
             return
         end
 
@@ -229,7 +229,7 @@ class Api::ReviewsController < ApplicationController
         # If there is intention to capture an existing review with the wildcards but there is no show review, it must return
         return if !review && (review_params[:id] || review_params[:review_id])
 
-        likes_hash = review_params[:id] ? adjust_likes(review) : {}
+        likes_hash = review_params[:id] ? adjust_likes(review,client_user) : {}
         likes = likes_hash[:likes]
         return if likes_hash[:action]
         
@@ -249,12 +249,13 @@ class Api::ReviewsController < ApplicationController
 
         #fields capable of being editted
         existing_highlights = review ? review.highlighted_points : [];
+        new_highlight = [review_params[:highlighted_points]] || []
 
         components[:rating] = review_params[:rating] || review.rating
-        components[:highlighted_points] = [*existing_highlights,review_params[:highlighted_points]]
+        components[:highlighted_points] = [*existing_highlights,*review_params[:highlighted_points]]
 
         overall_review = review ? review.overall_review : nil
-        watch_priority = review ? review.watch_priority : nil
+        watch_priority = review ? review.watch_priority : 0
         amount_watched = review ? review.watch_priority : nil
 
         components[:overall_review] = review_params[:overall_review] || overall_review
@@ -262,12 +263,13 @@ class Api::ReviewsController < ApplicationController
         components[:amount_watched] = review_params[:amount_watched] || amount_watched
 
         #recommendation acceptance is slightly broken. There is no indicator that a recommendation has been addressed. 
-        recommendation = Recommendation.where(user_id: user.username, show: show).take
-        if recommendation && !recommendation.accepted
-            if !recommendation.accepted
-                recommendation.accepted = true
-                recommendation.save
-            end
+        !review ? recommendation = active_recommendation(client_user,show) : nil
+        
+        if recommendation
+            recommendation.accepted = 1
+            recommendation.save
+
+            p "recommendation logic works"
 
             output[:notifications] = {
                 id: recommendation.id,
@@ -335,7 +337,19 @@ class Api::ReviewsController < ApplicationController
         where_array
     end
 
-    def adjust_likes(review)
+    def active_recommendation(user,show)
+       # The first accepted referral will have the referrer placed in the referral id upon a review creation
+        accepted_rec = Recommendation.where(user_id: user.username, show: show, accepted: 1).order(created_at: :asc).take
+
+        # if someone rejects a recommendation within the last month but they end up watching the show, the first referrer will get credit for the referral
+        rejected_rec = Recommendation.where("user_id = ? AND show = ? AND accepted = ? AND created_at > ?", user.username, show, -1, 1.months.ago)
+        .order(created_at: :asc)
+        .take
+
+        accepted_rec || rejected_rec
+    end
+
+    def adjust_likes(review,client_user)
         action_hash = review_params[:likes]
         return {action: nil, likes: review.likes}if !action_hash
 
@@ -349,7 +363,6 @@ class Api::ReviewsController < ApplicationController
         # end
 
         like_count = review.likes
-        user = User.find_by(username: action["user"])
         net = action["net"]
         target = action["target"]
 
@@ -368,7 +381,7 @@ class Api::ReviewsController < ApplicationController
             recipient: review.user,
             action: event,
             net: net,
-            action_user: user.username,
+            action_user: client_user.username,
             show: review.show,
             target_item: "Review"
         }
