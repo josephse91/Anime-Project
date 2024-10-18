@@ -33,7 +33,6 @@ function UserTable() {
 
   let formData = new FormData();
   let myHeaders = new Headers();
-  //myHeaders.append("session_token","DIDA4gm9QYmulrzs29CPTA");
 
   async function apiRequest(options,query) {
     let requestStr = "http://localhost:3000" + request + query;
@@ -42,11 +41,13 @@ function UserTable() {
     setResponse(data)
     console.log(requestStr,data)
 
-    // Logic meant to focus on the localStorage and sessionStorage
+    // Logic meant to focus on the localStorage
     let dataMap = new Map(Object.entries(data))
     
+    // capturing the session key if provided
     let AdSessionTokenKey = [...dataMap.keys()].includes("ad_session_token")
     let AdSessionTokenValue = dataMap.get("ad_session_token")
+
     if(AdSessionTokenKey && AdSessionTokenValue) {
       localStorage.setItem("ad_session_token",data["ad_session_token"])
       console.log("new session_token: ", data["ad_session_token"])
@@ -64,6 +65,9 @@ function UserTable() {
       headers: myHeaders,
       method: requestMethod
     }
+
+    //Local storage has been selected as the cookie to preserve the session token.
+    // Since the local storage cannot be captured by the rails API directly, the localstorage is always sent through the header
 
     const adSessionToken = localStorage.getItem('ad_session_token')
     myHeaders.append("ad_session_token",adSessionToken);

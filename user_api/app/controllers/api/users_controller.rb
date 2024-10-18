@@ -177,6 +177,28 @@ class Api::UsersController < ApplicationController
         #delete features that are tied to the respective user
         reviews = Review.where(user: user.username)
         reviews.destroy_all
+
+        user.peers.each do |peer_username,date|
+            peer = User.find_by(username: peer_username)
+            peer_associates = peer.peers
+            peer_associates.delete(user.username)
+            peer.update(peers: peer_associates)
+        end
+
+        #needs revisions for rooms. (After room controller is looked at)
+        user.rooms.each do |room_name,date|
+            room = Room.find_by(room_name: room_name)
+            room_users = room.users
+            room_users.delete(user.username)
+            room.update(room_name: room_users)
+        end
+
+        recommendations = Recommendation.where(user_id: user.username)
+        recommendations.destroy_all
+
+        watch_laters = WatchLater.where(user_id: user.username)
+        watch_laters.destroy_all
+
         temp_user = user
         user.destroy
 

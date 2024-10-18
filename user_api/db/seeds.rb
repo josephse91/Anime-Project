@@ -580,6 +580,12 @@ serge_aviel_rec = Recommendation.create({
     referral_id: serge.username
 })
 
+aviel_serge_rec = Recommendation.create({
+    user_id: serge.username,
+    show: "Kaguya Sama",
+    referral_id: aviel.username
+})
+
 aviel_allia_rec = Recommendation.create({
     user_id: allia.username,
     show: "Prison School",
