@@ -13,12 +13,13 @@ class Api::ReviewCommentsController < ApplicationController
         SQL
 
         @comments = ReviewComment.find_by_sql(sql)
-        render :index
+        render json: {status: "completed", comments: @comments, review: review}
+        #render :index
     end
 
     def create
+        return if !comment_attrs
         components = comment_attrs[:components]
-        return if !components
 
         comment = ReviewComment.new(components)
 
@@ -35,19 +36,19 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def update
-        component_hash = comment_attrs
-        return if !component_hash
-
-        components = component_hash[:components]
+        components = comment_attrs
+        return if !comment_attrs
         
-        comment = ReviewComment.find_by(id: comments_param[:id])
-        valid_check = ReviewComment.new(components)
+        existing_comment = components[:existing_comment]
+        new_comment = components[:comment]
 
-        if (valid_check.valid?)
-            comment.update(components)
-            render json: {status: "complete", comment: comment}
+        existing_comment.comment = new_comment
+
+        if (existing_comment.valid?)
+            existing_comment.save
+            render json: {status: "complete", comment: existing_comment}
         else
-            render json: {status: "failed", errors: comment.errors.objects.first.full_message}
+            render json: {status: "failed", errors: existing_comment.errors.objects.first.full_message}
         end
     end
 
@@ -55,15 +56,12 @@ class Api::ReviewCommentsController < ApplicationController
         user = find_user
         return if !user
 
-        comment = confirm_comment_owner(user)
+        comment = find_comment
         return if !comment
 
-        delete_stack = []
+        return if !confirm_comment_owner(user,comment)
 
-        if !comment
-            render json: {status: "failed", parent: parent, error: "Comment does not exist"}
-            return nil
-        end
+        delete_stack = []
 
         destroyed_comments = {};
 
@@ -91,7 +89,7 @@ class Api::ReviewCommentsController < ApplicationController
             end
         end
 
-        render json: {status: "complete", comments: destroyed_comments}
+        render json: {status: "complete", deleted_comments: destroyed_comments}
 
     end
 
@@ -100,8 +98,7 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def find_user
-        user = User.find_by(username: comments_param[:user_id])
-
+        user = current_user
         if !user
             render json: {status: "failed", user: user,error: "Invalid user"}
             return
@@ -111,9 +108,10 @@ class Api::ReviewCommentsController < ApplicationController
     end
 
     def find_comment
-        comment = ReviewComment.find_by(id: comments_param[:id])
+        comment_id = comments_param[:id]
+        comment = ReviewComment.find_by(id: comment_id)
 
-        if !comment 
+        if !comment && comment_id
             render json: {status: "failed", error: "Comment does not exist"}
             return
         end
@@ -123,13 +121,26 @@ class Api::ReviewCommentsController < ApplicationController
 
     def find_review
         review = Review.find_by(id: comments_param[:review_id])
+
+        if !review
+            render json: {
+                status: "failed", 
+                error: "The review could not be found"
+            }
+            return
+        end
+
+        review
     end
 
-    def confirm_comment_owner(current_user)
-        review_comment = find_comment
-        return if !review_comment
+    def confirm_comment_owner(current_user,existing_comment)
+        #review_comment = find_comment
+        #return if !review_comment
 
-        if current_user != review_comment.user_id
+        p "confirm-owner #{current_user} and #{existing_comment.user_id}"
+
+        owner = current_user.username == existing_comment.user_id
+        if !owner
             render json: {
                 status: "failed", 
                 error: "Only the creator of the post can edit the post"
@@ -137,59 +148,71 @@ class Api::ReviewCommentsController < ApplicationController
             return
         end
 
-        review_comment
+        owner
     end
 
     def comment_attrs(comment = nil) 
-        user = find_user
-        return if !user
-        user_id = user.username
+
+        client_user = find_user
+        return if !client_user
+        p "current_user: #{client_user}"
+        user_id = client_user.username
+
+        existing_comment = find_comment
+        like_check = comments_param[:likes]
+
+        if existing_comment && like_check
+            adjust_likes(notifications,review,existing_comment)
+            return
+        end
+        p "current_user: #{client_user}/ existing_comment: #{existing_comment}"
+        components = {}
+
+        comment = comments_param[:comment]
+        components[:comment] = comment
+
+        owner_confirm = nil 
+        
+        if existing_comment
+            owner_confirm = confirm_comment_owner(client_user,existing_comment)
+            return if !owner_confirm
+
+            if owner_confirm
+                components[:id] = existing_comment.id
+                components[:existing_comment] = existing_comment
+            end
+            return components
+        end
+
+        review_id = comments_param[:review_id]
+        review = find_review 
+        return if !review
 
         comment_type = comments_param[:comment_type]
         parent = comments_param[:parent]
-        review_id = comments_param[:review_id]
-        review = Review.find_by(id: review_id)
+
         notifications = []
 
-        if comments_param[:id]
-            target_comment = find_comment
-
-            likes_hash = target_comment ? adjust_likes(notifications,review,target_comment) : {}
-            likes = likes_hash[:likes]
-            return nil if likes_hash[:action]
-        end
+        components[:review_id] = review_id
+        components[:user_id] = client_user.username
+        components[:comment_type] = comment_type
+        components[:parent] = parent
         
-        if comment_type == "reply"
-            parent = ReviewComment.find_by(id: comments_param[:parent])
-            top_comment = parent.id
-            add_notification(notifications,review,user,parent)
+        parent_obj = ReviewComment.find_by(id: parent)
+        if comment_type == "reply" 
+            top_comment = parent_obj.id
+            !owner_confirm ? add_notification(notifications,review,client_user,components) : nil
         elsif comment_type == "comment"
-            parent = Review.find_by(id: comments_param[:parent])
             top_comment = ReviewComment.last.id + 1
-            add_notification(notifications,review,user_id)
+            !owner_confirm ? add_notification(notifications,review,user_id) : nil
         end
 
-        if !parent && !target_comment
-            render json: {status: "failed", parent: parent, error: "Review or Comment does not exist"}
+        if !parent
+            render json: {status: "failed", parent: parent, error: "Review or Comment requires parent"}
             return nil
         end
 
-        comments_param[:id] ? review_comment = confirm_comment_owner(user_id) : nil
-        return if !review_comment && target_comment
-
-        comment = comments_param[:comment]
-        
-        parent = target_comment&.parent || parent&.id
-
-        components = {
-            comment: comment,
-        }
-
-        review_id ? components[:review_id] = review_id : nil
-        user_id ? components[:user_id] = user_id : nil
-        comment_type ? components[:comment_type] = comment_type : nil
-        parent ? components[:parent] = parent : nil
-        top_comment ? components[:top_comment] = top_comment : nil
+        components[:top_comment] = top_comment
 
         {components: components, notification: notifications}
     end
@@ -252,11 +275,11 @@ class Api::ReviewCommentsController < ApplicationController
             notifications.push(reviewer)
         end
 
-        if comment && current_user.username != comment.user_id
+        if comment && current_user.username != comment[:user_id]
             commenter = {
-                id: comment.id,
-                recipient: comment.user_id,
-                review: comment.review_id,
+                id: comment[:id],
+                recipient: comment[:user_id],
+                review: comment[:review_id],
                 show: review.show,
                 target_item: "Review Comment",
                 action: "Comment",

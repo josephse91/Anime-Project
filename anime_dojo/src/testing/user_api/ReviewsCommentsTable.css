@@ -1,2 +1,27 @@
-
-
+#root {
+    min-width: 1280px;
+    max-width: 3000px;
+    padding: 2rem;
+  }
+  
+  .credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .inputLine {
+    display: flex;
+    gap: 10px;
+  }
+  
+  label {
+    width: 60px;
+    text-align: right;
+  }
+  
+  input {
+    max-width: 300px;
+  }
+  

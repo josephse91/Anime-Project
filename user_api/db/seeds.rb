@@ -452,11 +452,11 @@ jarret_comment_2.top_comment = jarret_comment_2.id
 jarret_comment_2.save
 
 serge_reply_1 = ReviewComment.create({
-    comment:"This may be the greatest piece of fiction, I've ever seen",
+    comment:"Real or Anime, it has to be one of the best.",
     review_id: aldane_review_2.id,
-    user_id: jarret.username,
+    user_id: serge.username,
     parent: jarret_comment_2.id,
-    comment_type: "reply"
+    comment_type: "reply",
     top_comment: jarret_comment_2.id
 })
 
@@ -472,9 +472,9 @@ aldane_reply_3 = ReviewComment.create({
 serge_reply_2 = ReviewComment.create({
     comment:"Amen to that brotha man",
     review_id: aldane_review_2.id,
-    user_id: jarret.username,
+    user_id: serge.username,
     parent: aldane_reply_3.id,
-    comment_type: "reply"
+    comment_type: "reply",
     top_comment: jarret_comment_2.id
 })
 
