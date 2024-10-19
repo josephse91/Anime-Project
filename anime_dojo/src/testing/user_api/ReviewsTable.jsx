@@ -143,7 +143,8 @@ function ReviewTable() {
 
     let runAPI = true;
 
-    if (data.like_action.net === 0) {
+    // net is the starting value of a current_user like status. Which means the like is being created for the first time
+    if (data.like_action.initialLike === 0) {
       endpoints["POST"] = {
         endpoint: "/api/likes/",
         params: [
@@ -405,7 +406,7 @@ function ReviewTable() {
       //formData.append("highlighted_points",'Surprisingly and epicly sad ending')
       //formData.append("overall_review","This has the qualities to be a classic")
       //formData.append("watch_priority",1)
-      let likesAction = {user: user, net: 0, target: 1}
+      let likesAction = {user: user, initialLike: 0, targetLike: 1}
       formData.append("likes",JSON.stringify(likesAction))
 
       // formData.append("referral_id","Jarret") (Never required)

@@ -70,7 +70,12 @@ function UserTable() {
     // Since the local storage cannot be captured by the rails API directly, the localstorage is always sent through the header
 
     const adSessionToken = localStorage.getItem('ad_session_token')
-    myHeaders.append("ad_session_token",adSessionToken);
+    let headerSessionToken = myHeaders.get("ad_session_token")
+    if(headerSessionToken) {
+      myHeaders.set("ad_session_token",adSessionToken);
+    } else {
+      myHeaders.append("ad_session_token",adSessionToken)
+    }
 
     if (currentUser) formData.append('user_id',currentUser);
     if (request.includes("/api/sessions")) formData.append('username',currentUser);

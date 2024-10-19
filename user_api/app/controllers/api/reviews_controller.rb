@@ -363,13 +363,14 @@ class Api::ReviewsController < ApplicationController
         # end
 
         like_count = review.likes
-        net = action["net"]
-        target = action["target"]
+        initial_like = action["initialLike"]
+        target_like = action["targetLike"]
 
-        if net < target
+
+        if initial_like < target_like
             review.likes = like_count + 1
             event = "like"
-        elsif net > target
+        elsif initial_like > target_like
             review.likes = like_count - 1
             event = "neutral"
         end
@@ -380,7 +381,7 @@ class Api::ReviewsController < ApplicationController
             id: review.id,
             recipient: review.user,
             action: event,
-            net: net,
+            initialLike: initial_like,
             action_user: client_user.username,
             show: review.show,
             target_item: "Review"

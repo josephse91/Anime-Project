@@ -239,25 +239,25 @@ class Api::ForumsController < ApplicationController
         up_votes = forum.votes["up"]
         down_votes = forum.votes["down"]
 
-        net = action["net"]
-        target = action["target"]
+        initial_vote = action["initialLike"]
+        target_vote = action["targetLike"]
 
-        if net == 1 && target == 0
+        if initial_vote == 1 && target_vote == 0
             forum.votes = {"up": up_votes - 1, "down": down_votes}
             event = "neutral"
-        elsif net == 1 && target == -1
+        elsif initial_vote == 1 && target_vote == -1
             forum.votes = {"up": up_votes - 1, "down": down_votes + 1}
             event = "unlike"
-        elsif net == 0 && target == 1
+        elsif initial_vote == 0 && target_vote == 1
             forum.votes = {"up": up_votes + 1, "down": down_votes}
             event = "like"
-        elsif net == 0 && target == -1
+        elsif initial_vote == 0 && target_vote == -1
             forum.votes = {"up": up_votes, "down": down_votes - 1}
             event = "unlike"
-        elsif net == -1 && target == 0
+        elsif initial_vote == -1 && target_vote == 0
             forum.votes = {"up": up_votes + 1, "down": down_votes}
             event = "neutral"
-        elsif net == -1 && target == 1
+        elsif initial_vote == -1 && target_vote == 1
             forum.votes = {"up": up_votes + 1, "down": down_votes - 1}
             event = "like"
         end
@@ -267,7 +267,7 @@ class Api::ForumsController < ApplicationController
         data = {
             id: forum.id,
             recipient: forum.creator,
-            net: net,
+            initialLike: initial_vote,
             action: event,
             action_user: user.username,
             target_item: "Forum",

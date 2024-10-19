@@ -2909,3 +2909,128 @@ Processing by Api::NotificationsController#update as */*
 Completed 200 OK in 13ms (Views: 3.4ms | ActiveRecord: 3.6ms | Allocations: 5501)
 
 
+Started PATCH "/api/notifications/Aldane" for ::1 at 2024-10-19 08:02:08 -0400
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::NotificationsController#update as */*
+  Parameters: {"notification"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"Aldane"}
+  [1m[36mNotification Load (0.3ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 AND "notifications"."seen" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3[0m  [["recipient", "Aldane"], ["seen", false], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:114:in `update'
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:115:in `update'
+  [1m[36mNotification Update All (2.6ms)[0m  [1m[33mUPDATE "notifications" SET "seen" = $1 WHERE "notifications"."id" IN (SELECT "notifications"."id" FROM "notifications" WHERE "notifications"."recipient" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3)[0m  [["seen", true], ["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:118:in `update'
+  [1m[36mNotification Load (0.3ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:125:in `update'
+Completed 200 OK in 107ms (Views: 3.4ms | ActiveRecord: 7.2ms | Allocations: 47329)
+
+
+Started PATCH "/api/notifications/Aldane" for ::1 at 2024-10-19 08:02:16 -0400
+Processing by Api::NotificationsController#update as */*
+  Parameters: {"notification"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"Aldane"}
+  [1m[36mNotification Load (0.3ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 AND "notifications"."seen" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3[0m  [["recipient", "Aldane"], ["seen", false], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:114:in `update'
+  [1m[36mNotification Load (0.3ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:115:in `update'
+  [1m[36mNotification Update All (6.0ms)[0m  [1m[33mUPDATE "notifications" SET "seen" = $1 WHERE "notifications"."id" IN (SELECT "notifications"."id" FROM "notifications" WHERE "notifications"."recipient" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3)[0m  [["seen", true], ["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:118:in `update'
+  [1m[36mNotification Load (0.4ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:125:in `update'
+Completed 200 OK in 17ms (Views: 4.8ms | ActiveRecord: 7.0ms | Allocations: 5501)
+
+
+Started PATCH "/api/notifications/Aldane" for ::1 at 2024-10-19 08:02:20 -0400
+Processing by Api::NotificationsController#update as */*
+  Parameters: {"notification"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"Aldane"}
+  [1m[36mNotification Load (0.3ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 AND "notifications"."seen" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3[0m  [["recipient", "Aldane"], ["seen", false], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:114:in `update'
+  [1m[36mNotification Load (0.2ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:115:in `update'
+  [1m[36mNotification Update All (7.9ms)[0m  [1m[33mUPDATE "notifications" SET "seen" = $1 WHERE "notifications"."id" IN (SELECT "notifications"."id" FROM "notifications" WHERE "notifications"."recipient" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3)[0m  [["seen", true], ["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:118:in `update'
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:125:in `update'
+Completed 200 OK in 17ms (Views: 4.1ms | ActiveRecord: 9.0ms | Allocations: 5501)
+
+
+Started PATCH "/api/notifications/Aldane" for ::1 at 2024-10-19 08:04:01 -0400
+Processing by Api::NotificationsController#update as */*
+  Parameters: {"notification"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"Aldane"}
+  [1m[36mNotification Load (0.8ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 AND "notifications"."seen" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3[0m  [["recipient", "Aldane"], ["seen", false], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:114:in `update'
+  [1m[36mNotification Load (0.3ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:115:in `update'
+  [1m[36mNotification Update All (2.8ms)[0m  [1m[33mUPDATE "notifications" SET "seen" = $1 WHERE "notifications"."id" IN (SELECT "notifications"."id" FROM "notifications" WHERE "notifications"."recipient" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3)[0m  [["seen", true], ["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:118:in `update'
+  [1m[36mNotification Load (0.4ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:125:in `update'
+Completed 200 OK in 18ms (Views: 4.5ms | ActiveRecord: 4.3ms | Allocations: 5501)
+
+
+Started PATCH "/api/notifications/Aldane" for ::1 at 2024-10-19 08:04:15 -0400
+Processing by Api::NotificationsController#update as */*
+  Parameters: {"notification"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"Aldane"}
+  [1m[36mNotification Load (0.5ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 AND "notifications"."seen" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3[0m  [["recipient", "Aldane"], ["seen", false], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:114:in `update'
+  [1m[36mNotification Load (0.2ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:115:in `update'
+  [1m[36mNotification Update All (1.2ms)[0m  [1m[33mUPDATE "notifications" SET "seen" = $1 WHERE "notifications"."id" IN (SELECT "notifications"."id" FROM "notifications" WHERE "notifications"."recipient" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3)[0m  [["seen", true], ["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:118:in `update'
+  [1m[36mNotification Load (0.2ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:125:in `update'
+Completed 200 OK in 9ms (Views: 3.1ms | ActiveRecord: 2.0ms | Allocations: 5483)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-19 08:22:31 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":2,\"recipient\":\"Jacquline Hauck V\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"show\":\"Teen Titans: The Judas Contract\",\"target_item\":\"Review\"}"}
+  [1m[36mNotification Load (0.7ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'review' AND target_id = 2 AND recipient = 'Jacquline Hauck V' AND action_user = 'Aldane') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (1.1ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'review' AND notifications.target_id = 2 AND notifications.recipient = 'Jacquline Hauck V' AND notifications.updated_at > '2024-10-19 11:22:31.500334') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (1.8ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "like"], ["target", "review"], ["target_id", 2], ["action_user", "Aldane"], ["recipient", "Jacquline Hauck V"], ["seen", false], ["common_actions", 0], ["message", "Aldane liked your review for Teen Titans: The Judas Contract"], ["selected", true], ["created_at", "2024-10-19 12:22:31.520778"], ["updated_at", "2024-10-19 12:22:31.520778"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (2.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 36ms (Views: 0.7ms | ActiveRecord: 12.1ms | Allocations: 7597)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-19 08:24:41 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":2,\"recipient\":\"Jacquline Hauck V\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"show\":\"Teen Titans: The Judas Contract\",\"target_item\":\"Review\"}"}
+  [1m[36mNotification Load (0.4ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'review' AND target_id = 2 AND recipient = 'Jacquline Hauck V' AND action_user = 'Aldane') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.4ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'review' AND notifications.target_id = 2 AND notifications.recipient = 'Jacquline Hauck V' AND notifications.updated_at > '2024-10-19 11:24:41.773295') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mNotification Update (1.4ms)[0m  [1m[33mUPDATE "notifications" SET "selected" = $1, "updated_at" = $2 WHERE "notifications"."id" = $3[0m  [["selected", false], ["updated_at", "2024-10-19 12:24:41.780545"], ["id", 44]]
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (3.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mNotification Update (0.5ms)[0m  [1m[33mUPDATE "notifications" SET "updated_at" = $1 WHERE "notifications"."id" = $2[0m  [["updated_at", "2024-10-19 12:24:41.807676"], ["id", 44]]
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+Completed 200 OK in 44ms (Views: 0.7ms | ActiveRecord: 8.0ms | Allocations: 4606)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-19 08:47:45 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":2,\"recipient\":\"Jacquline Hauck V\",\"action\":\"like\",\"initialLike\":0,\"action_user\":\"Aldane\",\"show\":\"Teen Titans: The Judas Contract\",\"target_item\":\"Review\"}"}
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'review' AND target_id = 2 AND recipient = 'Jacquline Hauck V' AND action_user = 'Aldane') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'review' AND notifications.target_id = 2 AND notifications.recipient = 'Jacquline Hauck V' AND notifications.updated_at > '2024-10-19 11:47:45.887599') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mNotification Update (1.0ms)[0m  [1m[33mUPDATE "notifications" SET "selected" = $1, "updated_at" = $2 WHERE "notifications"."id" = $3[0m  [["selected", true], ["updated_at", "2024-10-19 12:47:45.906628"], ["id", 44]]
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mTRANSACTION (3.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+Completed 200 OK in 33ms (Views: 0.4ms | ActiveRecord: 9.5ms | Allocations: 6014)
+
+

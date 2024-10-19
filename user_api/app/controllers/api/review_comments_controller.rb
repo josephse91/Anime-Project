@@ -207,14 +207,15 @@ class Api::ReviewCommentsController < ApplicationController
         # end
 
         like_count = comment.likes
-        net = action["net"]
-        target = action["target"]
+        initial_like = action["initialLike"]
+        target_like = action["targetLike"]
 
-        if net < target
-            comment.likes = like_count + 1
+        # The like count will always change by the absolute difference between the target and the net
+        if initial_like < target_like
+            comment.likes = like_count + (target_like - initial_like)
             event = "like"
-        elsif net > target
-            comment.likes = like_count - 1
+        elsif initial_like > target_like
+            comment.likes = like_count - (initial_like - target)
             event = "unlike"
         end
 
@@ -223,7 +224,7 @@ class Api::ReviewCommentsController < ApplicationController
         data = {
             id: comment.id,
             recipient: comment.user_id,
-            net: net,
+            initialLike: initial_like,
             action: event,
             action_user: review.user,
             target_item: "Review Comment",

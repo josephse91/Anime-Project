@@ -612,3 +612,150 @@ Processing by Api::LikesController#create as */*
 Completed 200 OK in 23ms (Views: 0.9ms | ActiveRecord: 4.6ms | Allocations: 1880)
 
 
+Started DELETE "/api/likes/21" for ::1 at 2024-10-19 07:59:17 -0400
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (1.2ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 80ms (Views: 0.2ms | ActiveRecord: 1.2ms | Allocations: 21955)
+
+
+Started DELETE "/api/likes/21" for ::1 at 2024-10-19 07:59:30 -0400
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.4ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 730)
+
+
+Started DELETE "/api/likes/21" for ::1 at 2024-10-19 08:00:46 -0400
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 4ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 731)
+
+
+Started DELETE "/api/likes/21" for ::1 at 2024-10-19 08:01:28 -0400
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.4ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.4ms | Allocations: 730)
+
+
+Started PATCH "/api/likes/21" for ::1 at 2024-10-19 08:02:07 -0400
+Processing by Api::LikesController#update as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:64:in `update'
+Completed 200 OK in 3ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 714)
+
+
+Started PATCH "/api/likes/21" for ::1 at 2024-10-19 08:02:16 -0400
+Processing by Api::LikesController#update as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:64:in `update'
+Completed 200 OK in 2ms (Views: 0.1ms | ActiveRecord: 0.3ms | Allocations: 714)
+
+
+Started PATCH "/api/likes/21" for ::1 at 2024-10-19 08:02:20 -0400
+Processing by Api::LikesController#update as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:64:in `update'
+Completed 200 OK in 2ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 714)
+
+
+Started PATCH "/api/likes/21" for ::1 at 2024-10-19 08:04:01 -0400
+Processing by Api::LikesController#update as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.3ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:64:in `update'
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.3ms | Allocations: 732)
+
+
+Started PATCH "/api/likes/21" for ::1 at 2024-10-19 08:04:15 -0400
+Processing by Api::LikesController#update as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"like\",\"net\":-1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:64:in `update'
+Completed 200 OK in 5ms (Views: 0.2ms | ActiveRecord: 0.5ms | Allocations: 714)
+
+
+Started DELETE "/api/likes/21" for ::1 at 2024-10-19 08:04:47 -0400
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.5ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.5ms | Allocations: 712)
+
+
+Started DELETE "/api/likes/21" for ::1 at 2024-10-19 08:11:27 -0400
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":21,\"recipient\":\"Aldane\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"show\":\"Jobless Reincarnation\",\"target_item\":\"Review\"}", "id"=>"21"}
+  [1m[36mLike Load (0.7ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '21') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 31ms (Views: 1.5ms | ActiveRecord: 5.4ms | Allocations: 3576)
+
+
+Started DELETE "/api/likes/2" for ::1 at 2024-10-19 08:21:52 -0400
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":2,\"recipient\":\"Jacquline Hauck V\",\"action\":\"neutral\",\"net\":1,\"action_user\":\"Aldane\",\"show\":\"Teen Titans: The Judas Contract\",\"target_item\":\"Review\"}", "id"=>"2"}
+  [1m[36mLike Load (0.7ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '2') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+Completed 200 OK in 28ms (Views: 0.7ms | ActiveRecord: 6.5ms | Allocations: 3536)
+
+
+Started POST "/api/likes/" for ::1 at 2024-10-19 08:22:31 -0400
+Processing by Api::LikesController#create as */*
+  Parameters: {"like_action"=>"{\"id\":2,\"recipient\":\"Jacquline Hauck V\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"show\":\"Teen Titans: The Judas Contract\",\"target_item\":\"Review\"}"}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mLike Create (2.0ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Aldane"], ["item_type", "Review"], ["item_id", 2], ["upvote", true], ["downvote", false], ["created_at", "2024-10-19 12:22:31.325827"], ["updated_at", "2024-10-19 12:22:31.325827"]]
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mTRANSACTION (1.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+Completed 200 OK in 179ms (Views: 1.1ms | ActiveRecord: 10.5ms | Allocations: 23201)
+
+
+Started POST "/api/likes/" for ::1 at 2024-10-19 08:24:41 -0400
+Processing by Api::LikesController#create as */*
+  Parameters: {"like_action"=>"{\"id\":2,\"recipient\":\"Jacquline Hauck V\",\"action\":\"like\",\"net\":0,\"action_user\":\"Aldane\",\"show\":\"Teen Titans: The Judas Contract\",\"target_item\":\"Review\"}"}
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mLike Create (0.9ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Aldane"], ["item_type", "Review"], ["item_id", 2], ["upvote", true], ["downvote", false], ["created_at", "2024-10-19 12:24:41.626683"], ["updated_at", "2024-10-19 12:24:41.626683"]]
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mTRANSACTION (2.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+Completed 200 OK in 22ms (Views: 0.4ms | ActiveRecord: 4.0ms | Allocations: 1864)
+
+
+Started DELETE "/api/likes/2" for ::1 at 2024-10-19 08:44:25 -0400
+Processing by Api::LikesController#destroy as */*
+  Parameters: {"like_action"=>"{\"id\":2,\"recipient\":\"Jacquline Hauck V\",\"action\":\"neutral\",\"initialLike\":1,\"action_user\":\"Aldane\",\"show\":\"Teen Titans: The Judas Contract\",\"target_item\":\"Review\"}", "id"=>"2"}
+  [1m[36mLike Load (0.6ms)[0m  [1m[34mSELECT "likes".* FROM "likes" WHERE (likes.user= 'Aldane' AND item_type= 'Review' AND item_id = '2') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/likes_controller.rb:91:in `destroy'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+  [1m[36mLike Destroy (0.5ms)[0m  [1m[31mDELETE FROM "likes" WHERE "likes"."id" = $1[0m  [["id", 25]]
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:99:in `destroy'
+Completed 200 OK in 121ms (Views: 0.8ms | ActiveRecord: 6.8ms | Allocations: 9910)
+
+
+Started POST "/api/likes/" for ::1 at 2024-10-19 08:47:45 -0400
+Processing by Api::LikesController#create as */*
+  Parameters: {"like_action"=>"{\"id\":2,\"recipient\":\"Jacquline Hauck V\",\"action\":\"like\",\"initialLike\":0,\"action_user\":\"Aldane\",\"show\":\"Teen Titans: The Judas Contract\",\"target_item\":\"Review\"}"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mLike Create (0.5ms)[0m  [1m[32mINSERT INTO "likes" ("user", "item_type", "item_id", "upvote", "downvote", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["user", "Aldane"], ["item_type", "Review"], ["item_id", 2], ["upvote", true], ["downvote", false], ["created_at", "2024-10-19 12:47:45.726062"], ["updated_at", "2024-10-19 12:47:45.726062"]]
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+  [1m[36mTRANSACTION (1.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/likes_controller.rb:34:in `create'
+Completed 200 OK in 78ms (Views: 0.5ms | ActiveRecord: 6.0ms | Allocations: 4436)
+
+

@@ -55,7 +55,13 @@ class Api::UsersController < ApplicationController
         return if !@user
 
         request_param = user_params[:requests]
+        client_user = current_user
         notifications = []
+
+        if !logged_in?()
+            render json: {status: "failed", error: "Not authorized user", user: @user.username, current_user: @user, params: user_params}
+            return
+        end
 
         # Conditional for an incoming request
         if request_param
@@ -69,19 +75,21 @@ class Api::UsersController < ApplicationController
             peer_check = peer_check(@user,request_focus,requests_action)
             return if peer_check
 
-            peer_request_check = @user.requests["peer"][request_focus]
+            peer_request_check = requester_object.requests["peer"][@user.username]
+
             if peer_request_check && requests_action == "add"
                 render json: {status: "failed", 
-                    error: "request already sent", requester: requester_object, 
+                    error: "request already sent", requestee: @user, 
                     user_requested: {username:@user.username, peer_requests: @user.requests["peer"]}
                 }
                 return
             end
 
             if requests_action == "remove"
-                user_requests_hash.delete(request_focus)
+                client_user.peers.delete(@user.username)
+                client_user.save
             elsif requests_action == "add"
-                user_requests_hash[request_focus] = TIME_INPUT
+                user_requests_hash[client_user.username] = TIME_INPUT
             end
 
             @user.save
@@ -89,8 +97,8 @@ class Api::UsersController < ApplicationController
             render_obj = {status: "complete", user: @user}
 
             if requests_action == "add"
-                add_notification(notifications,requester_object,@user,"Sent a Request")
-                #requester_object.save
+                add_notification(notifications,client_user,requester_object,"Sent a Request")
+                #requestee_object.save
                 render_obj[:notifications] = notifications
             end
 
@@ -99,11 +107,6 @@ class Api::UsersController < ApplicationController
         end
 
         # Should only allow the current user to be the one to change further attributes
-
-        if !logged_in?()
-            render json: {status: "failed", error: "Not authorized user", user: @user.username, current_user: @user, params: user_params}
-            return
-        end
 
         new_username = user_params[:new_username]
         new_password = user_params[:new_password]
@@ -240,12 +243,14 @@ class Api::UsersController < ApplicationController
     end
 
     def peer_check(user,param_user,action)
-        peer_exist = user.peers[param_user]
+        
+        peer_exist = user.requests["peer"][param_user] if user_params[:requests]
+        peer_exist = user.peers[param_user] if user_params[:peers]
 
         if peer_exist && action == "add"
             render json: {status: "complete", user: user.username, peers: user.peers, message: "User already has this peer"}
         end
-
+        p "user: #{user.username}/ peer_exist: #{peer_exist}/ action: #{action}"
         peer_exist && action == "add"
     end
 

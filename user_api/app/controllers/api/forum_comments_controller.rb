@@ -247,25 +247,25 @@ class Api::ForumCommentsController < ApplicationController
         up_votes = comment.votes["up"]
         down_votes = comment.votes["down"]
 
-        net = action["net"]
-        target = action["target"]
+        initial_vote = action["initialLike"]
+        target_like = action["targetLike"]
 
-        if net == 1 && target == 0
+        if initial_vote == 1 && target_like == 0
             comment.votes = {"up": up_votes - 1, "down": down_votes}
             event = "neutral"
-        elsif net == 1 && target == -1
+        elsif initial_vote == 1 && target_like == -1
             comment.votes = {"up": up_votes - 1, "down": down_votes + 1}
             event = "unlike"
-        elsif net == 0 && target == 1
+        elsif initial_vote == 0 && target_like == 1
             comment.votes = {"up": up_votes + 1, "down": down_votes}
             event = "like"
-        elsif net == 0 && target == -1
+        elsif initial_vote == 0 && target_like == -1
             comment.votes = {"up": up_votes, "down": down_votes - 1}
             event = "unlike"
-        elsif net == -1 && target == 0
+        elsif initial_vote == -1 && target_like == 0
             comment.votes = {"up": up_votes + 1, "down": down_votes}
             event = "neutral"
-        elsif net == -1 && target == 1
+        elsif initial_vote == -1 && target_like == 1
             comment.votes = {"up": up_votes + 1, "down": down_votes - 1}
             event = "like"
         end
@@ -278,7 +278,7 @@ class Api::ForumCommentsController < ApplicationController
         data = {
             action: "like",
             target_item: "Forum Comment",
-            net: net,
+            initialLike: initial_vote,
             action_user: user.username,
             recipient: comment.comment_owner,
             room: forum.room_id,

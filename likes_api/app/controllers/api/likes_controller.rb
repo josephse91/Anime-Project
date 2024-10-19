@@ -103,7 +103,7 @@ class Api::LikesController < ApplicationController
             return
         end
 
-        render json: {status: "complete", action: "neutral", like: deleted_like}
+        render json: {status: "complete", action: "neutral", deleted_like: deleted_like}
     end
 
     def like_params
