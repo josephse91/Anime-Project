@@ -58,6 +58,7 @@ class Api::UsersController < ApplicationController
         client_user = current_user
         notifications = []
 
+        #In order to edit the current_user or target_user model, the current_user must be logged in
         if !logged_in?()
             render json: {status: "failed", error: "Not authorized user", user: @user.username, current_user: @user, params: user_params}
             return
@@ -86,8 +87,8 @@ class Api::UsersController < ApplicationController
             end
 
             if requests_action == "remove"
-                client_user.peers.delete(@user.username)
-                client_user.save
+                user_requests_hash.delete(client_user.username)
+                @user.save
             elsif requests_action == "add"
                 user_requests_hash[client_user.username] = TIME_INPUT
             end
@@ -105,8 +106,6 @@ class Api::UsersController < ApplicationController
             render json: render_obj
             return
         end
-
-        # Should only allow the current user to be the one to change further attributes
 
         new_username = user_params[:new_username]
         new_password = user_params[:new_password]

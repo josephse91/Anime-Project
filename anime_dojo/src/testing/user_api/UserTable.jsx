@@ -55,7 +55,7 @@ function UserTable() {
       localStorage.removeItem("ad_session_token")
       console.log("removed session_token: ", data["ad_session_token"])
     }
-
+    await followUpAPIs(data)
   }
   
   let sendRequest = function(e) {
@@ -123,6 +123,77 @@ function UserTable() {
 
     apiRequest(options,query)
     console.log("Submit has been handled")
+  }
+
+  async function followUpAPIs(data) {
+    if (data.status === "failed") return new Promise(resolve => {
+      resolve({status: "N/A", message: "follow up API was not utilized"})
+    })
+
+    if (data.notifications || data.notification_count) {
+      const notificationsEndpoint = await notificationRequests(data)
+      const output = await notificationsCall(notificationsEndpoint,data)
+    }
+  }
+
+  async function notificationRequests(data) {
+    let endpoints = {};
+    let user = data.notifications[0].recipient
+    let actionUser = data.notifications[0].action_user
+    let targetItem = data.notifications[0].target_item.toLowerCase()
+
+    if (data.notification_count) {
+      endpoints["GET"] = {
+        endpoint: `/api/notifications_count/${user}`,
+        params: []
+      }
+    } else if (user !== actionUser) {
+        endpoints["POST"] = {
+          endpoint: `/api/notifications/`,
+          params: ["notification", data]
+        }
+      } else if (user !== actionUser) {
+        endpoints["PATCH"] = {
+          endpoint: `/api/notifications/${user}`,
+          params: []
+        }
+      }
+      return new Promise(resolve => resolve({status: "success", endpoints: endpoints}))
+    }
+
+  async function notificationsCall(endpointData,actionData) {
+    const options5 = {
+      headers: myHeaders,
+    }
+    
+    let requestStr = "http://localhost:3003";
+
+    const method = Object.keys(endpointData.endpoints)[0]
+    const endpoints = endpointData.endpoints
+
+    options5.method = method
+
+    let formData5 = new FormData()
+    options5.body = formData5
+
+    let notifications = actionData.notifications
+    let notificationData = []
+
+    console.log(endpointData,actionData, method,notifications)
+
+    for (let notification of notifications) {
+      let param = "notification"
+      let value = notification
+      formData5.append(param,JSON.stringify(value))
+
+      requestStr += endpoints[method].endpoint
+      let apiRequest = await fetch(requestStr, options5)
+      let data = await apiRequest.json()
+      console.log(requestStr, data)
+      notificationData.push(data) 
+    }
+
+    return new Promise(resolve => resolve({status: "success", data: notificationData}))
   }
 
 
