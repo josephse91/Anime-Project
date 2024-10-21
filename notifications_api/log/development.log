@@ -3104,3 +3104,146 @@ Processing by Api::NotificationsController#create as */*
 Completed 200 OK in 21ms (Views: 0.8ms | ActiveRecord: 3.6ms | Allocations: 3040)
 
 
+Started POST "/api/notifications/" for ::1 at 2024-10-21 07:06:51 -0400
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":9,\"recipient\":\"Aldane\",\"show\":\"Attack on Titan\",\"action\":\"Comment\",\"action_user\":{\"id\":7,\"username\":\"Aldane\",\"password_digest\":\"$2a$12$5FcdeInOzmjHOJvDBm/NH.gcKIkS3QMJ6l2jYXbH7RIyi0dVIeWKi\",\"rooms\":{\"Planet Vegeta\":\"10-19-2024\"},\"peers\":{\"Suzi Parker\":\"2022-12-12\",\"Christie Morissette\":\"2022-12-12\",\"Melvin Harris LLD\":\"2022-12-12\",\"Jarret\":\"10-19-2024\",\"Serge\":\"10-19-2024\",\"David\":\"10-19-2024\",\"Jamal\":\"10-19-2024\",\"Allia\":\"10-19-2024\"},\"requests\":{\"room\":{},\"peer\":{},\"roomAuth\":{}},\"genre_preference\":\"Shounin\",\"go_to_motto\":\"You can take away my body, but you can't take away my pride\",\"user_grade_protocol\":null,\"session_token\":\"h2RF7Gvcqg0XmPPQgCgNDg\",\"created_at\":\"2024-10-19T17:26:25.025Z\",\"updated_at\":\"2024-10-21T10:46:45.152Z\"},\"target_item\":\"Review\"}"}
+Completed 500 Internal Server Error in 179ms (ActiveRecord: 0.0ms | Allocations: 21211)
+
+
+
+TypeError - can't quote Array:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-21 07:17:32 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":9,\"recipient\":\"Aldane\",\"show\":\"Attack on Titan\",\"action\":\"Comment\",\"action_user\":{\"id\":7,\"username\":\"Aldane\",\"password_digest\":\"$2a$12$5FcdeInOzmjHOJvDBm/NH.gcKIkS3QMJ6l2jYXbH7RIyi0dVIeWKi\",\"rooms\":{\"Planet Vegeta\":\"10-19-2024\"},\"peers\":{\"Suzi Parker\":\"2022-12-12\",\"Christie Morissette\":\"2022-12-12\",\"Melvin Harris LLD\":\"2022-12-12\",\"Jarret\":\"10-19-2024\",\"Serge\":\"10-19-2024\",\"David\":\"10-19-2024\",\"Jamal\":\"10-19-2024\",\"Allia\":\"10-19-2024\"},\"requests\":{\"room\":{},\"peer\":{},\"roomAuth\":{}},\"genre_preference\":\"Shounin\",\"go_to_motto\":\"You can take away my body, but you can't take away my pride\",\"user_grade_protocol\":null,\"session_token\":\"h2RF7Gvcqg0XmPPQgCgNDg\",\"created_at\":\"2024-10-19T17:26:25.025Z\",\"updated_at\":\"2024-10-21T10:46:45.152Z\"},\"target_item\":\"Review\"}"}
+Completed 500 Internal Server Error in 14ms (ActiveRecord: 4.7ms | Allocations: 3497)
+
+
+
+TypeError - can't quote Array:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-21 07:19:11 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":25,\"recipient\":\"Jarret\",\"review\":9,\"show\":\"Attack on Titan\",\"target_item\":\"Review Comment\",\"action\":\"Comment\",\"action_user\":{\"id\":7,\"username\":\"Aldane\",\"password_digest\":\"$2a$12$5FcdeInOzmjHOJvDBm/NH.gcKIkS3QMJ6l2jYXbH7RIyi0dVIeWKi\",\"rooms\":{\"Planet Vegeta\":\"10-19-2024\"},\"peers\":{\"Suzi Parker\":\"2022-12-12\",\"Christie Morissette\":\"2022-12-12\",\"Melvin Harris LLD\":\"2022-12-12\",\"Jarret\":\"10-19-2024\",\"Serge\":\"10-19-2024\",\"David\":\"10-19-2024\",\"Jamal\":\"10-19-2024\",\"Allia\":\"10-19-2024\"},\"requests\":{\"room\":{},\"peer\":{},\"roomAuth\":{}},\"genre_preference\":\"Shounin\",\"go_to_motto\":\"You can take away my body, but you can't take away my pride\",\"user_grade_protocol\":null,\"session_token\":\"h2RF7Gvcqg0XmPPQgCgNDg\",\"created_at\":\"2024-10-19T17:26:25.025Z\",\"updated_at\":\"2024-10-21T10:46:45.152Z\"}}"}
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms | Allocations: 786)
+
+
+
+TypeError - can't quote Array:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-21 07:27:41 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":25,\"recipient\":\"Jarret\",\"review\":9,\"show\":\"Attack on Titan\",\"target_item\":\"Review Comment\",\"action\":\"Comment\",\"action_user\":\"Aldane\"}"}
+  [1m[36mNotification Load (3.4ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'review comment' AND target_id = 25 AND recipient = 'Jarret' AND action_user = 'Aldane') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (1.4ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'review comment' AND notifications.target_id = 25 AND notifications.recipient = 'Jarret' AND notifications.updated_at > '2024-10-21 10:27:41.317447') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (1.7ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "comment"], ["target", "review comment"], ["target_id", 25], ["action_user", "Aldane"], ["recipient", "Jarret"], ["seen", false], ["common_actions", 0], ["message", "Aldane commented on your review comment for Attack on Titan"], ["selected", true], ["created_at", "2024-10-21 11:27:41.560473"], ["updated_at", "2024-10-21 11:27:41.560473"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (3.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 258ms (Views: 1.4ms | ActiveRecord: 36.8ms | Allocations: 30901)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-21 07:31:35 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":9,\"recipient\":\"Aldane\",\"show\":\"Attack on Titan\",\"action\":\"Comment\",\"action_user\":\"Serge\",\"target_item\":\"Review\"}"}
+  [1m[36mNotification Load (0.7ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'review' AND target_id = 9 AND recipient = 'Aldane' AND action_user = 'Serge') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.3ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'review' AND notifications.target_id = 9 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-21 10:31:35.493786') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (0.4ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "comment"], ["target", "review"], ["target_id", 9], ["action_user", "Serge"], ["recipient", "Aldane"], ["seen", false], ["common_actions", 0], ["message", "Serge commented on your review for Attack on Titan"], ["selected", true], ["created_at", "2024-10-21 11:31:35.501087"], ["updated_at", "2024-10-21 11:31:35.501087"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 15ms (Views: 0.4ms | ActiveRecord: 3.2ms | Allocations: 3069)
+
+
+Started POST "/api/notifications//api/notifications/" for ::1 at 2024-10-21 07:31:35 -0400
+  
+ActionController::RoutingError (No route matches [POST] "/api/notifications/api/notifications"):
+  
+Started POST "/api/notifications/" for ::1 at 2024-10-21 07:51:23 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":9,\"recipient\":\"Aldane\",\"show\":\"Attack on Titan\",\"action\":\"Comment\",\"action_user\":\"Serge\",\"target_item\":\"Review\"}"}
+  [1m[36mNotification Load (1.0ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'review' AND target_id = 9 AND recipient = 'Aldane' AND action_user = 'Serge') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'review' AND notifications.target_id = 9 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-21 10:51:23.926225') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mNotification Update (1.9ms)[0m  [1m[33mUPDATE "notifications" SET "selected" = $1, "updated_at" = $2 WHERE "notifications"."id" = $3[0m  [["selected", false], ["updated_at", "2024-10-21 11:51:23.956093"], ["id", 48]]
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mNotification Update (0.8ms)[0m  [1m[33mUPDATE "notifications" SET "updated_at" = $1 WHERE "notifications"."id" = $2[0m  [["updated_at", "2024-10-21 11:51:24.095334"], ["id", 48]]
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mTRANSACTION (1.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+Completed 200 OK in 177ms (Views: 0.5ms | ActiveRecord: 15.7ms | Allocations: 12692)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-21 07:51:24 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":25,\"recipient\":\"Jarret\",\"review\":9,\"show\":\"Attack on Titan\",\"target_item\":\"Review Comment\",\"action\":\"Comment\",\"action_user\":\"Serge\"}"}
+  [1m[36mNotification Load (0.7ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'review comment' AND target_id = 25 AND recipient = 'Jarret' AND action_user = 'Serge') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.7ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'review comment' AND notifications.target_id = 25 AND notifications.recipient = 'Jarret' AND notifications.updated_at > '2024-10-21 10:51:24.235642') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mNotification Update (0.6ms)[0m  [1m[33mUPDATE "notifications" SET "selected" = $1, "updated_at" = $2 WHERE "notifications"."id" = $3[0m  [["selected", false], ["updated_at", "2024-10-21 11:51:24.246560"], ["id", 47]]
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (1.2ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "comment"], ["target", "review comment"], ["target_id", 25], ["action_user", "Serge"], ["recipient", "Jarret"], ["seen", false], ["common_actions", 1], ["message", "2 users commented on your review comment for Attack on Titan"], ["selected", true], ["created_at", "2024-10-21 11:51:24.256977"], ["updated_at", "2024-10-21 11:51:24.256977"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 35ms (Views: 0.4ms | ActiveRecord: 6.8ms | Allocations: 4611)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-21 09:17:49 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":25,\"recipient\":\"Jarret\",\"initialLike\":0,\"action\":\"like\",\"action_user\":\"Aldane\",\"target_item\":\"Review Comment\",\"show\":\"Attack on Titan\"}"}
+  [1m[36mNotification Load (1.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'review comment' AND target_id = 25 AND recipient = 'Jarret' AND action_user = 'Aldane') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.8ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'review comment' AND notifications.target_id = 25 AND notifications.recipient = 'Jarret' AND notifications.updated_at > '2024-10-21 12:17:49.884476') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mNotification Update (0.6ms)[0m  [1m[33mUPDATE "notifications" SET "message" = $1, "selected" = $2, "updated_at" = $3 WHERE "notifications"."id" = $4[0m  [["message", "Aldane liked your review comment for Attack on Titan"], ["selected", true], ["updated_at", "2024-10-21 13:17:49.942433"], ["id", 47]]
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+Completed 200 OK in 83ms (Views: 3.0ms | ActiveRecord: 14.1ms | Allocations: 5878)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-21 09:29:19 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":29,\"recipient\":\"Aldane\",\"initialLike\":0,\"action\":\"like\",\"action_user\":\"Serge\",\"target_item\":\"Review Comment\",\"show\":\"Attack on Titan\"}"}
+  [1m[36mNotification Load (0.8ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'review comment' AND target_id = 29 AND recipient = 'Aldane' AND action_user = 'Serge') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'review comment' AND notifications.target_id = 29 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-21 12:29:19.276834') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (0.8ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "like"], ["target", "review comment"], ["target_id", 29], ["action_user", "Serge"], ["recipient", "Aldane"], ["seen", false], ["common_actions", 0], ["message", "Serge liked your review comment for Attack on Titan"], ["selected", true], ["created_at", "2024-10-21 13:29:19.303126"], ["updated_at", "2024-10-21 13:29:19.303126"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 43ms (Views: 1.8ms | ActiveRecord: 9.5ms | Allocations: 5908)
+
+

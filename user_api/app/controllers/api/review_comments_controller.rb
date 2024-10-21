@@ -37,7 +37,7 @@ class Api::ReviewCommentsController < ApplicationController
 
     def update
         components = comment_attrs
-        return if !comment_attrs
+        return if !components
         
         existing_comment = components[:existing_comment]
         new_comment = components[:comment]
@@ -155,17 +155,23 @@ class Api::ReviewCommentsController < ApplicationController
 
         client_user = find_user
         return if !client_user
-        p "current_user: #{client_user}"
+
+        review_id = comments_param[:review_id]
+        review = find_review 
+        return if !review
+
         user_id = client_user.username
 
         existing_comment = find_comment
         like_check = comments_param[:likes]
 
+        notifications = []
+
         if existing_comment && like_check
-            adjust_likes(notifications,review,existing_comment)
-            return
+            adjust_likes(notifications,client_user,review.show,existing_comment)
+            return nil
         end
-        p "current_user: #{client_user}/ existing_comment: #{existing_comment}"
+
         components = {}
 
         comment = comments_param[:comment]
@@ -184,14 +190,8 @@ class Api::ReviewCommentsController < ApplicationController
             return components
         end
 
-        review_id = comments_param[:review_id]
-        review = find_review 
-        return if !review
-
         comment_type = comments_param[:comment_type]
         parent = comments_param[:parent]
-
-        notifications = []
 
         components[:review_id] = review_id
         components[:user_id] = client_user.username
@@ -201,7 +201,7 @@ class Api::ReviewCommentsController < ApplicationController
         parent_obj = ReviewComment.find_by(id: parent)
         if comment_type == "reply" 
             top_comment = parent_obj.id
-            !owner_confirm ? add_notification(notifications,review,client_user,components) : nil
+            !owner_confirm ? add_notification(notifications,review,client_user,parent_obj) : nil
         elsif comment_type == "comment"
             top_comment = ReviewComment.last.id + 1
             !owner_confirm ? add_notification(notifications,review,user_id) : nil
@@ -217,7 +217,7 @@ class Api::ReviewCommentsController < ApplicationController
         {components: components, notification: notifications}
     end
 
-    def adjust_likes(notifications,review,comment)
+    def adjust_likes(notifications,client_user,show,comment)
         action_hash = comments_param[:likes]
         return {action: nil, likes: comment.likes} if !action_hash
 
@@ -238,7 +238,7 @@ class Api::ReviewCommentsController < ApplicationController
             comment.likes = like_count + (target_like - initial_like)
             event = "like"
         elsif initial_like > target_like
-            comment.likes = like_count - (initial_like - target)
+            comment.likes = like_count - (initial_like - target_like)
             event = "unlike"
         end
 
@@ -249,9 +249,9 @@ class Api::ReviewCommentsController < ApplicationController
             recipient: comment.user_id,
             initialLike: initial_like,
             action: event,
-            action_user: review.user,
+            action_user: client_user.username,
             target_item: "Review Comment",
-            show: review.show
+            show: show
         }
         event == "like" ? notifications.push(data) : nil
         render_obj = {status: "complete", action: event, like_action: data, comment: comment}
@@ -259,7 +259,7 @@ class Api::ReviewCommentsController < ApplicationController
 
         render json: render_obj
 
-        {action: event, comment: comment}
+        #{action: event, comment: comment}
     end
 
     def add_notification(notifications,review,current_user,comment = nil)
@@ -268,22 +268,22 @@ class Api::ReviewCommentsController < ApplicationController
             recipient: review.user,
             show: review.show,
             action: "Comment",
-            action_user: current_user,
+            action_user: current_user.username,
             target_item: "Review"
         }
-        if current_user != review.user
+        if current_user.username != review.user
             notifications.push(reviewer)
         end
 
-        if comment && current_user.username != comment[:user_id]
+        if comment && current_user.username != comment.user_id
             commenter = {
-                id: comment[:id],
-                recipient: comment[:user_id],
-                review: comment[:review_id],
+                id: comment.id,
+                recipient: comment.user_id,
+                review: comment.review_id,
                 show: review.show,
                 target_item: "Review Comment",
                 action: "Comment",
-                action_user: current_user
+                action_user: current_user.username
             }
             notifications.push(commenter)
         end
