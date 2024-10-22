@@ -43,12 +43,14 @@ class Api::ReviewsController < ApplicationController
         end
 
         @review.save
+        altered_rooms = alter_show_count_to_room(user,@review,"add")
 
         render_obj = {
             status: "complete", 
             user: user, 
             review: @review, 
-            action: "add review"
+            action: "add review",
+            altered_rooms: altered_rooms
         }
 
         notifications = []
@@ -136,11 +138,12 @@ class Api::ReviewsController < ApplicationController
     end
 
     def destroy
-        if !current_user
+        user = current_user
+        if !user
             render json: {status: "failed", error: "User is not owner of review"}
             return
         end
-        
+
         review_hash = find_show
         review = review_hash ? review_hash[:review] : nil
 
@@ -151,14 +154,16 @@ class Api::ReviewsController < ApplicationController
 
         comments = ReviewComment.where(review_id: review.id)
         # The review_comments are deleted automatically due to the model validations
+
         review.destroy
+        altered_rooms = alter_show_count_to_room(user,review_copy,"delete")
 
         if !review.destroyed?
             render json: {status: "failed", error: review.errors.objects.first.full_message}
             return
         end
         
-        render json: {status: "complete", action: "delete review", review: review_copy, comments: comments}
+        render json: {status: "complete", action: "delete review", review: review_copy, comments: comments, altered_rooms: altered_rooms}
     end
 
     #helper functions
@@ -167,7 +172,9 @@ class Api::ReviewsController < ApplicationController
     end
 
     def find_user
-        input_user =  review_params[:user_id]
+        return if !review_params[:user_id]
+
+        input_user = review_params[:user_id]
         user = User.find_by(username: input_user)
 
         if !user
@@ -335,6 +342,36 @@ class Api::ReviewsController < ApplicationController
         end
 
         where_array
+    end
+
+    def alter_show_count_to_room(user,review,action)
+        show = review.show
+        user_rooms = user.rooms.keys
+
+        altered_room_shows = {}
+        
+        user_rooms.each do |room|
+            room_obj = Room.find_by(room_name: room)
+            room_show_count = room_obj.shows[show]
+            
+            if room_show_count && action == "add"
+                room_obj.shows[show] += 1
+            elsif !room_show_count && action == "add"
+                room_obj.shows[show] = 1
+            elsif room_show_count > 1 && action == "delete"
+                room_obj.shows[show] -= 1
+            elsif room_show_count = 1 && action == "delete"
+                room_obj.shows.delete(show)
+            end
+
+            room_obj.save
+            
+            room_name = room_obj.room_name
+            altered_show = room_obj.shows[show] || 0
+            altered_room_shows[room_name] = "#{show}: #{altered_show}"
+        end
+        
+        altered_room_shows
     end
 
     def active_recommendation(user,show)

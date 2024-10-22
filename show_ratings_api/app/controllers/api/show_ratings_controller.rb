@@ -12,6 +12,7 @@ class Api::ShowRatingsController < ApplicationController
     end
 
     def room_show_index
+        #Will require a database trigger for when a show within a room changes
         room = show_params[:room_id]
         sql_room = "'" + room + "'"
         

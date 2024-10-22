@@ -3174,3 +3174,83 @@ Processing by Api::ShowRatingsController#create as */*
 Completed 200 OK in 24ms (Views: 0.3ms | ActiveRecord: 5.2ms | Allocations: 5721)
 
 
+Started POST "/api/show_ratings/" for ::1 at 2024-10-22 08:36:24 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":10,\"user\":\"Serge\",\"show\":\"Naruto\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"Naruto is the gold standard of Shounin anime. Shippuden is still stronger but this is the gold standard\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-19T17:26:25.609Z\",\"updated_at\":\"2024-10-19T17:26:25.609Z\"},{\"id\":13,\"user\":\"Serge\",\"show\":\"Tokyo Revengers\",\"rating\":78,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This show is solid but there are just a few things I can't get past. The time travel portion of the show is just so convenient that I find it lazy. I also can't get past the fact that these characters are in middle school. The character defining moments are great though\",\"referral_id\":null,\"watch_priority\":0,\"likes\":0,\"created_at\":\"2024-10-19T17:26:25.660Z\",\"updated_at\":\"2024-10-19T17:26:25.660Z\"}]", "room_id"=>"Jujutsu High"}
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Naruto"], ["room_id", "Jujutsu High"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Create (0.7ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Naruto"], ["room_id", "Jujutsu High"], ["reviewers", "{\"Serge\":90}"], ["total_points", 90], ["number_of_reviews", 1], ["created_at", "2024-10-22 12:36:25.414053"], ["updated_at", "2024-10-22 12:36:25.414053"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (2.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Tokyo Revengers"], ["room_id", "Jujutsu High"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Create (0.3ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Tokyo Revengers"], ["room_id", "Jujutsu High"], ["reviewers", "{\"Serge\":78}"], ["total_points", 78], ["number_of_reviews", 1], ["created_at", "2024-10-22 12:36:25.434399"], ["updated_at", "2024-10-22 12:36:25.434399"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 114ms (Views: 1.2ms | ActiveRecord: 14.6ms | Allocations: 10965)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-22 08:37:13 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":10,\"user\":\"Serge\",\"show\":\"Naruto\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"Naruto is the gold standard of Shounin anime. Shippuden is still stronger but this is the gold standard\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-19T17:26:25.609Z\",\"updated_at\":\"2024-10-19T17:26:25.609Z\"},{\"id\":13,\"user\":\"Serge\",\"show\":\"Tokyo Revengers\",\"rating\":78,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This show is solid but there are just a few things I can't get past. The time travel portion of the show is just so convenient that I find it lazy. I also can't get past the fact that these characters are in middle school. The character defining moments are great though\",\"referral_id\":null,\"watch_priority\":0,\"likes\":0,\"created_at\":\"2024-10-19T17:26:25.660Z\",\"updated_at\":\"2024-10-19T17:26:25.660Z\"}]", "room_id"=>"New Vahala"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Naruto"], ["room_id", "New Vahala"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Create (0.3ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Naruto"], ["room_id", "New Vahala"], ["reviewers", "{\"Serge\":90}"], ["total_points", 90], ["number_of_reviews", 1], ["created_at", "2024-10-22 12:37:13.648962"], ["updated_at", "2024-10-22 12:37:13.648962"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Tokyo Revengers"], ["room_id", "New Vahala"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Create (0.9ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Tokyo Revengers"], ["room_id", "New Vahala"], ["reviewers", "{\"Serge\":78}"], ["total_points", 78], ["number_of_reviews", 1], ["created_at", "2024-10-22 12:37:13.658236"], ["updated_at", "2024-10-22 12:37:13.658236"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 19ms (Views: 0.4ms | ActiveRecord: 5.1ms | Allocations: 5721)
+
+
+Started PATCH "/api/show_ratings/fill" for ::1 at 2024-10-22 09:41:39 -0400
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"review"=>"{\"id\":21,\"user\":\"Aldane\",\"show\":\"Naruto\",\"rating\":87,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":null,\"referral_id\":null,\"watch_priority\":0,\"likes\":0,\"created_at\":\"2024-10-22T13:41:38.392Z\",\"updated_at\":\"2024-10-22T13:41:38.392Z\"}", "rooms"=>"[\"Planet Vegeta\"]", "show_action"=>"add review", "id"=>"fill"}
+  [1m[36mShowRating Load (0.6ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Naruto"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:88:in `update'
+  [1m[36mShowRating Load (0.5ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Naruto"], ["id", 5], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mShowRating Update (0.5ms)[0m  [1m[33mUPDATE "show_ratings" SET "reviewers" = $1, "total_points" = $2, "number_of_reviews" = $3, "updated_at" = $4 WHERE "show_ratings"."id" = $5[0m  [["reviewers", "{\"\":91,\"David\":91,\"Serge\":96,\"Aldane\":87}"], ["total_points", 365], ["number_of_reviews", 4], ["updated_at", "2024-10-22 13:41:39.568864"], ["id", 5]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+Completed 200 OK in 45ms (Views: 1.1ms | ActiveRecord: 10.9ms | Allocations: 8001)
+
+
+Started PATCH "/api/show_ratings/fill" for ::1 at 2024-10-22 09:42:40 -0400
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"review"=>"{\"id\":21,\"user\":\"Aldane\",\"show\":\"Naruto\",\"rating\":87,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":null,\"referral_id\":null,\"watch_priority\":0,\"likes\":0,\"created_at\":\"2024-10-22T13:41:38.392Z\",\"updated_at\":\"2024-10-22T13:41:38.392Z\"}", "rooms"=>"[\"Planet Vegeta\"]", "show_action"=>"delete review", "id"=>"fill"}
+  [1m[36mShowRating Load (1.6ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" = $2[0m  [["room_id", "Planet Vegeta"], ["show_title", "Naruto"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:88:in `update'
+  [1m[36mShowRating Load (0.7ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mShowRating Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Naruto"], ["id", 5], ["room_id", "Planet Vegeta"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mShowRating Update (0.9ms)[0m  [1m[33mUPDATE "show_ratings" SET "reviewers" = $1, "total_points" = $2, "number_of_reviews" = $3, "updated_at" = $4 WHERE "show_ratings"."id" = $5[0m  [["reviewers", "{\"\":91,\"David\":91,\"Serge\":96}"], ["total_points", 278], ["number_of_reviews", 3], ["updated_at", "2024-10-22 13:42:40.328693"], ["id", 5]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mTRANSACTION (2.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+Completed 200 OK in 89ms (Views: 2.4ms | ActiveRecord: 6.8ms | Allocations: 4193)
+
+

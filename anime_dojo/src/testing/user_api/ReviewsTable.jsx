@@ -380,7 +380,12 @@ function ReviewTable() {
     // Since the local storage cannot be captured by the rails API directly, the localstorage is always sent through the header
 
     const adSessionToken = localStorage.getItem('ad_session_token')
-    myHeaders.append("ad_session_token",adSessionToken);
+    let headerSessionToken = myHeaders.get("ad_session_token")
+    if(headerSessionToken) {
+      myHeaders.set("ad_session_token",adSessionToken);
+    } else {
+      myHeaders.append("ad_session_token",adSessionToken)
+    }
 
     // This is where you will format the testcase values
     // let testcaseInput = JSON.stringify({action: "add",focusRequest: testcase.value })
@@ -401,13 +406,13 @@ function ReviewTable() {
       options.body = formData
       if (testcase.key) formData.append(testcase.key,testcaseInput)
       // The next few lines are meant for review creation and editting
-      //formData.append("rating",87)
+      formData.append("rating",87)
       //formData.append("amount_watched","completed")
       //formData.append("highlighted_points",'Surprisingly and epicly sad ending')
       //formData.append("overall_review","This has the qualities to be a classic")
       //formData.append("watch_priority",1)
-      let likesAction = {user: user, initialLike: 0, targetLike: 1}
-      formData.append("likes",JSON.stringify(likesAction))
+      //let likesAction = {user: user, initialLike: 0, targetLike: 1}
+      //formData.append("likes",JSON.stringify(likesAction))
 
       // formData.append("referral_id","Jarret") (Never required)
 

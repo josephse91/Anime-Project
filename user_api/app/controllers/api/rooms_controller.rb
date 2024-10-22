@@ -17,9 +17,11 @@ class Api::RoomsController < ApplicationController
     def create
         user = client_user
         return if !user
+
+        room_name = rooms_params[:room_id]
         
         @room = Room.new(
-            room_name: rooms_params[:room_id]
+            room_name: room_name
         )
 
         privacy = rooms_params[:private_room]
@@ -34,6 +36,10 @@ class Api::RoomsController < ApplicationController
         end
 
         @room.save
+
+        user.rooms[room_name] = TIME_INPUT
+        user.save
+        
         render json: {
             status: "complete", 
             room: @room,
@@ -93,7 +99,8 @@ class Api::RoomsController < ApplicationController
         @room = find_room
         return if !@room
 
-        render json: {status: "complete", room: @room}  
+        render json: {status: "complete", room: @room} 
+        # The following line is something that should run nightly and autonomously 
         clean_expired_keys(@room)
     end
 
