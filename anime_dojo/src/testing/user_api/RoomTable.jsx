@@ -236,7 +236,12 @@ function RoomTable() {
     // Since the local storage cannot be captured by the rails API directly, the localstorage is always sent through the header
 
     const adSessionToken = localStorage.getItem('ad_session_token')
-    myHeaders.append("ad_session_token",adSessionToken);
+    let headerSessionToken = myHeaders.get("ad_session_token")
+    if(headerSessionToken) {
+      myHeaders.set("ad_session_token",adSessionToken);
+    } else {
+      myHeaders.append("ad_session_token",adSessionToken)
+    }
 
     if (room) formData.append('room_id',room);
 
@@ -253,7 +258,7 @@ function RoomTable() {
       //formData.append("submitted_key", "3mosYAlgW2nqU9UTecscgQ")
       // formData.append("make_entry_key", true)
       // formData.append("user_remove","Aviel")
-      // formData.append(testcase.key,testcaseInputString)
+      formData.append(testcase.key,testcaseInputString)
     }
 
     apiRequest(options,search)

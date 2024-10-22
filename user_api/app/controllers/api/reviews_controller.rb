@@ -365,7 +365,6 @@ class Api::ReviewsController < ApplicationController
             end
 
             room_obj.save
-            
             room_name = room_obj.room_name
             altered_show = room_obj.shows[show] || 0
             altered_room_shows[room_name] = "#{show}: #{altered_show}"

@@ -39,7 +39,7 @@ class Api::RoomsController < ApplicationController
 
         user.rooms[room_name] = TIME_INPUT
         user.save
-        
+
         render json: {
             status: "complete", 
             room: @room,
@@ -108,7 +108,7 @@ class Api::RoomsController < ApplicationController
         @room = find_room
         return if !@room
 
-        user = find_user
+        user = client_user
         return if !user
 
         render_obj = {
@@ -116,21 +116,34 @@ class Api::RoomsController < ApplicationController
             room: @room
         }
 
-        current_user = user.username
+        current_username = user.username
         room_name = @room.room_name
 
         notifications = []
+
         request = rooms_params[:request]
-        request_user = User.find_by(username: request)
-        if request && !request_user
-            render json: {status: "failed", error: "User could not be found"}
-            return
+        request_user = find_request_username
+        return if request && !request_user
+
+        foreign_requester = !room_includes_user?(@room,current_username)
+        if request == current_username && !@room.private_room && foreign_requester
+            @room.users[request] = TIME_INPUT
+            room.save
+            request_user.rooms[room_name] = TIME_INPUT
+            request_user.save
+
+            render_obj[:user] = request_user
+            render json: render_obj
         end
+
+        return
+
         submitted_key = rooms_params[:submitted_key]
         user_remove = rooms_params[:user_remove]
+
         room_keys = @room.entry_keys
         group_admin = @room.admin["group_admin"]
-        room_admins = @room.admin["admin_users"][current_user]
+        room_admins = @room.admin["admin_users"][current_username]
 
         if submitted_key
             if !room_keys[submitted_key]
@@ -145,7 +158,7 @@ class Api::RoomsController < ApplicationController
                 return
             end
 
-            @room.users[current_user] = TIME_INPUT
+            @room.users[current_username] = TIME_INPUT
             user.rooms[room_name] = TIME_INPUT
 
             @room.save
@@ -166,7 +179,7 @@ class Api::RoomsController < ApplicationController
             return
         end
 
-        if request && request == current_user    
+        if request && request == current_username    
             if (group_admin && @room.pending_approval[request]) || !@room.private_room
                 @room.users[request] = TIME_INPUT
                 user.rooms[room_name] = TIME_INPUT
@@ -193,9 +206,9 @@ class Api::RoomsController < ApplicationController
             return
         end
 
-        if user_remove && user_remove == current_user
+        if user_remove && user_remove == current_username
             user.rooms.delete(room_name)
-            @room.users.delete(current_user)
+            @room.users.delete(current_username)
 
             if user.invalid?
                 render json: {status: "failed", error: user.errors.objects.first.full_message}
@@ -214,7 +227,7 @@ class Api::RoomsController < ApplicationController
             return
         end
 
-        if !@room.users[current_user] 
+        if !@room.users[current_username] 
             render json: {status: "failed", error: "Only users within room can update the room"}
             return
         end
@@ -233,13 +246,13 @@ class Api::RoomsController < ApplicationController
         end
 
         if user_remove
-            if !room_admins && user_remove != current_user
+            if !room_admins && user_remove != current_username
                 render json: {status: "failed", error: "Not authorized to remove user from room"}
                 return
             end
 
             user.rooms.delete(room_name)
-            @room.users.delete(current_user)
+            @room.users.delete(current_username)
 
             user.save
             @room.save
@@ -278,7 +291,7 @@ class Api::RoomsController < ApplicationController
             @room.save
             add_notification(notifications,@room,request_user, "Accepted request to join")
         elsif member_request && !room_admins && !@room.pending_approval[request]
-            request_user.requests["room"][@room.room_name] = current_user
+            request_user.requests["room"][@room.room_name] = current_username
             request_user.save
             add_notification(notifications,@room,request_user,"Requested to Join")
         else
@@ -349,6 +362,19 @@ class Api::RoomsController < ApplicationController
             render json: {status: "failed", error: "User could not be found"}
         end
         user
+    end
+
+    def find_request_username
+        user_input = rooms_params[:request]
+        user = User.find_by(username: user_input)
+        if !user
+            render json: {status: "failed", error: "User could not be found"}
+        end
+        user
+    end
+
+    def room_includes_user?(room,username)
+        !!room.users[username] 
     end
 
     def find_room
