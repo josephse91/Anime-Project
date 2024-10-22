@@ -15,8 +15,8 @@ class Api::RoomsController < ApplicationController
     end
 
     def create
-        current_user = find_user
-        return if !current_user
+        user = client_user
+        return if !user
         
         @room = Room.new(
             room_name: rooms_params[:room_id]
@@ -25,8 +25,8 @@ class Api::RoomsController < ApplicationController
         privacy = rooms_params[:private_room]
         privacy ? @room.private_room = privacy : nil
 
-        @room.users[current_user.username] = TIME_INPUT
-        @room.admin["admin_users"][current_user.username] = TIME_INPUT
+        @room.users[user.username] = TIME_INPUT
+        @room.admin["admin_users"][user.username] = TIME_INPUT
 
         if @room.invalid?
             render json: {status: "failed", error: @room.errors.objects.first.full_message}
@@ -38,7 +38,7 @@ class Api::RoomsController < ApplicationController
             status: "complete", 
             room: @room,
             action: "member added",
-            user: current_user,
+            user: user,
         }
     end
 
@@ -327,14 +327,20 @@ class Api::RoomsController < ApplicationController
         params.permit(:id,:pending_approval,:search,:current_user,:request,:user_remove,:make_entry_key,:submitted_key,:user_id, :room_id, :room_action, :private_room)
     end
 
-    def find_user
-        user_input = rooms_params[:current_user] || rooms_params[:user_id]
-        user = User.find_by(username: user_input)
+    def client_user
+        user = current_user
+        if !user
+            render json: {status: "failed", error: "User not signed in"}
+        end
+        user
+    end
 
+    def find_user
+        user_input = rooms_params[:user_id]
+        user = User.find_by(username: user_input)
         if !user
             render json: {status: "failed", error: "User could not be found"}
         end
-
         user
     end
 

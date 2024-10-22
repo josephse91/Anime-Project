@@ -232,6 +232,12 @@ function RoomTable() {
       method: requestMethod
     }
 
+    //Local storage has been selected as the cookie to preserve the session token.
+    // Since the local storage cannot be captured by the rails API directly, the localstorage is always sent through the header
+
+    const adSessionToken = localStorage.getItem('ad_session_token')
+    myHeaders.append("ad_session_token",adSessionToken);
+
     if (room) formData.append('room_id',room);
 
     // This is where you will format the testcase values
@@ -242,8 +248,9 @@ function RoomTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      formData.append("request","David")
-      formData.append("submitted_key", "3mosYAlgW2nqU9UTecscgQ")
+      //formData.append("request","David")
+      formData.append("private_room",false)
+      //formData.append("submitted_key", "3mosYAlgW2nqU9UTecscgQ")
       // formData.append("make_entry_key", true)
       // formData.append("user_remove","Aviel")
       // formData.append(testcase.key,testcaseInputString)

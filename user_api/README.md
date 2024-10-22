@@ -494,8 +494,8 @@ This will also interact with a number of the tables (user,review,forum,forum com
 ```
 | Parameter  | Type     | Description                    |
 | :--------- | :------- | :-------------------------     |
-| `current_user` | `string` | The username interacting with the client  |
 | `room_id` | `string` | Name of Room  |
+| `private_room` | `boolean` | Form data |
 
 [Back to API Reference](#API-Reference) / 
 [Top of the Rooms Table](#rooms-table)
