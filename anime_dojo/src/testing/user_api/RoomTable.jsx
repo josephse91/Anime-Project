@@ -88,7 +88,7 @@ function RoomTable() {
 
   async function showRatingRequests(data) {
     if (!data || data.status === "failed") return new Promise(resolve => {
-      console.log("Add reviews to Room Request Failed")
+      //console.log("Add reviews to Room Request Failed")
       resolve({status: "failed"})
     })
 
@@ -257,31 +257,26 @@ function RoomTable() {
     <div className="App" id="container">
       <div className='testForm' id='userTableForm'>
       <form className="credentials" onChange={handleChange}>
+      <div className='inputLine'>
         <label htmlFor="room">Room:</label>
         <input type="text" id="room" name="room" value={room}></input>
+      </div>
+      <div className='inputLine'>
         <label htmlFor="search">Search:</label>
         <input type="text" id="search" name="search" value={search}/>
-
-        <div id="testcaseLabels">
+      </div>
+      <div className='inputLine'>
           <label htmlFor="key">Key:</label>
-          <label htmlFor="value">Value:</label>
-        </div>
-
-        <div id="testcaseInputs">
           <input type="text" id="key" name="key" value={testcase.key}/>
+          <label htmlFor="value">Value:</label>
           <input type="text" id="value" name="value" value={testcase.value}/>
-        </div>
-
-        <div id="requestLabels">
+      </div>
+      <div className='inputLine'>
           <label htmlFor="method">Method:</label>
-          <label htmlFor="request">Request:</label>
-        </div>
-        
-        <div id="requestInputs">
           <input type="text" id="requestMethod" name="requestMethod" value={requestMethod}/>
+          <label htmlFor="request">Request:</label>
           <input type="text" id="request" name="request" value={request}/>
-        </div>
-        
+      </div>  
       </form>
       <button className='request' id="requestButton" onClick={sendRequest}>Send</button>
       </div>

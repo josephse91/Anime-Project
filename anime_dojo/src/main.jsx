@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 //import UserTable from './testing/user_api/UserTable'
 //import ReviewTable from './testing/user_api/ReviewsTable'
-import ReviewCommentsTable from './testing/user_api/ReviewsCommentsTable'
-// import RoomTable from './testing/user_api/RoomTable'
+//import ReviewCommentsTable from './testing/user_api/ReviewsCommentsTable'
+import RoomTable from './testing/user_api/RoomTable'
 // import ForumsTable from './testing/user_api/ForumsTable'
 // import ForumCommentsTable from './testing/user_api/ForumCommentsTable'
 // import ShowRatingsTable from './testing/show_rating_api/ShowRatingsTable'
@@ -14,6 +14,6 @@ import ReviewCommentsTable from './testing/user_api/ReviewsCommentsTable'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ReviewCommentsTable />
+    <RoomTable />
   </React.StrictMode>
 )
