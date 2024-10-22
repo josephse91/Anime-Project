@@ -125,25 +125,36 @@ class Api::RoomsController < ApplicationController
         request_user = find_request_username
         return if request && !request_user
 
+        # Simple User self addition for Public Rooms
         foreign_requester = !room_includes_user?(@room,current_username)
+
+        if request && !foreign_requester
+            render json: {status: "failed", errors: "This user is already within the room"}
+        end
+
         if request == current_username && !@room.private_room && foreign_requester
             @room.users[request] = TIME_INPUT
-            room.save
+            @room.save
             request_user.rooms[room_name] = TIME_INPUT
             request_user.save
 
             render_obj[:user] = request_user
+            render_obj[:action] = "member added"
+
             render json: render_obj
+            return
         end
 
-        return
+        # --------------------------------------------------------
+        # Foreign user request a private non group_admin room 
+        if !@room.admin["group_admin"] && foreign_requester == current_username
+            @room.pending_approval
+        end
 
+
+        #--------------------------------------------------------
         submitted_key = rooms_params[:submitted_key]
-        user_remove = rooms_params[:user_remove]
-
         room_keys = @room.entry_keys
-        group_admin = @room.admin["group_admin"]
-        room_admins = @room.admin["admin_users"][current_username]
 
         if submitted_key
             if !room_keys[submitted_key]
@@ -178,6 +189,10 @@ class Api::RoomsController < ApplicationController
             render json: render_obj
             return
         end
+        #-------------------------------------------------------------------
+        group_admin = @room.admin["group_admin"]
+        room_admins = @room.admin["admin_users"][current_username]
+        user_remove = rooms_params[:user_remove]
 
         if request && request == current_username    
             if (group_admin && @room.pending_approval[request]) || !@room.private_room

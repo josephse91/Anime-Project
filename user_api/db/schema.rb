@@ -83,6 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_10_163927) do
     t.json "admin", default: {"group_admin"=>true, "admin_users"=>{}}
     t.json "entry_keys", default: {}
     t.json "shows", default: {}
+    t.boolean "retired", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_name"], name: "index_rooms_on_room_name"
