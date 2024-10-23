@@ -39,7 +39,7 @@ function RoomTable() {
     let queryInput = query ? query : "";
     let requestStr = "http://localhost:3000" + request + queryInput, requestStr2;
     let apiRequest = await fetch(requestStr, options), apiRequest2
-    let data = await apiRequest.json(), data2
+    let data = await apiRequest.json()//, data2
     setResponse(data)
     console.log(requestStr,data)
 
@@ -67,8 +67,8 @@ function RoomTable() {
         requestStr2 = "http://localhost:3000/api/"
         requestStr2 += `rooms/${room.room_name}/add_user_reviews/${user.username}`
         apiRequest2 = await fetch(requestStr2, options2)
-        data2 = await apiRequest2.json()
-        console.log(apiRequest2, data2, options2)
+        let data2 = await apiRequest2.json()
+        console.log(apiRequest2.url, data2, options2)
 
         return new Promise(resolve => resolve({status: "success", data: data2}))
       }
@@ -76,12 +76,12 @@ function RoomTable() {
       return new Promise(resolve => resolve({status: "failed"}))
     }
 
+    apiRequest2 = await addReviewsToRooms(data)
+
     if (data.notifications || data.notification_count) {
       const notificationsEndpoint = await notificationRequests(data)
       const notifications = await notificationsCall(notificationsEndpoint,data)
     }
-
-    apiRequest2 = await addReviewsToRooms(data)
 
     const data3 = apiRequest2.data
 
@@ -308,6 +308,11 @@ function RoomTable() {
     //headerSessionToken = "0KJU4ULJdT2bXaKqM3dqwQ" //Aviel
     headerSessionToken = "JNoCEcPm9X1WSjqCkPS2GQ" //Aldane
     //headerSessionToken = "KhSsq5juOk2LkD08FsTMfg" //Serge
+    //headerSessionToken = "rsT2jbeua6Jc6e3gwpP0lA" //Tonette Stokes DVM
+    //headerSessionToken = "1U7bmf8siS6tZ3Cn_n1DPw" //Mrs. Erasmo Runolfsson
+    //headerSessionToken = "z8e2d3ji4MaFjztwIM1dCw" //Mittie Hermiston
+    //headerSessionToken = "MYac2pD4MEWup9jhaekk_g" //Allia
+    
 
     if(headerSessionToken) {
       myHeaders.set("ad_session_token",headerSessionToken);
@@ -327,11 +332,12 @@ function RoomTable() {
 
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
-      //formData.append("request","David")
+      //formData.append("request","Aldane")
       //formData.append("private_room",false)
       //formData.append("submitted_key", "3mosYAlgW2nqU9UTecscgQ")
-      formData.append("make_entry_key", true)
+      //formData.append("make_entry_key", true)
       // formData.append("user_remove","Aviel")
+      formData.append("room_action","remove user")
       formData.append(testcase.key,testcaseInputString)
     }
 

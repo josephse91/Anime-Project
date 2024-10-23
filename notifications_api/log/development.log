@@ -3386,3 +3386,150 @@ Processing by Api::NotificationsController#create as */*
 Completed 200 OK in 40ms (Views: 0.7ms | ActiveRecord: 8.9ms | Allocations: 3188)
 
 
+Started POST "/api/notifications/" for ::1 at 2024-10-23 01:36:11 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Mrs. Erasmo Runolfsson\",\"action\":\"Accepted request to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (2.0ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 4 AND recipient = 'Mrs. Erasmo Runolfsson' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (1.0ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 4 AND notifications.recipient = 'Mrs. Erasmo Runolfsson' AND notifications.updated_at > '2024-10-23 04:36:11.663498') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (1.6ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "accepted request to join"], ["target", "room"], ["target_id", 4], ["action_user", "Jujutsu High"], ["recipient", "Mrs. Erasmo Runolfsson"], ["seen", false], ["common_actions", 0], ["message", "Your are now in room: Jujutsu High"], ["selected", true], ["created_at", "2024-10-23 05:36:11.724869"], ["updated_at", "2024-10-23 05:36:11.724869"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 84ms (Views: 2.2ms | ActiveRecord: 16.2ms | Allocations: 5894)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-23 02:11:21 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":true,\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (8.9ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 4 AND recipient = 'Aldane' AND action_user = TRUE) LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+Completed 500 Internal Server Error in 34ms (ActiveRecord: 14.1ms | Allocations: 4517)
+
+
+
+ActiveRecord::StatementInvalid - PG::UndefinedFunction: ERROR:  operator does not exist: character varying = boolean
+LINE 1: ...t_id = 4 AND recipient = 'Aldane' AND action_user = TRUE) LI...
+                                                             ^
+HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-23 02:14:51 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Allia\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (2.2ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 4 AND recipient = 'Aldane' AND action_user = 'Allia') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (1.5ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 4 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-23 05:14:51.896636') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (2.1ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "requested to join"], ["target", "room"], ["target_id", 4], ["action_user", "Allia"], ["recipient", "Aldane"], ["seen", false], ["common_actions", 0], ["message", "Allia is requesting to join room: Jujutsu High"], ["selected", true], ["created_at", "2024-10-23 06:14:51.913267"], ["updated_at", "2024-10-23 06:14:51.913267"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (2.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 49ms (Views: 3.8ms | ActiveRecord: 8.8ms | Allocations: 3182)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-23 02:20:14 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Allia\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (0.5ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 4 AND recipient = 'Aldane' AND action_user = 'Allia') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.4ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 4 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-23 05:20:14.208469') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mNotification Update (0.6ms)[0m  [1m[33mUPDATE "notifications" SET "selected" = $1, "updated_at" = $2 WHERE "notifications"."id" = $3[0m  [["selected", false], ["updated_at", "2024-10-23 06:20:14.217061"], ["id", 54]]
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mNotification Update (0.3ms)[0m  [1m[33mUPDATE "notifications" SET "updated_at" = $1 WHERE "notifications"."id" = $2[0m  [["updated_at", "2024-10-23 06:20:14.225805"], ["id", 54]]
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+Completed 200 OK in 26ms (Views: 0.4ms | ActiveRecord: 4.6ms | Allocations: 4562)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-23 02:25:59 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Allia\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (0.7ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 4 AND recipient = 'Aldane' AND action_user = 'Allia') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 4 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-23 05:25:59.734540') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mNotification Update (0.7ms)[0m  [1m[33mUPDATE "notifications" SET "selected" = $1, "updated_at" = $2 WHERE "notifications"."id" = $3[0m  [["selected", true], ["updated_at", "2024-10-23 06:25:59.751667"], ["id", 54]]
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mTRANSACTION (1.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+Completed 200 OK in 27ms (Views: 0.5ms | ActiveRecord: 7.3ms | Allocations: 6025)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-23 02:32:08 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Allia\",\"action\":\"Accepted request to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 4 AND recipient = 'Allia' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 4 AND notifications.recipient = 'Allia' AND notifications.updated_at > '2024-10-23 05:32:08.678368') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (0.8ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "accepted request to join"], ["target", "room"], ["target_id", 4], ["action_user", "Jujutsu High"], ["recipient", "Allia"], ["seen", false], ["common_actions", 0], ["message", "Your are now in room: Jujutsu High"], ["selected", true], ["created_at", "2024-10-23 06:32:08.698178"], ["updated_at", "2024-10-23 06:32:08.698178"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 29ms (Views: 0.6ms | ActiveRecord: 9.7ms | Allocations: 5889)
+
+
+Started PATCH "/api/notifications/Aldane" for ::1 at 2024-10-23 16:48:36 -0400
+Processing by Api::NotificationsController#update as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Aldane\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}", "id"=>"Aldane"}
+  [1m[36mNotification Load (1.5ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 AND "notifications"."seen" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3[0m  [["recipient", "Aldane"], ["seen", false], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:114:in `update'
+  [1m[36mNotification Load (0.3ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:115:in `update'
+  [1m[36mNotification Update All (4.2ms)[0m  [1m[33mUPDATE "notifications" SET "seen" = $1 WHERE "notifications"."id" IN (SELECT "notifications"."id" FROM "notifications" WHERE "notifications"."recipient" = $2 ORDER BY "notifications"."updated_at" DESC LIMIT $3)[0m  [["seen", true], ["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:118:in `update'
+  [1m[36mNotification Load (0.5ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE "notifications"."recipient" = $1 ORDER BY "notifications"."updated_at" DESC LIMIT $2[0m  [["recipient", "Aldane"], ["LIMIT", 20]]
+  ↳ app/controllers/api/notifications_controller.rb:125:in `update'
+Completed 200 OK in 171ms (Views: 26.8ms | ActiveRecord: 30.3ms | Allocations: 9862)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-23 17:05:57 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":5,\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Serge\",\"target_item\":\"Room\",\"room\":\"Shadow Realm\"}"}
+  [1m[36mNotification Load (1.2ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 5 AND recipient = 'Aldane' AND action_user = 'Serge') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (1.2ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 5 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-23 20:05:57.980527') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (0.9ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "requested to join"], ["target", "room"], ["target_id", 5], ["action_user", "Serge"], ["recipient", "Aldane"], ["seen", false], ["common_actions", 0], ["message", "Serge is requesting to join room: Shadow Realm"], ["selected", true], ["created_at", "2024-10-23 21:05:58.029616"], ["updated_at", "2024-10-23 21:05:58.029616"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 70ms (Views: 0.8ms | ActiveRecord: 11.3ms | Allocations: 5888)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-23 17:13:31 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":5,\"recipient\":\"Serge\",\"action\":\"Accepted request to join\",\"action_user\":\"Shadow Realm\",\"target_item\":\"Room\",\"room\":\"Shadow Realm\"}"}
+  [1m[36mNotification Load (0.6ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 5 AND recipient = 'Serge' AND action_user = 'Shadow Realm') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.8ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 5 AND notifications.recipient = 'Serge' AND notifications.updated_at > '2024-10-23 20:13:31.472370') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (0.8ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "accepted request to join"], ["target", "room"], ["target_id", 5], ["action_user", "Shadow Realm"], ["recipient", "Serge"], ["seen", false], ["common_actions", 0], ["message", "Your are now in room: Shadow Realm"], ["selected", true], ["created_at", "2024-10-23 21:13:31.491260"], ["updated_at", "2024-10-23 21:13:31.491260"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (2.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 33ms (Views: 0.5ms | ActiveRecord: 8.2ms | Allocations: 5889)
+
+

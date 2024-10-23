@@ -61,6 +61,7 @@ class Api::RoomsController < ApplicationController
         remove_shows = []
 
         reviews = Review.where(user: user.username)
+
         reviews.each do |review|
             if room.shows[review.show] && action == "member added"
                 room.shows[review.show] += 1
@@ -127,9 +128,11 @@ class Api::RoomsController < ApplicationController
 
         # Simple User self addition for Public Rooms
         foreign_requester = !room_includes_user?(@room,current_username)
+        room_admin_check = @room.admin["admin_users"][current_username]
 
-        if request && !foreign_requester
+        if request && !foreign_requester && !room_admin_check
             render json: {status: "failed", errors: "This user is already within the room"}
+            return
         end
 
         if request == current_username && !@room.private_room && foreign_requester
@@ -149,13 +152,15 @@ class Api::RoomsController < ApplicationController
         # Foreign user request a private non group_admin room
         
          group_admins = @room.admin["admin_users"].keys
-        if !@room.admin["group_admin"] && foreign_requester == current_username
+         p foreign_requester, current_username
+        if !@room.admin["group_admin"] && request == current_username
             @room.pending_approval[current_username] = TIME_INPUT
             @room.save
             
-            request_to_admins(notifications,@room,foreign_requester)
+            request_to_admins(notifications,@room,request)
+            
 
-            render_obj[:notification] = notifications
+            render_obj[:notifications] = notifications
             render_obj[:requester] = foreign_requester
             render_obj[:admins] = group_admins
 
@@ -233,19 +238,29 @@ class Api::RoomsController < ApplicationController
 
         # -----------------------------------------------------------------------
         # Group Admin procedures
-        room_admin_check = @room.admin["admin_users"][current_username]
         if !room_admin_check
             render json: {status: "failed", error: "must be an admin to make change"}
             return
         end
 
-        user_remove = rooms_params[:user_remove]
+        room_action = rooms_params[:room_action]
+
+        if room_action == "reject pending"
+            @room.pending_approval.delete(request)
+            @room.save
+
+            render json: {status: "complete", room: @room}
+            return
+        end
+
+        user_remove = rooms_params[:room_action] == "remove user"
+        #remove_user_obj = User.find_by(username: request)
 
         if user_remove && user_remove != current_username
-            user.rooms.delete(room_name)
-            @room.users.delete(current_username)
+            request_user.rooms.delete(room_name)
+            @room.users.delete(request)
 
-            if user.invalid?
+            if request_user.invalid?
                 render json: {status: "failed", error: user.errors.objects.first.full_message}
                 return
             end
@@ -255,10 +270,10 @@ class Api::RoomsController < ApplicationController
                 return
             end
 
-            user.save
+            request_user.save
             @room.save
 
-            render json: {status: "complete", user: user, room: @room, action: "member removed"}
+            render json: {status: "complete", user: request_user, room: @room, action: "member removed"}
             return
             # Logic needs to be included to change the rating total of each applicable show within the room
         end
@@ -274,7 +289,13 @@ class Api::RoomsController < ApplicationController
         end
 
         member_request = request && !submitted_key
+        # Group admin can only approve users that have sent a request. (Pending)
         pending_user = @room.pending_approval[request]
+
+        if !foreign_requester && !room_admin_check
+            render json: {status: "failed", errors: "User has already been added to the room"}
+            return
+        end
 
         if  member_request && room_admin_check && pending_user
             @room.users[request] = TIME_INPUT
@@ -291,10 +312,7 @@ class Api::RoomsController < ApplicationController
         elsif member_request && !room_admin_check && !@room.pending_approval[request]
             request_user.requests["room"][@room.room_name] = current_username
             request_user.save
-            add_notification(notifications,@room,request_user,"Requested to Join")
-        else
-            render json: {status: "failed", error: "Only the authorized user can bring in users into the room"}
-            return
+            add_notification(notifications,@room,request_user,user,"Requested to Join")
         end
 
         privacy = rooms_params[:private_room]
@@ -303,11 +321,6 @@ class Api::RoomsController < ApplicationController
             @room.private_room = privacy
             @room.save
         end
-
-        render_obj = {
-            status: "complete", 
-            room: @room
-        }
 
         if request
             render_obj[:notifications] = notifications
@@ -372,7 +385,7 @@ class Api::RoomsController < ApplicationController
     end
 
     def room_includes_user?(room,username)
-        !!room.users[username] 
+        room.users[username] != nil
     end
 
     def find_room
