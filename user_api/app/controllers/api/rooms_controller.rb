@@ -333,7 +333,7 @@ class Api::RoomsController < ApplicationController
         @room = find_room
         return if !@room
 
-        user = find_user
+        user = client_user
         return if !user
 
         if @room.users.length > 1
@@ -346,12 +346,23 @@ class Api::RoomsController < ApplicationController
             return
         end
 
-        deleted_room = @room.room_name
+        delete_shows = @room.shows.keys
+        delete_shows_obj = Review.where(show: delete_shows)
+        delete_room = @room
+        deleted_room_name = @room.room_name
+        
+
+        delete_forums_and_comments(deleted_room_name)
+
+        render json: {
+            status: "complete",
+            user: user, 
+            room: deleted_room_name,
+            remove_shows: delete_shows_obj, 
+            action: "delete room",
+        }
+
         @room.destroy
-
-        delete_forums_and_comments(deleted_room)
-
-        render json: {status: "complete", room: deleted_room}
     end
 
     def rooms_params

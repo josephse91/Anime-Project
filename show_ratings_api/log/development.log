@@ -3435,3 +3435,337 @@ Processing by Api::ShowRatingsController#destroy as */*
 Completed 200 OK in 171ms (Views: 3.4ms | ActiveRecord: 34.8ms | Allocations: 4262)
 
 
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 18:38:42 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (8.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Create (4.1ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["reviewers", "{\"Aldane\":90}"], ["total_points", 90], ["number_of_reviews", 1], ["created_at", "2024-10-23 22:38:42.837029"], ["updated_at", "2024-10-23 22:38:42.837029"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Create (1.8ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["reviewers", "{\"Aldane\":99}"], ["total_points", 99], ["number_of_reviews", 1], ["created_at", "2024-10-23 22:38:42.911616"], ["updated_at", "2024-10-23 22:38:42.911616"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (2.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 446ms (Views: 10.6ms | ActiveRecord: 59.1ms | Allocations: 8451)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 18:56:12 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 126ms (Views: 0.7ms | ActiveRecord: 13.2ms | Allocations: 10530)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:09:32 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 66ms (Views: 0.8ms | ActiveRecord: 12.8ms | Allocations: 8076)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:11:43 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (1.8ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 61ms (Views: 1.1ms | ActiveRecord: 4.6ms | Allocations: 5349)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:16:11 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 40ms (Views: 1.2ms | ActiveRecord: 2.5ms | Allocations: 5343)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:17:41 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 40ms (Views: 0.8ms | ActiveRecord: 3.3ms | Allocations: 5344)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:21:03 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 23ms (Views: 0.3ms | ActiveRecord: 2.7ms | Allocations: 5342)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:29:19 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 27ms (Views: 0.6ms | ActiveRecord: 5.6ms | Allocations: 8073)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:30:26 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 36ms (Views: 0.2ms | ActiveRecord: 2.3ms | Allocations: 5342)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:31:07 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 34ms (Views: 0.6ms | ActiveRecord: 4.4ms | Allocations: 5342)
+
+
+Started DELETE "/api/show_ratings/fill" for ::1 at 2024-10-23 19:31:16 -0400
+Processing by Api::ShowRatingsController#destroy as */*
+  Parameters: {"reviews"=>"[\"Bleach\",\"Attack on Titan\"]", "rooms"=>"undefined", "id"=>"fill"}
+  [1m[36mShowRating Load (0.3ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" IS NULL AND "show_ratings"."show_title" IS NULL[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:182:in `destroy'
+  [1m[36mShowRating Delete All (0.4ms)[0m  [1m[31mDELETE FROM "show_ratings" WHERE 1=0[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:185:in `destroy'
+Completed 200 OK in 8ms (Views: 0.2ms | ActiveRecord: 0.7ms | Allocations: 1381)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:34:28 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 28ms (Views: 0.8ms | ActiveRecord: 2.1ms | Allocations: 5343)
+
+
+Started DELETE "/api/show_ratings/fill" for ::1 at 2024-10-23 19:34:42 -0400
+Processing by Api::ShowRatingsController#destroy as */*
+  Parameters: {"reviews"=>"[\"Bleach\",\"Attack on Titan\"]", "rooms"=>"undefined", "id"=>"fill"}
+  [1m[36mShowRating Load (0.3ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" IS NULL AND "show_ratings"."show_title" IS NULL[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:182:in `destroy'
+  [1m[36mShowRating Delete All (0.2ms)[0m  [1m[31mDELETE FROM "show_ratings" WHERE 1=0[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:185:in `destroy'
+Completed 200 OK in 5ms (Views: 0.7ms | ActiveRecord: 0.6ms | Allocations: 1276)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:37:11 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 21ms (Views: 0.3ms | ActiveRecord: 2.0ms | Allocations: 5342)
+
+
+Started DELETE "/api/show_ratings/fill" for ::1 at 2024-10-23 19:37:39 -0400
+Processing by Api::ShowRatingsController#destroy as */*
+  Parameters: {"reviews"=>"[\"Bleach\",\"Attack on Titan\"]", "room_id"=>"undefined", "id"=>"fill"}
+  [1m[36mShowRating Load (0.2ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" IS NULL[0m  [["room_id", "undefined"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:182:in `destroy'
+  [1m[36mShowRating Delete All (0.3ms)[0m  [1m[31mDELETE FROM "show_ratings" WHERE 1=0[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:185:in `destroy'
+Completed 200 OK in 7ms (Views: 0.2ms | ActiveRecord: 1.0ms | Allocations: 1319)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:38:36 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 53ms (Views: 1.2ms | ActiveRecord: 3.3ms | Allocations: 5342)
+
+
+Started DELETE "/api/show_ratings/fill" for ::1 at 2024-10-23 19:38:44 -0400
+Processing by Api::ShowRatingsController#destroy as */*
+  Parameters: {"reviews"=>"[\"Bleach\",\"Attack on Titan\"]", "room_id"=>"[object Object]", "id"=>"fill"}
+  [1m[36mShowRating Load (0.7ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" IS NULL[0m  [["room_id", "[object Object]"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:182:in `destroy'
+  [1m[36mShowRating Delete All (0.8ms)[0m  [1m[31mDELETE FROM "show_ratings" WHERE 1=0[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:185:in `destroy'
+Completed 200 OK in 17ms (Views: 0.3ms | ActiveRecord: 1.4ms | Allocations: 1290)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:39:16 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 27ms (Views: 0.3ms | ActiveRecord: 2.9ms | Allocations: 5342)
+
+
+Started DELETE "/api/show_ratings/fill" for ::1 at 2024-10-23 19:39:24 -0400
+Processing by Api::ShowRatingsController#destroy as */*
+  Parameters: {"reviews"=>"[\"Bleach\",\"Attack on Titan\"]", "room_id"=>"Konoha", "id"=>"fill"}
+  [1m[36mShowRating Load (0.4ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" IS NULL[0m  [["room_id", "Konoha"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:182:in `destroy'
+  [1m[36mShowRating Delete All (0.4ms)[0m  [1m[31mDELETE FROM "show_ratings" WHERE 1=0[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:185:in `destroy'
+Completed 200 OK in 10ms (Views: 0.4ms | ActiveRecord: 0.7ms | Allocations: 1293)
+
+
+Started POST "/api/show_ratings/" for ::1 at 2024-10-23 19:44:42 -0400
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha"}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Konoha"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 22ms (Views: 0.3ms | ActiveRecord: 2.2ms | Allocations: 5342)
+
+
+Started DELETE "/api/show_ratings/fill" for ::1 at 2024-10-23 19:44:53 -0400
+Processing by Api::ShowRatingsController#destroy as */*
+  Parameters: {"reviews"=>"[{\"id\":7,\"user\":\"Jarret\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"God Tier Level\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.024Z\",\"updated_at\":\"2024-10-22T23:45:22.024Z\"},{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Konoha", "id"=>"fill"}
+  [1m[36mShowRating Load (0.6ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" IN ($2, $3)[0m  [["room_id", "Konoha"], ["show_title", "Attack on Titan"], ["show_title", "Bleach"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:182:in `destroy'
+  [1m[36mShowRating Delete All (1.7ms)[0m  [1m[31mDELETE FROM "show_ratings" WHERE "show_ratings"."id" IN ($1, $2)[0m  [["id", 37], ["id", 38]]
+  ↳ app/controllers/api/show_ratings_controller.rb:185:in `destroy'
+Completed 200 OK in 9ms (Views: 0.7ms | ActiveRecord: 2.3ms | Allocations: 1435)
+
+

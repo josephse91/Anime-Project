@@ -54,6 +54,11 @@ function RoomTable() {
       let room = data.room
       let roomAction = data.action
 
+      if (roomAction === "delete room") return new Promise(resolve => {
+        console.log("Add Reviews API is not used")
+        resolve({status: "failed", message: "add Reviews API is not used"})
+      })
+
       if (
         data.status === "complete" && 
         requestMethod2 === "PATCH" &&
@@ -76,16 +81,25 @@ function RoomTable() {
       return new Promise(resolve => resolve({status: "failed"}))
     }
 
-    apiRequest2 = await addReviewsToRooms(data)
+      apiRequest2 = await addReviewsToRooms(data)
+
+    
 
     if (data.notifications || data.notification_count) {
       const notificationsEndpoint = await notificationRequests(data)
       const notifications = await notificationsCall(notificationsEndpoint,data)
     }
 
-    const data3 = apiRequest2.data
-
-    const showEndpoints = await showRatingRequests(data3)
+    const data3 = apiRequest2.data 
+    console.log("this is new data: ",data)
+    // conditional is necessary because the data3 relies on the addReviewsToRooms function which isn't run when a room is deleted. This is because when deleting a room, the addReviewsToRooms function requires a room object search that no longer exists
+    
+    if(data.action !== "delete room") {
+      var showEndpoints = await showRatingRequests(data3)
+    } else {
+      var showEndpoints = await showRatingRequests(data)
+    }
+    
     const showRequest = await showRatingCalls(showEndpoints)
 
     return showRequest
@@ -189,6 +203,16 @@ function RoomTable() {
         params: [
           ["review", data.review],
           ["rooms", data.rooms_to_delete_show]
+        ]
+      }
+    }
+
+    if (data.action === "delete room" && data.remove_shows.length) {
+      endpoints["DELETE"] = {
+        endpoint: "/api/show_ratings/fill",
+        params: [
+          ["reviews", data.remove_shows],
+          ["room_id", data.room]
         ]
       }
     }
