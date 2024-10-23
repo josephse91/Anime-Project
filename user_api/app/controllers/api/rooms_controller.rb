@@ -122,7 +122,7 @@ class Api::RoomsController < ApplicationController
         notifications = []
 
         request = rooms_params[:request]
-        request_user = find_request_username
+        request_user = find_request_obj
         return if request && !request_user
 
         # Simple User self addition for Public Rooms
@@ -146,15 +146,35 @@ class Api::RoomsController < ApplicationController
         end
 
         # --------------------------------------------------------
-        # Foreign user request a private non group_admin room 
+        # Foreign user request a private non group_admin room
+        
+         group_admins = @room.admin["admin_users"].keys
         if !@room.admin["group_admin"] && foreign_requester == current_username
-            @room.pending_approval
+            @room.pending_approval[current_username] = TIME_INPUT
+            @room.save
+            
+            request_to_admins(notifications,@room,foreign_requester)
+
+            render_obj[:notification] = notifications
+            render_obj[:requester] = foreign_requester
+            render_obj[:admins] = group_admins
+
+            render json: render_obj
+            return
         end
 
 
         #--------------------------------------------------------
+        # Foreign user enters a submitted key
+
         submitted_key = rooms_params[:submitted_key]
         room_keys = @room.entry_keys
+        group_admin_check = @room.admin["group_admin"]
+
+        if !submitted_key && group_admin_check
+            render json: {status: "failed", error: "For this room, you must receive a key. Ask a member to generate key"}
+            return
+        end
 
         if submitted_key
             if !room_keys[submitted_key]
@@ -174,15 +194,12 @@ class Api::RoomsController < ApplicationController
 
             @room.save
             user.save
-            
-            add_notification(notifications,@room,user)
 
             render_obj = {
                 status: "complete", 
                 message: "Key has been successfully submitted to Room: #{room_name}",
                 action: "member added",
                 user: user,
-                notification: notifications,
                 room: @room
             }
 
@@ -190,38 +207,41 @@ class Api::RoomsController < ApplicationController
             return
         end
         #-------------------------------------------------------------------
-        group_admin = @room.admin["group_admin"]
-        room_admins = @room.admin["admin_users"][current_username]
-        user_remove = rooms_params[:user_remove]
+        # Member actions
+        member_check = room_includes_user?(@room,current_username)
 
-        if request && request == current_username    
-            if (group_admin && @room.pending_approval[request]) || !@room.private_room
-                @room.users[request] = TIME_INPUT
-                user.rooms[room_name] = TIME_INPUT
-                user.save
-                add_notification(notifications,@room,user)
-            elsif group_admin && !@room.pending_approval[request]
-                render json: {status: "failed", error: "For this room, you must receive a key. Ask a member to generate key"}
-                return
-            else
-                @room.pending_approval[request] = TIME_INPUT
-                request_to_admins(notifications,@room,request)
-            end
-            
-            @room.save
-
-            render_obj = {
-                status: "complete", 
-                room: @room,
-                notifications: notifications
-            }
-            
-            render_obj[:notifications] = notifications
-            render json: render_obj
+        if !member_check
+            render json: {status: "failed", error: "must be a member of room"}
             return
         end
 
-        if user_remove && user_remove == current_username
+        generate_key = rooms_params[:make_entry_key]
+
+        if generate_key
+            key = Room.generate_entry_key
+            @room.entry_keys[key] = Time.now.advance(days: 10).at_noon.getutc
+
+            if !@room.valid?
+                render json: {status: "failed", error: @room.errors.objects.first.full_message}
+                return
+            end
+
+            @room.save
+            render json: {status: "complete", key: key, room: @room}
+            return
+        end
+
+        # -----------------------------------------------------------------------
+        # Group Admin procedures
+        room_admin_check = @room.admin["admin_users"][current_username]
+        if !room_admin_check
+            render json: {status: "failed", error: "must be an admin to make change"}
+            return
+        end
+
+        user_remove = rooms_params[:user_remove]
+
+        if user_remove && user_remove != current_username
             user.rooms.delete(room_name)
             @room.users.delete(current_username)
 
@@ -240,18 +260,11 @@ class Api::RoomsController < ApplicationController
 
             render json: {status: "complete", user: user, room: @room, action: "member removed"}
             return
+            # Logic needs to be included to change the rating total of each applicable show within the room
         end
-
-        if !@room.users[current_username] 
-            render json: {status: "failed", error: "Only users within room can update the room"}
-            return
-        end
-
-        generate_key = rooms_params[:make_entry_key]
-        pending_user = @room.pending_approval[request]
 
         if rooms_params[:room_name]
-            if group_admin || room_admins
+            if group_admin_check || room_admin_check
                 @room.room_name = rooms_params[:room_name] || room_name
                 @room.save
             else
@@ -260,40 +273,10 @@ class Api::RoomsController < ApplicationController
             end
         end
 
-        if user_remove
-            if !room_admins && user_remove != current_username
-                render json: {status: "failed", error: "Not authorized to remove user from room"}
-                return
-            end
-
-            user.rooms.delete(room_name)
-            @room.users.delete(current_username)
-
-            user.save
-            @room.save
-
-            render json: {status: "complete", user: user, action: "member removed"}
-            return
-            # Logic needs to be included to change the rating total of each applicable show within the room
-        end
-
-        if generate_key
-            key = Room.generate_entry_key
-            @room.entry_keys[key] = Time.now.advance(days: 10).at_noon.getutc
-
-            if !@room.valid?
-                render json: {status: "failed", error: @room.errors.objects.first.full_message}
-                return
-            end
-
-            @room.save
-            render json: {status: "complete", key: key, room: @room}
-            return
-        end
-
         member_request = request && !submitted_key
+        pending_user = @room.pending_approval[request]
 
-        if  member_request && room_admins && @room.pending_approval[request]
+        if  member_request && room_admin_check && pending_user
             @room.users[request] = TIME_INPUT
             request_user.rooms[room_name] = TIME_INPUT
             request_user.save
@@ -304,8 +287,8 @@ class Api::RoomsController < ApplicationController
             @room.pending_approval.delete(request)
             clear_admin_request(@room,request)
             @room.save
-            add_notification(notifications,@room,request_user, "Accepted request to join")
-        elsif member_request && !room_admins && !@room.pending_approval[request]
+            add_notification(notifications,@room,request_user,nil, "Accepted request to join")
+        elsif member_request && !room_admin_check && !@room.pending_approval[request]
             request_user.requests["room"][@room.room_name] = current_username
             request_user.save
             add_notification(notifications,@room,request_user,"Requested to Join")
@@ -379,10 +362,10 @@ class Api::RoomsController < ApplicationController
         user
     end
 
-    def find_request_username
+    def find_request_obj
         user_input = rooms_params[:request]
         user = User.find_by(username: user_input)
-        if !user
+        if !user && user_input
             render json: {status: "failed", error: "User could not be found"}
         end
         user
@@ -394,7 +377,7 @@ class Api::RoomsController < ApplicationController
 
     def find_room
         room_input = rooms_params[:id] || rooms_params[:room_id]
-        room = Room.find_by(room_name: room_input)
+        room = Room.where(room_name: room_input).where(retired: false).take
 
         if !room
             render json: {status: "failed", error: "Room could not be found"}
@@ -402,6 +385,7 @@ class Api::RoomsController < ApplicationController
 
         room
     end
+
 
     def clean_expired_keys(room)
         deleted_keys = [];
@@ -430,33 +414,36 @@ class Api::RoomsController < ApplicationController
         forums
     end
 
-    def request_to_admins(notifications,room,request)
-        room_admins = room.admin["admin_users"].keys
+    def request_to_admins(notifications,room,requester)
+        room_admin_check = room.admin["admin_users"].keys
 
-        room_admins.each do |admin_names|
+        room_admin_check.each do |admin_names|
             admin_user = User.find_by(username: admin_names)
-            admin_user.requests["roomAuth"][request] = TIME_INPUT
+            admin_user.requests["roomAuth"][room.room_name] = [requester,TIME_INPUT]
             admin_user.save
-            add_notification(notifications,@room,admin_user,"Requested to join")
+            add_notification(notifications,room,admin_user,requester,"Requested to join")
         end
+
+        room_admin_check
     end
 
     def clear_admin_request(room,admitted_user)
-        room_admins = room.admin["admin_users"].keys
+        room_admin_check = room.admin["admin_users"].keys
 
-        room_admins.each do |admin|
+        room_admin_check.each do |admin|
             admin_user = User.find_by(username: admin)
             admin_user.requests["roomAuth"].delete(admitted_user)
             admin_user.save
         end
     end
 
-    def add_notification(notifications,room,user,request_type = "Accept")
+    def add_notification(notifications,room,recipient,user,request_type = "Accept")
+        action_user = user ? user : room.room_name
         data = {
             id: room.id,
-            recipient: user.username,
+            recipient: recipient.username,
             action: request_type,
-            action_user: room.room_name,
+            action_user: action_user,
             target_item: "Room",
             room: room.room_name
         }

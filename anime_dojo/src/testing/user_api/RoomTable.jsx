@@ -76,6 +76,11 @@ function RoomTable() {
       return new Promise(resolve => resolve({status: "failed"}))
     }
 
+    if (data.notifications || data.notification_count) {
+      const notificationsEndpoint = await notificationRequests(data)
+      const notifications = await notificationsCall(notificationsEndpoint,data)
+    }
+
     apiRequest2 = await addReviewsToRooms(data)
 
     const data3 = apiRequest2.data
@@ -223,6 +228,66 @@ function RoomTable() {
     }
     return "Function call complete"
   }
+
+  async function notificationRequests(data) {
+    let endpoints = {};
+    let user = data.notifications[0].recipient
+    let actionUser = data.notifications[0].action_user
+    let targetItem = data.notifications[0].target_item.toLowerCase()
+
+    if (data.notification_count) {
+      endpoints["GET"] = {
+        endpoint: `/api/notifications_count/${user}`,
+        params: []
+      }
+    } else if (user === actionUser && targetItem !== "recommendation") {
+      endpoints["PATCH"] = {
+        endpoint: `/api/notifications/${user}`,
+        params: []
+      }
+    } else if (user !== actionUser || targetItem == "recommendation") {
+      endpoints["POST"] = {
+        endpoint: `/api/notifications/`,
+        params: ["notification", data]
+      }
+    }
+    return new Promise(resolve => resolve({status: "success", endpoints: endpoints}))
+  }
+
+  async function notificationsCall(endpointData,actionData) {
+    const options5 = {
+      headers: myHeaders,
+    }
+    
+    let requestStr = "http://localhost:3003";
+
+    const method = Object.keys(endpointData.endpoints)[0]
+    const endpoints = endpointData.endpoints
+
+    options5.method = method
+
+    let formData5 = new FormData()
+    options5.body = formData5
+
+    let notifications = actionData.notifications
+    let notificationData = []
+
+    console.log(endpointData,actionData, method,notifications)
+
+    for (let notification of notifications) {
+      let param = "notification"
+      let value = notification
+      formData5.append(param,JSON.stringify(value))
+
+      requestStr += endpoints[method].endpoint
+      let apiRequest = await fetch(requestStr, options5)
+      let data = await apiRequest.json()
+      console.log(requestStr, data)
+      notificationData.push(data) 
+    }
+
+    return new Promise(resolve => resolve({status: "success", data: notificationData}))
+  }
   
   let sendRequest = function(e) {
     e.preventDefault;
@@ -237,10 +302,19 @@ function RoomTable() {
 
     const adSessionToken = localStorage.getItem('ad_session_token')
     let headerSessionToken = myHeaders.get("ad_session_token")
+
+    //headerSessionToken = "KhSsq5juOk2LkD08FsTMfg" //Serge
+    //headerSessionToken = "Tq13m7KnuZYMMCGCvujABA" //David
+    //headerSessionToken = "0KJU4ULJdT2bXaKqM3dqwQ" //Aviel
+    headerSessionToken = "JNoCEcPm9X1WSjqCkPS2GQ" //Aldane
+    //headerSessionToken = "KhSsq5juOk2LkD08FsTMfg" //Serge
+
     if(headerSessionToken) {
-      myHeaders.set("ad_session_token",adSessionToken);
+      myHeaders.set("ad_session_token",headerSessionToken);
+      //myHeaders.set("ad_session_token",adSessionToken);
     } else {
-      myHeaders.append("ad_session_token",adSessionToken)
+      myHeaders.set("ad_session_token",headerSessionToken);
+      //myHeaders.append("ad_session_token",adSessionToken)
     }
 
     if (room) formData.append('room_id',room);
@@ -254,9 +328,9 @@ function RoomTable() {
     if (requestMethod === "POST" || requestMethod === "PATCH" || requestMethod === "DELETE") {
       options.body = formData
       //formData.append("request","David")
-      formData.append("private_room",false)
+      //formData.append("private_room",false)
       //formData.append("submitted_key", "3mosYAlgW2nqU9UTecscgQ")
-      // formData.append("make_entry_key", true)
+      formData.append("make_entry_key", true)
       // formData.append("user_remove","Aviel")
       formData.append(testcase.key,testcaseInputString)
     }

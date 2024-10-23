@@ -1,8 +1,8 @@
 class Room < ApplicationRecord
-    self.primary_key = "room_name"
+    #self.primary_key = "room_name"
     
     validates :room_name, 
-        uniqueness: { conditions: -> { where(retired: true) } }, 
+        uniqueness: { conditions: -> { where(retired: false) } }, 
         length: {in: 4..30}, 
         format: { with: /[A-Za-z0-9#$!@%^&* ]+/}
 

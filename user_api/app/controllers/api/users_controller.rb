@@ -191,9 +191,20 @@ class Api::UsersController < ApplicationController
         #needs revisions for rooms. (After room controller is looked at)
         user.rooms.each do |room_name,date|
             room = Room.find_by(room_name: room_name)
-            room_users = room.users
-            room_users.delete(user.username)
-            room.update(room_name: room_users)
+
+            private_room_check = room.private_room
+            group_admin_check = room.admin["group_admin"]
+
+            if private_room_check && !group_admin_check
+                room.admin["group_admin"] = false
+            end
+ 
+            room.users.delete(user.username)
+            if room.users.keys.length = 0
+                room.retired = true
+            else
+                
+            room.save
         end
 
         recommendations = Recommendation.where(user_id: user.username)

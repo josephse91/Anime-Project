@@ -3247,3 +3247,142 @@ Processing by Api::NotificationsController#create as */*
 Completed 200 OK in 43ms (Views: 1.8ms | ActiveRecord: 9.5ms | Allocations: 5908)
 
 
+Started POST "/api/notifications/" for ::1 at 2024-10-22 20:55:23 -0400
+  [1m[36mActiveRecord::SchemaMigration Pluck (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":\"Jujutsu High\",\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (5.1ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 'Jujutsu High' AND recipient = 'Aldane' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+Completed 500 Internal Server Error in 192ms (ActiveRecord: 5.1ms | Allocations: 22869)
+
+
+
+ActiveRecord::StatementInvalid - PG::InvalidTextRepresentation: ERROR:  invalid input syntax for type integer: "Jujutsu High"
+LINE 1: ...fications" WHERE (target = 'room' AND target_id = 'Jujutsu H...
+                                                             ^:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-22 21:08:32 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":\"Jujutsu High\",\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (1.5ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 'Jujutsu High' AND recipient = 'Aldane' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+Completed 500 Internal Server Error in 18ms (ActiveRecord: 7.1ms | Allocations: 4538)
+
+
+
+ActiveRecord::StatementInvalid - PG::InvalidTextRepresentation: ERROR:  invalid input syntax for type integer: "Jujutsu High"
+LINE 1: ...fications" WHERE (target = 'room' AND target_id = 'Jujutsu H...
+                                                             ^:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-22 21:16:55 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":\"Jujutsu High\",\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (0.9ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 'Jujutsu High' AND recipient = 'Aldane' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+Completed 500 Internal Server Error in 13ms (ActiveRecord: 5.5ms | Allocations: 4558)
+
+
+
+ActiveRecord::StatementInvalid - PG::InvalidTextRepresentation: ERROR:  invalid input syntax for type integer: "Jujutsu High"
+LINE 1: ...fications" WHERE (target = 'room' AND target_id = 'Jujutsu H...
+                                                             ^:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-22 22:37:46 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":\"Jujutsu High\",\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (22.1ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 'Jujutsu High' AND recipient = 'Aldane' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+Completed 500 Internal Server Error in 99ms (ActiveRecord: 39.0ms | Allocations: 4538)
+
+
+
+ActiveRecord::StatementInvalid - PG::InvalidTextRepresentation: ERROR:  invalid input syntax for type integer: "Jujutsu High"
+LINE 1: ...fications" WHERE (target = 'room' AND target_id = 'Jujutsu H...
+                                                             ^:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-22 22:40:28 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":\"Jujutsu High\",\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (2.2ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 'Jujutsu High' AND recipient = 'Aldane' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+Completed 500 Internal Server Error in 7ms (ActiveRecord: 2.2ms | Allocations: 1812)
+
+
+
+ActiveRecord::StatementInvalid - PG::InvalidTextRepresentation: ERROR:  invalid input syntax for type integer: "Jujutsu High"
+LINE 1: ...fications" WHERE (target = 'room' AND target_id = 'Jujutsu H...
+                                                             ^:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-22 22:41:02 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":\"Jujutsu High\",\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (7.9ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 'Jujutsu High' AND recipient = 'Aldane' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+Completed 500 Internal Server Error in 28ms (ActiveRecord: 7.9ms | Allocations: 1812)
+
+
+
+ActiveRecord::StatementInvalid - PG::InvalidTextRepresentation: ERROR:  invalid input syntax for type integer: "Jujutsu High"
+LINE 1: ...fications" WHERE (target = 'room' AND target_id = 'Jujutsu H...
+                                                             ^:
+  app/controllers/api/notifications_controller.rb:33:in `create'
+
+Started POST "/api/notifications/" for ::1 at 2024-10-22 23:08:27 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (6.1ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 4 AND recipient = 'Aldane' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (2.4ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 4 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-23 02:08:27.839064') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (3.0ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "requested to join"], ["target", "room"], ["target_id", 4], ["action_user", "Jujutsu High"], ["recipient", "Aldane"], ["seen", false], ["common_actions", 0], ["message", "Jujutsu High is requesting to join room: Jujutsu High"], ["selected", true], ["created_at", "2024-10-23 03:08:28.154984"], ["updated_at", "2024-10-23 03:08:28.154984"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 346ms (Views: 3.6ms | ActiveRecord: 41.9ms | Allocations: 30268)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-22 23:17:08 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Jujutsu High\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (0.8ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 4 AND recipient = 'Aldane' AND action_user = 'Jujutsu High') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (0.7ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 4 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-23 02:17:08.163290') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mNotification Update (2.1ms)[0m  [1m[33mUPDATE "notifications" SET "selected" = $1, "updated_at" = $2 WHERE "notifications"."id" = $3[0m  [["selected", false], ["updated_at", "2024-10-23 03:17:08.190394"], ["id", 51]]
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:47:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mNotification Update (0.3ms)[0m  [1m[33mUPDATE "notifications" SET "updated_at" = $1 WHERE "notifications"."id" = $2[0m  [["updated_at", "2024-10-23 03:17:08.321277"], ["id", 51]]
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:53:in `create'
+Completed 200 OK in 166ms (Views: 0.8ms | ActiveRecord: 12.7ms | Allocations: 12693)
+
+
+Started POST "/api/notifications/" for ::1 at 2024-10-22 23:18:14 -0400
+Processing by Api::NotificationsController#create as */*
+  Parameters: {"notification"=>"{\"id\":4,\"recipient\":\"Aldane\",\"action\":\"Requested to join\",\"action_user\":\"Aviel\",\"target_item\":\"Room\",\"room\":\"Jujutsu High\"}"}
+  [1m[36mNotification Load (1.0ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (target = 'room' AND target_id = 4 AND recipient = 'Aldane' AND action_user = 'Aviel') LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/api/notifications_controller.rb:33:in `create'
+  [1m[36mNotification Load (1.4ms)[0m  [1m[34mSELECT "notifications".* FROM "notifications" WHERE (notifications.target = 'room' AND notifications.target_id = 4 AND notifications.recipient = 'Aldane' AND notifications.updated_at > '2024-10-23 02:18:14.977061') ORDER BY "notifications"."updated_at" DESC[0m
+  ↳ app/controllers/api/notifications_controller.rb:37:in `create'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mNotification Create (2.0ms)[0m  [1m[32mINSERT INTO "notifications" ("event_action", "target", "target_id", "action_user", "recipient", "seen", "common_actions", "message", "selected", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["event_action", "requested to join"], ["target", "room"], ["target_id", 4], ["action_user", "Aviel"], ["recipient", "Aldane"], ["seen", false], ["common_actions", 1], ["message", "2 users is requesting to join room: Jujutsu High"], ["selected", true], ["created_at", "2024-10-23 03:18:14.995196"], ["updated_at", "2024-10-23 03:18:14.995196"]]
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+  [1m[36mTRANSACTION (3.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notifications_controller.rb:81:in `create'
+Completed 200 OK in 40ms (Views: 0.7ms | ActiveRecord: 8.9ms | Allocations: 3188)
+
+

@@ -3302,3 +3302,54 @@ Processing by Api::ShowRatingsController#update as */*
 Completed 200 OK in 26ms (Views: 0.3ms | ActiveRecord: 2.3ms | Allocations: 4267)
 
 
+Started POST "/api/show_ratings/" for ::1 at 2024-10-22 20:34:18 -0400
+  [1m[36mActiveRecord::SchemaMigration Pluck (1.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::ShowRatingsController#create as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Jujutsu High"}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Bleach"], ["room_id", "Jujutsu High"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Create (1.6ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Bleach"], ["room_id", "Jujutsu High"], ["reviewers", "{\"Aldane\":90}"], ["total_points", 90], ["number_of_reviews", 1], ["created_at", "2024-10-23 00:34:21.739310"], ["updated_at", "2024-10-23 00:34:21.739310"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."room_id" = $2 LIMIT $3[0m  [["show_title", "Attack on Titan"], ["room_id", "Jujutsu High"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mShowRating Create (0.7ms)[0m  [1m[32mINSERT INTO "show_ratings" ("show_title", "room_id", "reviewers", "total_points", "number_of_reviews", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["show_title", "Attack on Titan"], ["room_id", "Jujutsu High"], ["reviewers", "{\"Aldane\":99}"], ["total_points", 99], ["number_of_reviews", 1], ["created_at", "2024-10-23 00:34:21.755760"], ["updated_at", "2024-10-23 00:34:21.755760"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:65:in `create'
+Completed 200 OK in 376ms (Views: 0.9ms | ActiveRecord: 29.0ms | Allocations: 46965)
+
+
+Started PATCH "/api/show_ratings/fill" for ::1 at 2024-10-22 20:37:34 -0400
+Processing by Api::ShowRatingsController#update as */*
+  Parameters: {"reviews"=>"[{\"id\":9,\"user\":\"Aldane\",\"show\":\"Bleach\",\"rating\":90,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is top 2 and its NOT 2!\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.052Z\",\"updated_at\":\"2024-10-22T23:45:22.052Z\"},{\"id\":10,\"user\":\"Aldane\",\"show\":\"Attack on Titan\",\"rating\":99,\"amount_watched\":null,\"highlighted_points\":[],\"overall_review\":\"This is beyond the greatest ever\",\"referral_id\":null,\"watch_priority\":1,\"likes\":0,\"created_at\":\"2024-10-22T23:45:22.566Z\",\"updated_at\":\"2024-10-22T23:45:22.566Z\"}]", "room_id"=>"Jujutsu High", "show_action"=>"member added", "id"=>"fill"}
+  [1m[36mShowRating Load (0.7ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."room_id" = $1 AND "show_ratings"."show_title" IN ($2, $3)[0m  [["room_id", "Jujutsu High"], ["show_title", "Bleach"], ["show_title", "Attack on Titan"]]
+  ↳ app/controllers/api/show_ratings_controller.rb:123:in `update'
+  [1m[36mShowRating Load (0.5ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 31], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mShowRating Load (0.2ms)[0m  [1m[34mSELECT "show_ratings".* FROM "show_ratings" WHERE "show_ratings"."id" = $1 LIMIT $2[0m  [["id", 32], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mShowRating Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Bleach"], ["id", 31], ["room_id", "Jujutsu High"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mShowRating Update (0.3ms)[0m  [1m[33mUPDATE "show_ratings" SET "total_points" = $1, "number_of_reviews" = $2, "updated_at" = $3 WHERE "show_ratings"."id" = $4[0m  [["total_points", 180], ["number_of_reviews", 2], ["updated_at", "2024-10-23 00:37:34.352351"], ["id", 31]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mShowRating Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "show_ratings" WHERE "show_ratings"."show_title" = $1 AND "show_ratings"."id" != $2 AND "show_ratings"."room_id" = $3 LIMIT $4[0m  [["show_title", "Attack on Titan"], ["id", 32], ["room_id", "Jujutsu High"], ["LIMIT", 1]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mShowRating Update (0.3ms)[0m  [1m[33mUPDATE "show_ratings" SET "total_points" = $1, "number_of_reviews" = $2, "updated_at" = $3 WHERE "show_ratings"."id" = $4[0m  [["total_points", 198], ["number_of_reviews", 2], ["updated_at", "2024-10-23 00:37:34.364925"], ["id", 32]]
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/show_ratings_controller.rb:151:in `update'
+Completed 200 OK in 36ms (Views: 0.5ms | ActiveRecord: 5.5ms | Allocations: 8293)
+
+
