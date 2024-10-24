@@ -93,7 +93,7 @@ function RoomTable() {
     const data3 = apiRequest2.data 
     console.log("this is new data: ",data)
     // conditional is necessary because the data3 relies on the addReviewsToRooms function which isn't run when a room is deleted. This is because when deleting a room, the addReviewsToRooms function requires a room object search that no longer exists
-    
+
     if(data.action !== "delete room") {
       var showEndpoints = await showRatingRequests(data3)
     } else {
@@ -328,9 +328,10 @@ function RoomTable() {
     let headerSessionToken = myHeaders.get("ad_session_token")
 
     //headerSessionToken = "KhSsq5juOk2LkD08FsTMfg" //Serge
-    //headerSessionToken = "Tq13m7KnuZYMMCGCvujABA" //David
+    //headerSessionToken = "signed_in" //Jarret
+    headerSessionToken = "Tq13m7KnuZYMMCGCvujABA" //David
     //headerSessionToken = "0KJU4ULJdT2bXaKqM3dqwQ" //Aviel
-    headerSessionToken = "JNoCEcPm9X1WSjqCkPS2GQ" //Aldane
+    //headerSessionToken = "JNoCEcPm9X1WSjqCkPS2GQ" //Aldane
     //headerSessionToken = "KhSsq5juOk2LkD08FsTMfg" //Serge
     //headerSessionToken = "rsT2jbeua6Jc6e3gwpP0lA" //Tonette Stokes DVM
     //headerSessionToken = "1U7bmf8siS6tZ3Cn_n1DPw" //Mrs. Erasmo Runolfsson
@@ -358,11 +359,17 @@ function RoomTable() {
       options.body = formData
       //formData.append("request","Aldane")
       //formData.append("private_room",false)
-      //formData.append("submitted_key", "3mosYAlgW2nqU9UTecscgQ")
+      //formData.append("submitted_key", "enter")
       //formData.append("make_entry_key", true)
-      // formData.append("user_remove","Aviel")
-      formData.append("room_action","remove user")
-      formData.append(testcase.key,testcaseInputString)
+      //formData.append("user_remove","Aviel")
+      //formData.append("room_action","reject pending")
+      //formData.append("room_action","remove user")
+      formData.append("room_action","leave room")
+      //formData.append("room_action","add admin")
+      //formData.append("room_action","remove admin")
+
+      let testDataCheck = testcase.key && testcaseInputString
+      if(testDataCheck) formData.append(testcase.key,testcaseInputString)
     }
 
     apiRequest(options,search)

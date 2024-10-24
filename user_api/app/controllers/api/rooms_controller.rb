@@ -122,10 +122,11 @@ class Api::RoomsController < ApplicationController
 
         notifications = []
 
+        room_action = rooms_params[:room_action]
         request = rooms_params[:request]
         request_user = find_request_obj
         return if request && !request_user
-
+        
         # Simple User self addition for Public Rooms
         foreign_requester = !room_includes_user?(@room,current_username)
         room_admin_check = @room.admin["admin_users"][current_username]
@@ -143,6 +144,7 @@ class Api::RoomsController < ApplicationController
 
             render_obj[:user] = request_user
             render_obj[:action] = "member added"
+            render_obj[:room] = @room
 
             render json: render_obj
             return
@@ -152,17 +154,17 @@ class Api::RoomsController < ApplicationController
         # Foreign user request a private non group_admin room
         
          group_admins = @room.admin["admin_users"].keys
-         p foreign_requester, current_username
+
         if !@room.admin["group_admin"] && request == current_username
             @room.pending_approval[current_username] = TIME_INPUT
             @room.save
             
             request_to_admins(notifications,@room,request)
-            
 
             render_obj[:notifications] = notifications
             render_obj[:requester] = foreign_requester
             render_obj[:admins] = group_admins
+            render_obj[:room] = @room
 
             render json: render_obj
             return
@@ -171,17 +173,34 @@ class Api::RoomsController < ApplicationController
 
         #--------------------------------------------------------
         # Foreign user enters a submitted key
-
         submitted_key = rooms_params[:submitted_key]
+        valid_key_check = submitted_key ? @room.entry_keys[:submitted_key] : nil
+        valid_request = rooms_params[:submitted_key] && current_username == request
         room_keys = @room.entry_keys
-        group_admin_check = @room.admin["group_admin"]
+        group_admin_check = @room.admin["group_admin"] == true
 
-        if !submitted_key && group_admin_check
+        #byebug
+        if !submitted_key && request && group_admin_check
+            render json: {status: "failed", error: "Key Needed to Enter room"}
+            return
+        end
+
+        if valid_request && @room.users[user]
+            render json: {status: "failed", error: "User is already within room"}
+            return
+        end
+
+        if submitted_key && !valid_request && group_admin_check
             render json: {status: "failed", error: "For this room, you must receive a key. Ask a member to generate key"}
             return
         end
 
-        if submitted_key
+        if submitted_key && valid_request && !group_admin_check
+            render json: {status: "failed", error: "For this room, you must receive admin approval"}
+            return
+        end
+
+        if submitted_key && valid_request && group_admin_check
             if !room_keys[submitted_key]
                 render json: {status: "failed", error: "Incorrect Entry Key"}
                 clean_expired_keys(@room)
@@ -213,15 +232,11 @@ class Api::RoomsController < ApplicationController
         end
         #-------------------------------------------------------------------
         # Member actions
-        member_check = room_includes_user?(@room,current_username)
-
-        if !member_check
-            render json: {status: "failed", error: "must be a member of room"}
-            return
-        end
+        member_check = room_includes_user?(@room,current_username,true)
+        return if !member_check
 
         generate_key = rooms_params[:make_entry_key]
-
+        
         if generate_key
             key = Room.generate_entry_key
             @room.entry_keys[key] = Time.now.advance(days: 10).at_noon.getutc
@@ -236,14 +251,40 @@ class Api::RoomsController < ApplicationController
             return
         end
 
+        member_leave = room_action == "leave room"
+
+        if member_leave 
+            remove_member = remove_member(user,@room,room_admin_check)
+            return if !remove_member
+
+            render_obj = {status: "complete", user: user, room: @room, action: "member removed"}
+
+            if remove_member[:message]
+                render_obj[:message] = remove_member[:message]
+            end
+            render json: render_obj
+            return
+        end
+
         # -----------------------------------------------------------------------
         # Group Admin procedures
+        target_member = rooms_params[:user_id]
+
+        if target_member
+            target_member_obj = find_user
+            return if !target_member_obj
+
+            target_member_username = target_member_obj.username
+            target_member_check = room_includes_user?(@room,target_member_username,true)
+            return if !member_check
+
+            target_member_admin_check = @room.admin["admin_users"][target_member_username] != nil
+        end
+
         if !room_admin_check
             render json: {status: "failed", error: "must be an admin to make change"}
             return
         end
-
-        room_action = rooms_params[:room_action]
 
         if room_action == "reject pending"
             @room.pending_approval.delete(request)
@@ -253,31 +294,27 @@ class Api::RoomsController < ApplicationController
             return
         end
 
+        # Admin remove user
         user_remove = rooms_params[:room_action] == "remove user"
-        #remove_user_obj = User.find_by(username: request)
 
-        if user_remove && user_remove != current_username
-            request_user.rooms.delete(room_name)
-            @room.users.delete(request)
+        removable_user = user_remove && target_member_username != current_username
+        valid_remove = removable_user && !target_member_admin_check
 
-            if request_user.invalid?
-                render json: {status: "failed", error: user.errors.objects.first.full_message}
-                return
-            end
-
-            if @room.invalid?
-                render json: {status: "failed", error: @room.errors.objects.first.full_message}
-                return
-            end
-
-            request_user.save
-            @room.save
-
-            render json: {status: "complete", user: request_user, room: @room, action: "member removed"}
+        if removable_user && !valid_remove
+            render json: {status: "failed", errors: "Admin members cannot be removed"}
             return
-            # Logic needs to be included to change the rating total of each applicable show within the room
         end
+        
 
+        if valid_remove
+            remove_member = remove_member(target_member_obj,@room,room_admin_check)
+            return if !remove_member
+
+            render json: {status: "complete", user: target_member_obj, room: @room, action: "member removed"}
+            return
+        end
+        
+        # Admin change name
         if rooms_params[:room_name]
             if group_admin_check || room_admin_check
                 @room.room_name = rooms_params[:room_name] || room_name
@@ -288,7 +325,7 @@ class Api::RoomsController < ApplicationController
             end
         end
 
-        member_request = request && !submitted_key
+        member_request = request && !@room.admin["group_admin"]
         # Group admin can only approve users that have sent a request. (Pending)
         pending_user = @room.pending_approval[request]
 
@@ -322,10 +359,27 @@ class Api::RoomsController < ApplicationController
             @room.save
         end
 
+        add_admin = rooms_params[:room_action] == "add admin"
+        remove_admin = rooms_params[:room_action] == "remove admin"
+
+        if add_admin 
+            @room.admin["admin_users"][target_member_username] = TIME_INPUT
+            @room.save
+        end
+
+        if remove_admin && @room.admin["admin_users"][target_member_username]
+            render json: {status: "failed", errors: "Admins status cannot be taken away by others"}
+            return
+        elsif remove_admin && user 
+            @room.admin["admin_users"].delete(current_username)
+            @room.save
+        end
+
         if request
             render_obj[:notifications] = notifications
         end
 
+        render_obj[:room] = @room
         render json: render_obj
     end
 
@@ -395,8 +449,13 @@ class Api::RoomsController < ApplicationController
         user
     end
 
-    def room_includes_user?(room,username)
-        room.users[username] != nil
+    def room_includes_user?(room,username,member_action = false)
+        member_check = room.users[username] != nil
+        if !member_check && member_action
+            render json: {status: "failed", error: "must be a member of room"}
+            return
+        end
+        member_check
     end
 
     def find_room
@@ -436,6 +495,50 @@ class Api::RoomsController < ApplicationController
         end
 
         forums
+    end
+
+    def remove_member(member_obj,room_obj,room_admin_check)
+        output = {}
+        member_username = member_obj.username
+        room_name = room_obj.room_name
+
+        # if the admin member is the LAST admin in the group, you must switch the room admin type to group admin style if it isn't that
+
+        group_admin_type = room_obj.admin["group_admin"]
+        admin_member_count = room_obj.admin["admin_users"].keys.length
+
+        group_admin_switch = !group_admin_type && room_admin_check && admin_member_count == 1
+
+        if group_admin_switch
+            room_obj.admin["group_admin"] = true
+            output[:message] = "Admin switched to Group Admin"
+        end
+
+        #delete the admin from room
+        if room_admin_check
+            room_obj.admin["admin_users"].delete(member_username)
+        end
+
+        #delete member        
+        member_obj.rooms.delete(room_name)
+        room_obj.users.delete(member_username)
+
+        if member_obj.invalid?
+            render json: {status: "failed", error: member_obj.errors.objects.first.full_message}
+            return
+        end
+
+        if room_obj.invalid?
+            render json: {status: "failed", error: room_obj.errors.objects.first.full_message}
+            return
+        end
+
+        member_obj.save
+        room_obj.save
+        
+        output[:member] = member_obj
+        output[:room] = room_obj
+        output
     end
 
     def request_to_admins(notifications,room,requester)
