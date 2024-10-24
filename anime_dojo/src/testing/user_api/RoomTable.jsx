@@ -329,7 +329,7 @@ function RoomTable() {
 
     //headerSessionToken = "KhSsq5juOk2LkD08FsTMfg" //Serge
     //headerSessionToken = "signed_in" //Jarret
-    headerSessionToken = "Tq13m7KnuZYMMCGCvujABA" //David
+    //headerSessionToken = "Tq13m7KnuZYMMCGCvujABA" //David
     //headerSessionToken = "0KJU4ULJdT2bXaKqM3dqwQ" //Aviel
     //headerSessionToken = "JNoCEcPm9X1WSjqCkPS2GQ" //Aldane
     //headerSessionToken = "KhSsq5juOk2LkD08FsTMfg" //Serge
@@ -340,8 +340,8 @@ function RoomTable() {
     
 
     if(headerSessionToken) {
-      myHeaders.set("ad_session_token",headerSessionToken);
-      //myHeaders.set("ad_session_token",adSessionToken);
+      //myHeaders.set("ad_session_token",headerSessionToken);
+      myHeaders.set("ad_session_token",adSessionToken);
     } else {
       myHeaders.set("ad_session_token",headerSessionToken);
       //myHeaders.append("ad_session_token",adSessionToken)
@@ -364,7 +364,7 @@ function RoomTable() {
       //formData.append("user_remove","Aviel")
       //formData.append("room_action","reject pending")
       //formData.append("room_action","remove user")
-      formData.append("room_action","leave room")
+      //formData.append("room_action","leave room")
       //formData.append("room_action","add admin")
       //formData.append("room_action","remove admin")
 

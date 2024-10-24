@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './ForumsTable.css';
 
 
 function ForumsTable() {
@@ -84,30 +85,26 @@ function ForumsTable() {
     <div className="App" id="container">
       <div className='testForm' id='userTableForm'>
       <form className="credentials" onChange={handleChange}>
+      <div className='inputLine'>
         <label htmlFor="forum">Forum:</label>
         <input type="text" id="forum" name="forum" value={forum}></input>
+      </div>
+      <div className='inputLine'>
         <label htmlFor="search">Search:</label>
         <input type="text" id="search" name="search" value={search}/>
-
-        <div id="testcaseLabels">
-          <label htmlFor="key">Key:</label>
-          <label htmlFor="value">Value:</label>
-        </div>
-
-        <div id="testcaseInputs">
-          <input type="text" id="key" name="key" value={testcase.key}/>
-          <input type="text" id="value" name="value" value={testcase.value}/>
-        </div>
-
-        <div id="requestLabels">
-          <label htmlFor="method">Method:</label>
-          <label htmlFor="request">Request:</label>
-        </div>
-        
-        <div id="requestInputs">
-          <input type="text" id="requestMethod" name="requestMethod" value={requestMethod}/>
+      </div>
+      <div className='inputLine'>
+        <label htmlFor="key">Key:</label>
+        <input type="text" id="key" name="key" value={testcase.key}/>
+        <label htmlFor="value">Value:</label>
+        <input type="text" id="value" name="value" value={testcase.value}/>
+      </div>
+      <div className='inputLine'>
+        <label htmlFor="method">Method:</label>
+        <input type="text" id="requestMethod" name="requestMethod" value={requestMethod}/>
+        <label htmlFor="request">Request:</label>
           <input type="text" id="request" name="request" value={request}/>
-        </div>
+      </div>
         
       </form>
       <button className='request' id="requestButton" onClick={sendRequest}>Send</button>
